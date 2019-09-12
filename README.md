@@ -48,6 +48,8 @@ Experiência no desenvolvimento de sites utilizando as linguagem:
 * **HTML5** | Linguagem de Marcação de Hipertexto
 * **CSS3** | Cascading Style Sheets Idioma
 * **Bootstrap** | É uma Estrutura CSS Gratuita e de Código Aberto
+* **Laravel** |
+* **AngularJS** |
 * **Javascript** | Linguagem dinâmica de hipertexto
 * **JQuery** | Plataforma cruzada
 * **PHP** | Pré-processador de Hipertexto
