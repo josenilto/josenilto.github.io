@@ -33,6 +33,7 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 * **Moodle** | Open Source learning platform
 * **OJS**/**PKP** | Open Journal Systems | Public Knowledge Project 
 * **Django** | The Web framework for perfectionists with deadlines
+* **DokuWiki** | is a wiki application licensed under GPLv2
 * **Discourse** | Civilized Discussion
 * **WordPress** | Create a Free Website or Blog
 * **Joomla** | Content Management System (CMS) - try it for free!
