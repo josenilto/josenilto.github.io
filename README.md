@@ -2,7 +2,8 @@
 
 ## Currículo GitHub Pages | Josenilto Luis
 
-Tenho experiência em implementações, virtualizações, configurações, gerenciamento de servidores Windows/Linux. Vivência em planejamento de melhorias na infraestrutura de TI. 
+Tenho experiência em implementações, virtualizações, configurações, gerenciamento de servidores Windows/Linux. 
+Vivência em planejamento de melhorias na infraestrutura de TI. 
 
 Gerenciamento de processos, reestruturação de serviços, otimização de desempenho. 
   
@@ -24,4 +25,25 @@ Serviços de rede, tais como:
 
 Site-to-site usando ADSL "Asymmetric Digital Subscriber Line", baixe o custo de sua empresa em até 80% usando essa opção, não é preciso de link dedicado, sistema pfSense modulo PPPoE, usando IP público na WAN "wide area network" e distribuindo na LAN "Local Area Network" e DMZ "DeMilitarized Zone".
 
-Na área de desenvolvimento tenho sólido conhecimento na implementação de sistemas utilizando CMS. WordPress, Drupal, Joomla, OJS, Magento e Moodle. Experiência na implementação e desenvolvimento utilizando o CMS Drupal versões 6, 7 e 8, Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal. Experiência no desenvolvimento de sites: HTML5, CSS3, JAVASCRIPT, BOOTSTRAP, PHP e MySQL. Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
+Na área de desenvolvimento tenho sólido conhecimento na implementação de sistemas utilizando CMS. 
+
+* WordPress 
+* Drupal 
+* Joomla 
+* OJS 
+* Magento
+* Moodle 
+
+Experiência na implementação e desenvolvimento utilizando o CMS Drupal versões 6, 7 e 8.
+Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal. 
+
+Experiência no desenvolvimento de sites: 
+
+HTML5, 
+CSS3, 
+JAVASCRIPT, 
+BOOTSTRAP, 
+PHP
+MySQL. 
+
+Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
