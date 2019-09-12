@@ -39,8 +39,7 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 * **[GLPI](https://glpi-project.org/downloads/)** | is software for business powered by open source
 * **[Zabbix](https://www.zabbix.com/download)** | The Enterprise Class Open Source Network
 * **[Nagios](https://www.nagios.org/downloads/)** | The Industry Standard In IT Infrastructure Monitoring
-* **[OCSInvenory](https://ocsinventory-ng.org/?page_id=1548&lang=en)** | Open Computer and Software Inventory Next Generation is free software that enables users to inventory IT assets.
-
+* **[OCSInvenory](https://ocsinventory-ng.org/?page_id=1548&lang=en)** | Open Computer and Software Inventory
 
 Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
 
