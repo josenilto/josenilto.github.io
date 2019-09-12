@@ -50,6 +50,6 @@ Experiência no desenvolvimento de sites utilizando as linguagem:
 * JAVASCRIPT 
 * BOOTSTRAP 2, 3 e 4
 * PHP 7
-* SQL { MySQL, MariaDB, PostegreSQL,e Sql Server }
+* SQL { MySQL, MariaDB,MongoDB, PostegreSQL,e Sql Server }
 
 Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
