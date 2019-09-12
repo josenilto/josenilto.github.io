@@ -27,11 +27,11 @@ Site-to-site usando ADSL "Asymmetric Digital Subscriber Line", baixe o custo de 
 
 Experiência na implementação e desenvolvimento, tenho sólido conhecimento em sistemas utilizando CMS. 
 
-* **[MAGENTO](https://magento.com/tech-resources/download)** | Plataforma Líder de eCommerce
-* **[MOODLE](https://download.moodle.org/)** | Open Source learning platform
+* **[Magento](https://magento.com/tech-resources/download)** | Plataforma Líder de eCommerce
+* **[Moodle](https://download.moodle.org/)** | Open Source learning platform
 * **[OJS PKP](https://pkp.sfu.ca/ojs/ojs_download/)** | Open Journal Systems | Public Knowledge Project 
-* **[DJANGO](https://www.djangoproject.com/download/)** | The Web framework for perfectionists with deadlines
-* **[DOKUWIKI](https://download.dokuwiki.org/)** | is a wiki application licensed under GPLv2
+* **[Django](https://www.djangoproject.com/download/)** | The Web framework for perfectionists with deadlines
+* **[DokuWiki](https://download.dokuwiki.org/)** | is a wiki application licensed under GPLv2
 * **[Discourse](https://github.com/josenilto/discourse-1)** | Civilized Discussion
 * **[WordPress](https://wordpress.org/download/)** | Create a Free Website or Blog
 * **[Joomla](https://downloads.joomla.org/)** | Content Management System (CMS) - try it for free!
