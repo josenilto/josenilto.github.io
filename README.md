@@ -22,6 +22,8 @@ Serviços de rede, tais como:
 * Web Server
 * Database
 * Storage e Virtual Private Network.
+* Glpi
+* Zabbix
 
 Site-to-site usando ADSL "Asymmetric Digital Subscriber Line", baixe o custo de sua empresa em até 80% usando essa opção, não é preciso de link dedicado, sistema pfSense modulo PPPoE, usando IP público na WAN "wide area network" e distribuindo na LAN "Local Area Network" e DMZ "DeMilitarized Zone".
 
@@ -34,10 +36,7 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 * Moodle
 * Django
 * Discourse
-* Drupal versões 6, 7 e 8 (Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal).
-
-* Glpi
-* Zabbix
+* Drupal versões 6, 7 e 8 {Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal}.
 
 Experiência no desenvolvimento de sites utilizando as linguagem: 
 
