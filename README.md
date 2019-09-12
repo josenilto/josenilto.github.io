@@ -38,6 +38,8 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 * **[DRUPAL](https://www.drupal.org/download)** | Open Source CMS, versões 6, 7 e 8
 * **[GLPI](https://glpi-project.org/downloads/)** | is software for business powered by open source
 * **[ZABBIX](https://www.zabbix.com/download)** | The Enterprise-Class Open Source Network
+* **** Nagios - The Industry Standard In IT Infrastructure Monitoring
+
 
 Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
 
