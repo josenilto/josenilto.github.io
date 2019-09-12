@@ -45,6 +45,14 @@ Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
 
 Experiência no desenvolvimento de sites utilizando as linguagem: 
 
+° Bootstrap "free and open-source front-end framework"
+° HTML5 "Hypertext Markup Language"
+° CSS3 "Cascading Style Sheets Language"
+° Javascript "Hypertext Dynamic Language"
+° JQuery "cross-platform"
+° PHP "Hypertext Preprocessor"
+° SQL "Structured Query Language" não é um protocolo para internet, e sim uma linguagem de consulta para banco de dados.
+
 * HTML5 
 * CSS3 e 4
 * JAVASCRIPT 
