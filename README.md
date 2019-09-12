@@ -55,5 +55,6 @@ Experiência no desenvolvimento de sites utilizando as linguagem:
 * **Laravel** | É uma Estrutura de Aplicativos
 * **CodeIgniter** | É uma Estrutura de Desenvolvimento Web Rápida de Software de Código Aberto
 * **Angular** | É uma Plataforma para a Construção de Aplicativos
+* **Git** | É um Sistema de Controle de Versão Distribuído para Rastrear Alterações no Código Fonte
 
 Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
