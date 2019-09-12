@@ -47,12 +47,13 @@ Experiência no desenvolvimento de sites utilizando as linguagem:
 
 * **HTML5** | Linguagem de Marcação de Hipertexto
 * **CSS3** | Cascading Style Sheets Idioma
-* **Bootstrap** | É uma Estrutura CSS Gratuita e de Código Aberto
-* **Laravel** |
-* **AngularJS** |
 * **Javascript** | Linguagem dinâmica de hipertexto
 * **JQuery** | Plataforma cruzada
 * **PHP** | Pré-processador de Hipertexto
 * **SQL** | Linguagem de Consulta Estruturada
+* **Bootstrap** | É uma Estrutura HTML, CSS, JS Gratuita e de Código Aberto
+* **Laravel** |É uma estrutura de aplicativos
+* **CodeIgniter** | É uma estrutura da Web de desenvolvimento rápido de software de código aberto
+* **Angular** | É uma plataforma para a construção de aplicativos
 
 Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
