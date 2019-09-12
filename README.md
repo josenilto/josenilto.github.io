@@ -39,11 +39,11 @@ Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
 
 Experiência no desenvolvimento de sites: 
 
-HTML5, 
-CSS3, 
-JAVASCRIPT, 
-BOOTSTRAP, 
-PHP
-MySQL. 
+* HTML5 
+* CSS3
+* JAVASCRIPT 
+* BOOTSTRAP 
+* PHP
+* MySQL 
 
 Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
