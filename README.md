@@ -31,7 +31,7 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 
 * **Magento** | Plataforma Líder de eCommerce
 * **Moodle** | Open Source learning platform
-* **OJS** - Open Journal Systems | **PKP** - Public Knowledge Project 
+* **OJS**/**PKP** | Open Journal Systems | Public Knowledge Project 
 * **Django** | The Web framework for perfectionists with deadlines
 * **Discourse** | Civilized Discussion
 * **WordPress** | Create a Free Website or Blog
