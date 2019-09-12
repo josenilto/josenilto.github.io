@@ -45,12 +45,12 @@ Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
 
 Experiência no desenvolvimento de sites utilizando as linguagem: 
 
-* **HTML5** | Hypertext Markup Language
-* **CSS3** | Cascading Style Sheets Language
-* **Bootstrap** Free and Open Source Front-End Framework
-* **Javascript** | Hypertext Dynamic Language
-* **JQuery** | Cross Platform
-* **PHP** | Hypertext Preprocessor
-* **SQL** | Structured Query Language
+* **HTML5** | Linguagem de Marcação de Hipertexto
+* **CSS3** | Cascading Style Sheets Idioma
+* **Bootstrap** | Aberta Livre e Front-End Fonte Framework
+* **Javascript** | Linguagem dinâmica de hipertexto
+* **JQuery** | Plataforma cruzada
+* **PHP** | Pré-processador de Hipertexto
+* **SQL** | Linguagem de Consulta Estruturada
 
 Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
