@@ -31,13 +31,13 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 
 * **[Magento](https://magento.com/tech-resources/download)** | Plataforma Líder de eCommerce
 * **[Moodle](https://download.moodle.org/)** | Open Source learning platform
-* **[OJS/PKP](https://pkp.sfu.ca/ojs/ojs_download/)** | Open Journal Systems | Public Knowledge Project 
-* **Django** | The Web framework for perfectionists with deadlines
-* **DokuWiki** | is a wiki application licensed under GPLv2
-* **Discourse** | Civilized Discussion
-* **WordPress** | Create a Free Website or Blog
-* **Joomla** | Content Management System (CMS) - try it for free!
-* **Drupal** | Open Source CMS, versões 6, 7 e 8
+* **[OJS / PKP](https://pkp.sfu.ca/ojs/ojs_download/)** | Open Journal Systems | Public Knowledge Project 
+* **[Django](https://www.djangoproject.com/download/)** | The Web framework for perfectionists with deadlines
+* **[DokuWiki](https://download.dokuwiki.org/)** | is a wiki application licensed under GPLv2
+* **[Discourse]()** | Civilized Discussion
+* **[WordPress](https://wordpress.org/download/)** | Create a Free Website or Blog
+* **[Joomla](https://downloads.joomla.org/)** | Content Management System (CMS) - try it for free!
+* **[Drupal](https://www.drupal.org/download)** | Open Source CMS, versões 6, 7 e 8
 
 Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
 
