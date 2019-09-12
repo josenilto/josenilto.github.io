@@ -28,11 +28,16 @@ Site-to-site usando ADSL "Asymmetric Digital Subscriber Line", baixe o custo de 
 Experiência na implementação e desenvolvimento, tenho sólido conhecimento em sistemas utilizando CMS. 
 
 * WordPress 
-* Joomla 
+* Joomla
 * OJS 
 * Magento
-* Moodle 
-* Drupal versões 6, 7 e 8 (Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal). 
+* Moodle
+* Django
+* Discourse
+* Drupal versões 6, 7 e 8 (Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal).
+
+* Glpi
+* Zabbix
 
 Experiência no desenvolvimento de sites utilizando as linguagem: 
 
