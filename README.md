@@ -22,8 +22,6 @@ Serviços de rede, tais como:
 * Web Server
 * Database
 * Storage e Virtual Private Network.
-* Glpi
-* Zabbix
 
 Site-to-site usando ADSL "Asymmetric Digital Subscriber Line", baixe o custo de sua empresa em até 80% usando essa opção, não é preciso de link dedicado, sistema pfSense modulo PPPoE, usando IP público na WAN "wide area network" e distribuindo na LAN "Local Area Network" e DMZ "DeMilitarized Zone".
 
@@ -38,6 +36,8 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 * **[WORDPRESS](https://wordpress.org/download/)** | Create a Free Website or Blog
 * **[JOOMLA](https://downloads.joomla.org/)** | Content Management System (CMS) - try it for free!
 * **[DRUPAL](https://www.drupal.org/download)** | Open Source CMS, versões 6, 7 e 8
+* **[GLPI](https://glpi-project.org/downloads/)** | is software for business powered by open source
+* **[ZABBIX](https://www.zabbix.com/download)** | The Enterprise-Class Open Source Network
 
 Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
 
