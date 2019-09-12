@@ -42,10 +42,10 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 Experiência no desenvolvimento de sites utilizando as linguagem: 
 
 * HTML5 
-* CSS3
+* CSS3 e 4
 * JAVASCRIPT 
-* BOOTSTRAP 
-* PHP
-* MySQL 
+* BOOTSTRAP 2, 3 e 4
+* PHP 7
+* SQL { MySQL, MariaDB, PostegreSQL,e Sql Server }
 
 Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
