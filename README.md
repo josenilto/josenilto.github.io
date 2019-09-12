@@ -52,7 +52,7 @@ Experiência no desenvolvimento de sites utilizando as linguagem:
 * **PHP** | Pré-processador de Hipertexto
 * **SQL** | Linguagem de Consulta Estruturada
 * **Bootstrap** | É uma Estrutura HTML, CSS, JS Gratuita e de Código Aberto
-* **Laravel** |É uma Estrutura de Aplicativos
+* **Laravel** | É uma Estrutura de Aplicativos
 * **CodeIgniter** | É uma Estrutura de Desenvolvimento Web Rápida de Software de Código Aberto
 * **Angular** | É uma Plataforma para a Construção de Aplicativos
 
