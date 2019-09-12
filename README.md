@@ -29,9 +29,9 @@ Site-to-site usando ADSL "Asymmetric Digital Subscriber Line", baixe o custo de 
 
 Experiência na implementação e desenvolvimento, tenho sólido conhecimento em sistemas utilizando CMS. 
 
-* **Magento** | Plataforma Líder de eCommerce
-* **Moodle** | Open Source learning platform
-* **OJS**/**PKP** | Open Journal Systems | Public Knowledge Project 
+* **[Magento](https://magento.com/tech-resources/download)** | Plataforma Líder de eCommerce
+* **[Moodle](https://download.moodle.org/)** | Open Source learning platform
+* **[OJS**/**PKP](https://pkp.sfu.ca/ojs/ojs_download/)** | Open Journal Systems | Public Knowledge Project 
 * **Django** | The Web framework for perfectionists with deadlines
 * **DokuWiki** | is a wiki application licensed under GPLv2
 * **Discourse** | Civilized Discussion
