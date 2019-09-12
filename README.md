@@ -1,16 +1,17 @@
-<img  title="Usuporte" align="left" width="65" height="65" src="https://user-images.githubusercontent.com/16817969/63829118-f493e800-c93e-11e9-92f3-68e3ac264f49.png">
+<img  title="Usuporte" align="left" width="50" height="50" src="https://user-images.githubusercontent.com/16817969/63829118-f493e800-c93e-11e9-92f3-68e3ac264f49.png">
 
-# Currículo GitHub Pages | Josenilto Luis
+## Currículo GitHub Pages | Josenilto Luis
 
-Profissional com experiência em implementações, virtualizações, configurações, gerenciamento de servidores Windows/Linux. Vivência em planejamento de melhorias na infraestrutura de TI. 
+Tenho experiência em implementações, virtualizações, configurações, gerenciamento de servidores Windows/Linux. Vivência em planejamento de melhorias na infraestrutura de TI. 
 
 Gerenciamento de processos, reestruturação de serviços, otimização de desempenho. 
-  Suporte incluindo: 
   
-  * Roteadores 
-  * Switch e Servidores. 
+Suporte incluindo: 
   
-  Serviços de rede, tais como: 
+* Roteadores 
+* Switch e Servidores. 
+  
+Serviços de rede, tais como: 
   
 * Active Directory 
 * Domain Name System 
