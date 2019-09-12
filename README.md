@@ -25,19 +25,16 @@ Serviços de rede, tais como:
 
 Site-to-site usando ADSL "Asymmetric Digital Subscriber Line", baixe o custo de sua empresa em até 80% usando essa opção, não é preciso de link dedicado, sistema pfSense modulo PPPoE, usando IP público na WAN "wide area network" e distribuindo na LAN "Local Area Network" e DMZ "DeMilitarized Zone".
 
-Na área de desenvolvimento tenho sólido conhecimento na implementação de sistemas utilizando CMS. 
+Experiência na implementação e desenvolvimento, tenho sólido conhecimento em sistemas utilizando CMS. 
 
 * WordPress 
-* Drupal 
 * Joomla 
 * OJS 
 * Magento
 * Moodle 
+* Drupal versões 6, 7 e 8 (Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal). 
 
-Experiência na implementação e desenvolvimento utilizando o CMS Drupal versões 6, 7 e 8.
-Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal. 
-
-Experiência no desenvolvimento de sites: 
+Experiência no desenvolvimento de sites utilizando as linguagem: 
 
 * HTML5 
 * CSS3
