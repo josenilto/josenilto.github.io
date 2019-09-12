@@ -41,7 +41,7 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 * **[Nagios](https://www.nagios.org/downloads/)** | The Industry Standard In IT Infrastructure Monitoring
 * **[OCSInvenory](https://ocsinventory-ng.org/?page_id=1548&lang=en)** | Open Computer and Software Inventory
 
-Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
+Search API, Multisite, Features, Criação de Views, Módulos, Themes.
 
 Experiência no desenvolvimento de sites utilizando as linguagem: 
 
