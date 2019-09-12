@@ -31,7 +31,7 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 
 * **[Magento](https://magento.com/tech-resources/download)** | Plataforma Líder de eCommerce
 * **[Moodle](https://download.moodle.org/)** | Open Source learning platform
-* **[OJS**/**PKP](https://pkp.sfu.ca/ojs/ojs_download/)** | Open Journal Systems | Public Knowledge Project 
+* **[OJS**/**PKP]**(https://pkp.sfu.ca/ojs/ojs_download/)** | Open Journal Systems | Public Knowledge Project 
 * **Django** | The Web framework for perfectionists with deadlines
 * **DokuWiki** | is a wiki application licensed under GPLv2
 * **Discourse** | Civilized Discussion
