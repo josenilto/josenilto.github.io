@@ -36,7 +36,9 @@ Experiência na implementação e desenvolvimento, tenho sólido conhecimento em
 * **Discourse** | Civilized Discussion
 * **WordPress** | Create a Free Website or Blog
 * **Joomla** | Content Management System (CMS) - try it for free!
-* **Drupal** | Open Source CMS, versões 6, 7 e 8. Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
+* **Drupal** | Open Source CMS, versões 6, 7 e 8
+
+Search API, Multisite, Features, Criação de Views, Módulos, Temas Drupal.
 
 Experiência no desenvolvimento de sites utilizando as linguagem: 
 
