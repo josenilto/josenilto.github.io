@@ -14,10 +14,10 @@ Suporte incluindo:
   
 Serviços de rede, tais como: 
   
-* Active Directory 
-* Domain Name System 
+* AD - Active Directory 
+* DNS - Domain Name System 
 * Backup
-* Email
+* E-mail
 * Proxy Server
 * Web Server
 * Database
