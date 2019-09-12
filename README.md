@@ -51,6 +51,6 @@ Experiência no desenvolvimento de sites utilizando as linguagem:
 * **Javascript** | Hypertext Dynamic Language
 * **JQuery** | Cross Platform
 * **PHP** | Hypertext Preprocessor
-* **SQL** | Structured Query Language" não é um protocolo para internet, e sim uma linguagem de consulta para Banco de Dados
+* **SQL** | Structured Query Language
 
 Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
