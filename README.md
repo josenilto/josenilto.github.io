@@ -1,4 +1,4 @@
-## CGP - Currículo GitHub Pages | Josenilto Luis \°/
+## CGP - Curriculum GitHub Pages | Josenilto Luis \°/
 
 Tenho sólida experiência nas tratativas de solicitações a incidentes relacionadas à Infraestrutura, através de análises de complexidade e conclusão de atendimentos de acordo com a metodologia ITIL, virtualização de servidores, configurações, desenvolvimento e implementação sustentável, execução de micro serviços e backups. Vivência em planejamento e melhorias na infraestrutura de TI e desenvolvimento de sites, há mais de 06 anos.
 
