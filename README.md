@@ -1,7 +1,11 @@
 ## CGP - Curriculum GitHub Pages | Josenilto Luis \°/
 
-	Formação Acadêmica 
+Formação Acadêmica 
 
+Universidade Veiga de Almeida, UVA 								                                                        ago. / 2019 Superior Completa
+Bacharelado, em Ciência da Computação
+
+Qualificação Profissional
 
 Tenho sólida experiência nas tratativas de solicitações a incidentes relacionadas à Infraestrutura, através de análises de complexidade e conclusão de atendimentos de acordo com a metodologia ITIL, virtualização de servidores, configurações, desenvolvimento e implementação sustentável, execução de micro serviços e backups. Vivência em planejamento e melhorias na infraestrutura de TI e desenvolvimento de sites, há mais de 06 anos.
 
