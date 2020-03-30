@@ -2,8 +2,7 @@
 
 Formação Acadêmica 
 
-Universidade Veiga de Almeida, UVA 								                                                        ago. / 2019 Superior Completa
-Bacharelado, em Ciência da Computação
+Superior Completa, Bacharelado, em Ciência da Computação, Universidade Veiga de Almeida, UVA - Ago. / 2019 
 
 Qualificação Profissional
 
