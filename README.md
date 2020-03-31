@@ -16,7 +16,7 @@ Suporte incluindo:
 * Roteadores 
 * Switch e Servidores. 
   
-Serviços de rede, tais como: 
+Serviços windows, tais como: 
   
 * AD - Active Directory 
 * DNS - Domain Name System 
