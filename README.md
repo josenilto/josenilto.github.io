@@ -49,16 +49,16 @@ Search API, Multisite, Features, Criação de Views, Módulos, Themes.
 
 Experiência no desenvolvimento de sites utilizando as linguagem: 
 
-* **HTML5** | Linguagem de Marcação de Hipertexto
-* **CSS3** | Cascading Style Sheets Idioma
-* **Javascript** | Linguagem dinâmica de hipertexto
-* **JQuery** | Plataforma cruzada
-* **PHP** | Pré-processador de Hipertexto
-* **SQL** | Linguagem de Consulta Estruturada
-* **Bootstrap** | É uma Estrutura HTML, CSS, JS Gratuita e de Código Aberto
-* **Laravel** | É uma Estrutura de Aplicativos
-* **CodeIgniter** | É uma Estrutura de Desenvolvimento Web Rápida de Software de Código Aberto
-* **Angular** | É uma Plataforma para a Construção de Aplicativos
-* **Git** | É um Sistema de Controle de Versão Distribuído para Rastrear Alterações no Código Fonte
+* **HTML5**         | Linguagem de Marcação de Hipertexto
+* **CSS3**          | Cascading Style Sheets Idioma
+* **Javascript**    | Linguagem dinâmica de hipertexto
+* **JQuery**        | Plataforma cruzada
+* **PHP**           | Pré-processador de Hipertexto
+* **SQL**           | Linguagem de Consulta Estruturada
+* **Bootstrap**     | É uma Estrutura HTML, CSS, JS Gratuita e de Código Aberto
+* **Laravel**       | É uma Estrutura de Aplicativos
+* **CodeIgniter**   | É uma Estrutura de Desenvolvimento Web Rápida de Software de Código Aberto
+* **Angular**       | É uma Plataforma para a Construção de Aplicativos
+* **Git**           | É um Sistema de Controle de Versão Distribuído para Rastrear Alterações no Código Fonte
 
 Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
