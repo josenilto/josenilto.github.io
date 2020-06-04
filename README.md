@@ -1,4 +1,4 @@
-## CGP - Curriculum GitHub Pages | Josenilto Luis
+## CGP 10 - Curriculum GitHub Pages | Josenilto Luis
 
 Formação Acadêmica 
 
