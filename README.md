@@ -2,8 +2,8 @@
 
 Formação Acadêmica 
 
-- Cursando, Bacharelado, em Sistema da Informação, Universidade Estácio de Sá, UNESA EAD Previção Formatura Ago. / 2020
-- Superior Completa, Bacharelado, em Ciência da Computação, Universidade Veiga de Almeida, UVA - Ago. / 2019 
+- Universidade Estácio de Sá, UNESA - Bacharelado, em Sistema da Informação | Dez. / 2020 - Cursando
+- Universidade Veiga de Almeida, UVA - Bacharelado, em Ciência da Computação | Ago. / 2019 - Superior Completo. 
 
 Qualificação Profissional
 
