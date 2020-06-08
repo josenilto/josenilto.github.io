@@ -1,4 +1,4 @@
-## Curriculum GitHub Pages | Josenilto Luis
+## GitHub Pages - Curriculum | Josenilto Luis
 
 Formação Acadêmica 
 
