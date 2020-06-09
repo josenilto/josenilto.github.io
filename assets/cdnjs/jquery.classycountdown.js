@@ -20,10 +20,10 @@
             labels: true,
             labelsOptions: {
                 lang: {
-                    days: 'Dias',
-                    hours: 'Horas',
-                    minutes: 'Minutos',
-                    seconds: 'Segundos'
+                    days: 'Days',
+                    hours: 'Hours',
+                    minutes: 'Minutes',
+                    seconds: 'Seconds'
                 },
                 style: 'font-size: 0.5em;'
             },
@@ -293,34 +293,34 @@
                             days: {
                                 gauge: {
                                     thickness: 0.1,
-                                    bgColor: "rgba(255,255,255,.5)",
+                                    bgColor: "rgba(255,255,255,.3)",
                                     fgColor: "#1abc9c"
                                 },
-                                textCSS: 'font-weight:600;color:rgba(255,255,255, .80);'
+                                textCSS: 'font-weight:600;color:#fff;'
                             },
                             hours: {
                                 gauge: {
                                     thickness: 0.1,
-                                    bgColor: "rgba(255,255,255,.5)",
-                                    fgColor: "rgba(0, 128, 255, .60)"
+                                    bgColor: "rgba(255,255,255,.3)",
+                                    fgColor: "#2980b9"
                                 },
-                                textCSS: 'font-weight:600;color:rgba(255,255,255, .85);'
+                                textCSS: 'font-weight:600;color:#fff;'
                             },
                             minutes: {
                                 gauge: {
                                     thickness: 0.1,
-                                    bgColor: "rgba(255,255,255,.5)",
-                                    fgColor: "rgba(127, 255, 0, .60)"
+                                    bgColor: "rgba(255,255,255,.3)",
+                                    fgColor: "#8e44ad"
                                 },
-                                textCSS: 'font-weight:600;color:rgba(255,255,255, .90);'
+                                textCSS: 'font-weight:600;color:#fff;'
                             },
                             seconds: {
                                 gauge: {
                                     thickness: 0.1,
-                                    bgColor: "rgba(255,255,255, .5)",
-                                    fgColor: "rgba(255, 0, 128, .60)"
+                                    bgColor: "rgba(255,255,255,.3)",
+                                    fgColor: "#f39c12"
                                 },
-                                textCSS: 'font-weight:600;color:rgba(255,255,255, .95);'
+                                textCSS: 'font-weight:600;color:#fff;'
                             }
                         }
                     };

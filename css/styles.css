@@ -1,3 +1,25 @@
+/*
+====================================================
+
+* 	[Master Stylesheet]
+	
+	Theme Name :  
+	Version    :  
+	Author     :  
+	Author URI :  
+
+====================================================
+
+	TOC
+	
+	1. PRIMARY STYLES
+	2. COMMONS FOR PAGE DESIGN
+		JQUERY LIGHT BOX
+	3. LEFT SECTION
+	4. RIGHT SECTION
+
+====================================================
+
 /* ---------------------------------
 1. PRIMARY STYLES
 --------------------------------- */
@@ -139,34 +161,29 @@ b.light-color {
 	width: 100%;
 }
 
-.display-table-cell-left {
-	display: table-cell;
-	vertical-align: middle;
-}
-
-.display-table-cell-right {
+.display-table-cell {
 	display: table-cell;
 	vertical-align: middle;
 }
 
 ::-webkit-input-placeholder {
 	font-size: .9em;
-	letter-spacing: 2px;
+	letter-spacing: 1px;
 }
 
 ::-moz-placeholder {
 	font-size: .9em;
-	letter-spacing: 2px;
+	letter-spacing: 1px;
 }
 
 :-ms-input-placeholder {
 	font-size: .9em;
-	letter-spacing: 2px;
+	letter-spacing: 1px;
 }
 
 :-moz-placeholder {
 	font-size: .9em;
-	letter-spacing: 2px;
+	letter-spacing: 1px;
 }
 
 .full-height {
@@ -179,7 +196,7 @@ b.light-color {
 
 .main-area {
 	position: relative;
-	height: 100%;
+	height: 100vh;
 }
 
 /* ---------------------------------
@@ -204,17 +221,11 @@ b.light-color {
 }
 
 .left-section .main-content {
-	padding: 40px 40px 40px 40px;
-	text-align: justify;
+	padding: 40px 40px 40px 0;
 }
-
-/* ---------------------------------
-Titulo
---------------------------------- */
 
 .main-content .title {
 	margin-bottom: 15px;
-	text-align: left;
 }
 
 .main-content .email-input-area {
@@ -266,15 +277,9 @@ Titulo
 	color: #999;
 }
 
-/* ---------------------------------
-3.1. Footer-icons
---------------------------------- */
-
 .left-section .footer-icons {
 	position: absolute;
-	bottom: 40px;
-	margin-left: 40px;
-	width: 400px;
+	bottom: 30px;
 }
 
 .left-section .footer-icons>li>a {
@@ -289,12 +294,12 @@ Titulo
 
 .left-section .footer-icons>li>a>i {
 	display: inline-block;
-	height: 40px;
-	line-height: 38px;
+	height: 35px;
+	line-height: 33px;
 	transition: all .2s;
-	border-radius: 80px;
+	border-radius: 40px;
 	text-align: center;
-	width: 40px;
+	width: 35px;
 }
 
 .left-section .footer-icons>li>a:hover>i {
@@ -302,28 +307,28 @@ Titulo
 }
 
 .left-section .footer-icons>li>a>i[class*="facebook"] {
-	color: #3b5998;
-	border-color: #3b5998;
+	color: #2A61D6;
+	border-color: #2A61D6;
 }
 
-.left-section .footer-icons>li>a>i[class*="youtube"] {
-	color: #ff0000;
-	border-color: #ff0000;
+.left-section .footer-icons>li>a>i[class*="twitter"] {
+	color: #3AA4F8;
+	border-color: #3AA4F8;
 }
 
-.left-section .footer-icons>li>a>i[class*="linkedin"] {
-	color: #0073b1;
-	border-color: #0073b1;
+.left-section .footer-icons>li>a>i[class*="google"] {
+	color: #F43846;
+	border-color: #F43846;
 }
 
 .left-section .footer-icons>li>a>i[class*="instagram"] {
-	color: #000000;
-	border-color: #000000;
+	color: #8F614A;
+	border-color: #8F614A;
 }
 
-.left-section .footer-icons>li>a>i[class*="github"] {
-	color: #000000;
-	border-color: #000000;
+.left-section .footer-icons>li>a>i[class*="pinterest"] {
+	color: #E1C013;
+	border-color: #E1C013;
 }
 
 /* ---------------------------------
@@ -353,6 +358,6 @@ Titulo
 }
 
 #rounded-countdown {
-	width: 85%;
+	width: 80%;
 	margin: 0 auto;
 }

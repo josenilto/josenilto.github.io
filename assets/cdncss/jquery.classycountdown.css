@@ -12,7 +12,7 @@
     display: inline-block;
     position: relative;
     width: calc(25% - 20px);
-    margin: 5px;
+    margin: 10px;
 }
 
 .ClassyCountdown-wrapper .ClassyCountdown-value {
