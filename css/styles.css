@@ -196,7 +196,7 @@ b.light-color {
 
 .main-area {
 	position: relative;
-	height: 100vh;
+	height: 100%;
 }
 
 /* ---------------------------------
@@ -279,7 +279,7 @@ b.light-color {
 
 .left-section .footer-icons {
 	position: absolute;
-	bottom: 60px;
+	bottom: 80px;
 }
 
 .left-section .footer-icons>li>a {
