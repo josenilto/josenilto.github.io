@@ -341,9 +341,14 @@ b.light-color {
 	border-color: #f00;
 }
 
-.left-section .footer-icons>li>a>i[class*="bitbucket"] {
-	color: #0052CC;
-	border-color: #0052CC;
+.left-section .footer-icons>li>a>i[class*="skype"] {
+	color: #0078d4;
+	border-color: #0078d4;
+}
+
+.left-section .footer-icons>li>a>i[class*="whatsapp"] {
+	color: #009688;
+	border-color: #009688;
 }
 
 

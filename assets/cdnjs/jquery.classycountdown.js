@@ -8,8 +8,8 @@
  *
  */
 
-(function($) {
-    $.fn.ClassyCountdown = function(options, callback) {
+(function ($) {
+    $.fn.ClassyCountdown = function (options, callback) {
         var element = $(this);
         var DaysLeft, HoursLeft, MinutesLeft, SecondsLeft;
         var secondsLeft;
@@ -20,10 +20,10 @@
             labels: true,
             labelsOptions: {
                 lang: {
-                    days: 'Days',
-                    hours: 'Hours',
-                    minutes: 'Minutes',
-                    seconds: 'Seconds'
+                    days: 'Dias',
+                    hours: 'Horas',
+                    minutes: 'Minutos',
+                    seconds: 'Segundos'
                 },
                 style: 'font-size: 0.5em;'
             },
@@ -68,7 +68,7 @@
                     textCSS: ''
                 }
             },
-            onEndCallback: function() {
+            onEndCallback: function () {
             }
         };
         if (options.theme) {
@@ -79,25 +79,25 @@
         doTick();
         setInterval(doTick, 1000);
         doResponsive();
-        
+
         function prepare() {
             element.append('<div class="ClassyCountdown-wrapper">' +
-                    '<div class="ClassyCountdown-days">' +
-                        '<input type="text" />' +
-                        '<span class="ClassyCountdown-value"><div></div><span></span></span>' +
-                    '</div>' +
-                    '<div class="ClassyCountdown-hours">' +
-                        '<input type="text" />' +
-                        '<span class="ClassyCountdown-value"><div></div><span></span></span>' +
-                    '</div>' +
-                    '<div class="ClassyCountdown-minutes">' +
-                        '<input type="text" />' +
-                        '<span class="ClassyCountdown-value"><div></div><span></span></span>' +
-                    '</div>' +
-                    '<div class="ClassyCountdown-seconds">' +
-                        '<input type="text" />' +
-                        '<span class="ClassyCountdown-value"><div></div><span></span></span>' +
-                    '</div>' +
+                '<div class="ClassyCountdown-days">' +
+                '<input type="text" />' +
+                '<span class="ClassyCountdown-value"><div></div><span></span></span>' +
+                '</div>' +
+                '<div class="ClassyCountdown-hours">' +
+                '<input type="text" />' +
+                '<span class="ClassyCountdown-value"><div></div><span></span></span>' +
+                '</div>' +
+                '<div class="ClassyCountdown-minutes">' +
+                '<input type="text" />' +
+                '<span class="ClassyCountdown-value"><div></div><span></span></span>' +
+                '</div>' +
+                '<div class="ClassyCountdown-seconds">' +
+                '<input type="text" />' +
+                '<span class="ClassyCountdown-value"><div></div><span></span></span>' +
+                '</div>' +
                 '</div>');
             element.find('.ClassyCountdown-days input').knob($.extend({
                 width: '100%',
@@ -128,7 +128,7 @@
             element.find('.ClassyCountdown-hours .ClassyCountdown-value').attr('style', settings.style.hours.textCSS);
             element.find('.ClassyCountdown-minutes .ClassyCountdown-value').attr('style', settings.style.minutes.textCSS);
             element.find('.ClassyCountdown-seconds .ClassyCountdown-value').attr('style', settings.style.seconds.textCSS);
-            element.find('.ClassyCountdown-value').each(function() {
+            element.find('.ClassyCountdown-value').each(function () {
                 $(this).css('margin-top', Math.floor(0 - (parseInt($(this).height()) / 2)) + 'px');
             });
             if (settings.labels) {
@@ -141,7 +141,7 @@
             secondsLeft = settings.end - settings.now;
             secondsToDHMS();
         }
-        
+
         function secondsToDHMS() {
             DaysLeft = Math.floor(secondsLeft / 86400);
             HoursLeft = Math.floor((secondsLeft % 86400) / 3600);
@@ -171,14 +171,14 @@
             element.find('.ClassyCountdown-minutes .ClassyCountdown-value > div').html(MinutesLeft);
             element.find('.ClassyCountdown-seconds .ClassyCountdown-value > div').html(SecondsLeft);
         }
-        
+
         function doResponsive() {
-            element.find('.ClassyCountdown-wrapper > div').each(function() {
+            element.find('.ClassyCountdown-wrapper > div').each(function () {
                 $(this).css('height', $(this).width() + 'px');
             });
             if (settings.style.textResponsive) {
                 element.find('.ClassyCountdown-value').css('font-size', Math.floor(element.find('> div').eq(0).width() * settings.style.textResponsive / 10) + 'px');
-                element.find('.ClassyCountdown-value').each(function() {
+                element.find('.ClassyCountdown-value').each(function () {
                     $(this).css('margin-top', Math.floor(0 - (parseInt($(this).height()) / 2)) + 'px');
                 });
             }
@@ -187,13 +187,13 @@
         }
 
         function onResize() {
-            element.find('.ClassyCountdown-wrapper > div').each(function() {
+            element.find('.ClassyCountdown-wrapper > div').each(function () {
                 $(this).css('height', $(this).width() + 'px');
             });
             if (settings.style.textResponsive) {
                 element.find('.ClassyCountdown-value').css('font-size', Math.floor(element.find('> div').eq(0).width() * settings.style.textResponsive / 10) + 'px');
             }
-            element.find('.ClassyCountdown-value').each(function() {
+            element.find('.ClassyCountdown-value').each(function () {
                 $(this).css("margin-top", Math.floor(0 - (parseInt($(this).height()) / 2)) + 'px');
             });
             element.find('.ClassyCountdown-days input').trigger('change');
@@ -201,7 +201,7 @@
             element.find('.ClassyCountdown-minutes input').trigger('change');
             element.find('.ClassyCountdown-seconds input').trigger('change');
         }
-        
+
         function getPreset(theme) {
             switch (theme) {
                 case 'flat-colors':
@@ -691,8 +691,7 @@
                                     fgColor: "#fff",
                                     lineCap: 'round'
                                 },
-                                textCSS: 'font-family:\'Open Sans\';font-weight:300;color:#fff;'
-                            }
+                                textCSS: 'font-family:\'Open Sans\';font-weight:300;color:#fff;'                            }
                         }
                     };
             }
