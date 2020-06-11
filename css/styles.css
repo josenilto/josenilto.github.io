@@ -307,8 +307,8 @@ b.light-color {
 }
 
 .left-section .footer-icons>li>a>i[class*="facebook"] {
-	color: #2A61D6;
-	border-color: #2A61D6;
+	color: #4267b2;
+	border-color: #4267b2;
 }
 
 .left-section .footer-icons>li>a>i[class*="twitter"] {
@@ -322,14 +322,30 @@ b.light-color {
 }
 
 .left-section .footer-icons>li>a>i[class*="instagram"] {
-	color: #8F614A;
-	border-color: #8F614A;
+	color: #000000;
+	border-color: #000000;
 }
 
-.left-section .footer-icons>li>a>i[class*="pinterest"] {
-	color: #E1C013;
-	border-color: #E1C013;
+.left-section .footer-icons>li>a>i[class*="linkedin"] {
+	color: #0073b1;
+	border-color: #0073b1;
 }
+
+.left-section .footer-icons>li>a>i[class*="github"] {
+	color: #000000;
+	border-color: #000000;
+}
+
+.left-section .footer-icons>li>a>i[class*="youtube"] {
+	color: #f00;
+	border-color: #f00;
+}
+
+.left-section .footer-icons>li>a>i[class*="bitbucket"] {
+	color: #0052CC;
+	border-color: #0052CC;
+}
+
 
 /* ---------------------------------
 4. RIGHT SECTION
