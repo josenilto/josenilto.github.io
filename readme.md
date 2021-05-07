@@ -56,7 +56,7 @@ Experiência no desenvolvimento de sites utilizando as linguagem:
 * **[PHP](https://www.php.net/releases/index.php)** | Pré-processador de Hipertexto
 * **SQL**           | Linguagem de Consulta Estruturada
 * **[Bootstrap](https://getbootstrap.com/docs/versions)** | É uma Estrutura HTML, CSS, JS Gratuita e de Código Aberto
-* **Laravel**       | É uma Estrutura de Aplicativos
+* **[Laravel](https://laravel.com/docs/5.8/releases)**       | É uma Estrutura de Aplicativos
 * **[CodeIgniter](https://codeigniter.com/download)**   | É uma Estrutura de Desenvolvimento Web Rápida de Software de Código Aberto
 * **[Angular](https://angular.io/guide/releases)** | É uma Plataforma para a Construção de Aplicativos
 * **[Git](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository)** | É um Sistema de Controle de Versão Distribuído para Rastrear Alterações no Código Fonte
