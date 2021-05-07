@@ -49,16 +49,16 @@ Search API, Multisite, Features, Criação de Views, Módulos, Themes.
 
 Experiência no desenvolvimento de sites utilizando as linguagem: 
 
-* **HTML5**         | Linguagem de Marcação de Hipertexto
-* **CSS3**          | Cascading Style Sheets Idioma
+* **[HTML5](https://html.com/html5)** | Linguagem de Marcação de Hipertexto
+* **[CSS3](https://www.w3.org/TR/html53)** | Cascading Style Sheets Idioma
 * **Javascript**    | Linguagem dinâmica de hipertexto
 * **JQuery**        | Plataforma cruzada
-* **PHP**           | Pré-processador de Hipertexto
+* **[PHP](https://www.php.net/releases/index.php)** | Pré-processador de Hipertexto
 * **SQL**           | Linguagem de Consulta Estruturada
 * **[Bootstrap](https://getbootstrap.com/docs/versions)** | É uma Estrutura HTML, CSS, JS Gratuita e de Código Aberto
 * **Laravel**       | É uma Estrutura de Aplicativos
-* **CodeIgniter**   | É uma Estrutura de Desenvolvimento Web Rápida de Software de Código Aberto
-* **Angular**       | É uma Plataforma para a Construção de Aplicativos
-* **Git**           | É um Sistema de Controle de Versão Distribuído para Rastrear Alterações no Código Fonte
+* **[CodeIgniter](https://codeigniter.com/download)**   | É uma Estrutura de Desenvolvimento Web Rápida de Software de Código Aberto
+* **[Angular](https://angular.io/guide/releases)** | É uma Plataforma para a Construção de Aplicativos
+* **[Git](https://docs.github.com/en/github/administering-a-repository/managing-releases-in-a-repository)** | É um Sistema de Controle de Versão Distribuído para Rastrear Alterações no Código Fonte
 
 Ferramentas de acesso remoto, ferramentas de FTP, Freeboard ferramentas de SSH, ferramentas de VPN, Redes. Serviços de hospedagem cloud AWS, registro Nacional e Internacional.
