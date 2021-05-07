@@ -55,7 +55,7 @@ Experiência no desenvolvimento de sites utilizando as linguagem:
 * **JQuery**        | Plataforma cruzada
 * **PHP**           | Pré-processador de Hipertexto
 * **SQL**           | Linguagem de Consulta Estruturada
-* **[Bootstrap](https://getbootstrap.com/docs/versions)**     | É uma Estrutura HTML, CSS, JS Gratuita e de Código Aberto
+* **[Bootstrap](https://getbootstrap.com/docs/versions)** | É uma Estrutura HTML, CSS, JS Gratuita e de Código Aberto
 * **Laravel**       | É uma Estrutura de Aplicativos
 * **CodeIgniter**   | É uma Estrutura de Desenvolvimento Web Rápida de Software de Código Aberto
 * **Angular**       | É uma Plataforma para a Construção de Aplicativos
