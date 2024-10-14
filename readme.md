@@ -1,13 +1,71 @@
 ## GitHub Page - Curriculum | Josenilto Luis
 
-Formação Acadêmica 
+📝 **GitHub Pages - Curriculum | Josenilto L Silva**
 
-- Universidade Estácio de Sá, UNESA - Bacharelado, em Sistema da Informação | Dez. / 2024 - Superior Completo
-- Universidade Veiga de Almeida, UVA - Bacharelado, em Ciência da Computação | Ago. / 2019 - Superior Completo
+**Formação Acadêmica**
 
-Qualificação Profissional
+- [ ] Instituto Militar de Engenharia, IME - Mestrado, em Sistema da Informação | *Cursando*
+- [x] Universidade Estácio de Sá, UNESA - Bacharelado, em Sistema da Informação | **Superior Completo* *20/03/2024**  
+- [x] Universidade Veiga de Almeida, UVA - Bacharelado, em Ciência da Computação | **Superior Completo* *23/08/2019**
 
-Tenho sólida experiência nas tratativas de solicitações a incidentes relacionadas à Infraestrutura, através de análises de complexidade e conclusão de atendimentos de acordo com a metodologia ITIL, virtualização de servidores, configurações, desenvolvimento e implementação sustentável, execução de micro serviços e backups. Vivência em planejamento e melhorias na infraestrutura de TI e desenvolvimento de sites, há mais de 12 anos.
+**Qualificação Profissional**
+
+Sou um profissional altamente capacitado com mais de 12 anos de experiência em TI, especializado em infraestrutura, virtualização de servidores e implementação de soluções baseadas em nuvem. Minha expertise abrange desde a análise de incidentes conforme as práticas ITIL até o desenvolvimento e aprimoramento de infraestruturas complexas. 
+
+**Principais Competências**
+
+**Infraestrutura e Serviços em Nuvem:**
+
+Experiência extensiva em nuvens privadas (OpenStack, CloudStack) e públicas (Azure, AWS, GCP, IBM, Oracle, RedHat).
+Garantia de disponibilidade, escalabilidade e desempenho em ambientes on-premises e na nuvem.
+Especialista em migração de cargas de trabalho entre diferentes ambientes e serviços de nuvem.
+
+**Planejamento Estratégico em TI:**
+
+Estratégias eficazes para tomada de decisão, gerenciamento de custos e desligamento de recursos.
+Experiência em computação sob demanda e arquitetura de micro serviços.
+
+**Automação e DevOps:**
+
+Proficiente em infraestrutura como código (Terraform, Ansible, Vagrant, Puppet).
+Conhecimento sólido em conceitos de CI/CD (svn, gitlab, github, bitbucket, Jenkins, SonarQube).
+
+**Administração de Sistemas e Redes:**
+
+Expertise em administração de servidores Web (Apache, Jboss, Tomcat, NginX, IIS).
+Fluência em linguagens de programação (Python, Ruby, PHP, Perl/CGI, Java, JavaScript).
+Proficiência em protocolos e topologias de rede TCP/IP, diagnósticos de rede WAN/LAN, VPN, entre outros.
+
+**Bancos de Dados e Linguagens:**
+
+Competência em consultas e manipulação de bancos de dados SQL Server, MySQL, PostgreSQL, MongoDB, Oracle (ETL, PLSQL).
+Conhecimento avançado em linguagens de marcação (HTML5, CSS3) e programação.
+
+**Segurança e Monitoramento:**
+
+Implementação de medidas de segurança eficazes.
+Monitoramento e rastreamento através de ferramentas como Zabbix, Grafana, Elastic, New Relic, Kibana.
+
+**Comunicação e Colaboração:**
+
+Habilidades avançadas em acesso remoto (MobaXterm, Bitvise, Putty SSH).
+Facilidade em comunicação e colaboração, evidenciada por meu perfil no LinkedIn e GitHub.
+
+Tenho mais de 12 anos de experiência em planejamento e melhoria de infraestrutura de TI e desenvolvimento de sites. 
+
+✅ **SRE** [ TIVIT - Cliente; Petrobras ]     
+✅ **DevOps** [ TelTec Solutions - Clientes; Grupo Madero, BRMALLS, Azul ... ]     
+✅ **DevSecOps** [ Monitora - Cliente; Serasa Experian ]     
+✅ **Arquiteto Cloud / DevOps** [ Grupo Madero ]     
+✅ Analista Cloud  [ Linx - Projetos chaordic ]    
+✅ Analista Infraestrutura [ Stefanini LATAM ] [ CTCTech - Cliente; ANP - Projeto APPs ]    
+✅ Analista Multiplataforma Operacional, On-Premise e Cloud [ G&P e GlobalHitss - Cliente; Caixa Econômica Federal ] 
+
+✅ Analista de Implantação [ Ferragens Ramada ] [ Cam Tecnologia - Cliente; RNP, Ferragens Ramada ... ]    
+
+✅ Supervisor Operacional de TI [ Universidade Veiga de Almeida ]    
+✅ Técnico de Informática [ Universidade Veiga de Almeida ]    
+✅ Estagiário de TI [ Universidade Veiga de Almeida ] 
 
 Gerenciamento de processos, reestruturação de serviços, otimização de desempenho. 
   
