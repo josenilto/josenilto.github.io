@@ -1,0 +1,63 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # ou a versão que você precisa
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  deploy_dev:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: dev
+      url: 'josenilto.github.io'
+    steps:
+      - name: Deploy to Development
+        run: echo "Deploying to Development environment"
+        # Adicione seu comando de deploy para dev aqui
+
+  deploy_hmp:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: hmp
+      url: 'josenilto.github.io'
+    steps:
+      - name: Deploy to HMP
+        run: echo "Deploying to HMP environment"
+        # Adicione seu comando de deploy para hmp aqui
+
+  deploy_prd:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: prd
+      url: 'josenilto.github.io'
+    steps:
+      - name: Deploy to Production
+        run: echo "Deploying to Production environment"
+        # Adicione seu comando de deploy para prd aqui
