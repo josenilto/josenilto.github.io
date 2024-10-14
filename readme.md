@@ -1,4 +1,4 @@
-###📝 **GitHub Pages - Curriculum | Josenilto L Silva**
+📝 **GitHub Pages - Curriculum | Josenilto L Silva**
 
 **Formação Acadêmica**
 
