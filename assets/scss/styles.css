@@ -1,6 +1,7 @@
 @charset "UTF-8";
 /*===== GOOGLE FONTS =====*/
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
 :root {
   --header-height: 3rem;
   /*========== Cores ==========*/
@@ -500,6 +501,7 @@ img {
 
 /*========== MEDIA QUERIES ==========*/
 @media screen and (min-width: 576px) {
+
   .home__container,
   .about__container,
   .app__container {
@@ -509,6 +511,7 @@ img {
     -ms-flex-align: center;
     align-items: center;
   }
+
   .about__data,
   .about__initial,
   .app__data,
@@ -517,6 +520,7 @@ img {
   .contact__initial {
     text-align: initial;
   }
+
   .about__img,
   .app__img {
     width: 380px;
@@ -524,6 +528,7 @@ img {
     -ms-flex-order: -1;
     order: -1;
   }
+
   .contact__container {
     -ms-grid-columns: 1.75fr 1fr;
     grid-template-columns: 1.75fr 1fr;
@@ -531,69 +536,86 @@ img {
     -ms-flex-align: center;
     align-items: center;
   }
+
   .contact__button {
     -ms-grid-column-align: center;
     justify-self: center;
   }
 }
+
 @media screen and (min-width: 768px) {
   body {
     margin: 0;
   }
+
   .section {
     padding-top: 8rem;
   }
+
   .nav {
     height: calc(var(--header-height) + 1.5rem);
   }
+
   .nav__list {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
   }
+
   .nav__item {
     margin-left: var(--mb-5);
     margin-bottom: 0;
   }
+
   .nav__toggle {
     display: none;
   }
+
   .change-theme {
     position: initial;
     margin-left: var(--mb-2);
   }
+
   .home__container {
     height: 100vh;
     justify-items: center;
   }
+
   .services__container,
   .menu__container {
     margin-top: var(--mb-6);
   }
+
   .menu__container {
     -ms-grid-columns: (210px) [3];
     grid-template-columns: repeat(3, 210px);
     -webkit-column-gap: 4rem;
     column-gap: 4rem;
   }
+
   .menu__content {
     padding: 1.5rem;
   }
+
   .menu__img {
     width: 130px;
   }
+
   .app__store {
     margin: 0 var(--mb-1) 0 0;
   }
 }
+
 @media screen and (min-width: 960px) {
   .bd-container {
     margin-left: auto;
     margin-right: auto;
   }
+
   .home__img {
     width: 500px;
   }
+
   .about__container,
   .app__container {
     -webkit-column-gap: 7rem;
@@ -607,4 +629,5 @@ img {
     height: 640px;
   }
 }
+
 /*# sourceMappingURL=styles.css.map */
