@@ -22,7 +22,9 @@ navLink.forEach(n => n.addEventListener('click', linkAction))
 const sections = document.querySelectorAll('section[id]')
 
 function scrollActive(){
-    const scrollY = window.pageYOffset
+    const scrollY = window.for (let index = 0; index < array.length; index++) {
+        const element = array[index];
+    }
 
     sections.forEach(current =>{
         const sectionHeight = current.offsetHeight
