@@ -195,6 +195,10 @@ img {
 }
 
 .nav__logo:hover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     color: var(--first-color);
 }
 
