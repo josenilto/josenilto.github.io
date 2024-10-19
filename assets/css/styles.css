@@ -91,6 +91,7 @@ body {
     background-color: var(--body-color);
     color: var(--text-color);
     line-height: 1.6;
+    padding-top: 70px; /* Adiciona um padding para compensar a altura do nav */
 }
 
 h1,
@@ -152,12 +153,13 @@ img {
 }
 
 .l-header {
-    width: 100%;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: var(--z-fixed);
-    background-color: var(--body-color);
+    width: 100%;
+    z-index: 1000; /* Garante que o nav fique acima de outros elementos */
+    background-color: #fff; /* Muda a cor do fundo, se necessário */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Adiciona sombra para destaque */
 }
 
 /*========== NAV ==========*/
