@@ -291,6 +291,7 @@ img {
 
 .home__img {
   width: 300px;
+  height: 200px;
   -ms-grid-column-align: center;
   justify-self: center;
 }
@@ -614,6 +615,7 @@ img {
 
   .home__img {
     width: 500px;
+    height: 400px;
   }
 
   .about__container,
