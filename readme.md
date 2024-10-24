@@ -1,5 +1,7 @@
 📝 **GitHub Pages - Curriculum | Josenilto L da Silva**
 
+[![Deploy Jekyll with GitHub Pages dependencies preinstalled](https://github.com/josenilto/josenilto.github.io/actions/workflows/jekyll-gh-pages.yml/badge.svg)](https://github.com/josenilto/josenilto.github.io/actions/workflows/jekyll-gh-pages.yml)
+
 **Formação Acadêmica**
 
 - [ ] Instituto Militar de Engenharia, IME - Mestrado, em Sistema da Informação | *Cursando*
