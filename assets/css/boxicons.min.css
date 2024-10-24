@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 @font-face {
     font-family: "boxicons";
     font-weight: normal;
@@ -4762,17 +4761,6 @@
 .bxs-zoom-out:before {
     content: "\eeb5";
 }
-=======
-@font-face {
-    font-family: "boxicons";
-    font-weight: normal;
-    font-style: normal;
-    src: url("../fonts/boxicons.eot");
-    src: url("../fonts/boxicons.eot") format("embedded-opentype"), url("../fonts/boxicons.woff2") format("woff2"),
-        url("../fonts/boxicons.woff") format("woff"), url("../fonts/boxicons.ttf") format("truetype"),
-        url("../fonts/boxicons.svg?#boxicons") format("svg");
-}
->>>>>>> 21065577200983a3eba43d0c32f159ee2316d856
 
 .bx {
     font-family: "boxicons" !important;
