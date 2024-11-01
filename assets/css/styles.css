@@ -638,9 +638,7 @@ img {
 }
 
 .frente{
-  background-image: url(https://josenilto.github.io/assets/img/profile-josenilto.webp);
-  width: 50%;
-  height: 50%;
+  /* background-image: url(https://josenilto.github.io/assets/img/profile-josenilto.webp); */
   background-size: cover;
 }
 
