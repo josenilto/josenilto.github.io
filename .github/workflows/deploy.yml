@@ -3,50 +3,104 @@ name: CI/CD Pipelines
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   build:
-    name: Build
+    name: Build & Generate Artifact
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Executar script de build
-        run: echo "Hello, world! — Build executado"
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: ./dist
+          retention-days: 3
 
   deploy-dev:
-    name: Deploy DEV
-    runs-on: ubuntu-latest
+    name: ✨ Deploy DEV
     needs: build
+    runs-on: ubuntu-latest
     environment:
       name: dev
       url: https://josenilto.github.io/dev
 
     steps:
-      - name: Executar deploy DEV
-        run: echo "Deploy DEV executado"
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist
+
+      - name: Deploy to GitHub Pages (DEV)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: dev
 
   deploy-hmg:
-    name: Deploy HMG
-    runs-on: ubuntu-latest
+    name: 🚧 Deploy HMG (Requires Approval)
     needs: deploy-dev
+    runs-on: ubuntu-latest
     environment:
       name: hmg
       url: https://josenilto.github.io/hmg
+      # Requer aprovação manual no GitHub
+      reviewers: ['josenilto']
 
     steps:
-      - name: Executar deploy HMG
-        run: echo "Deploy HMG executado"
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist
+
+      - name: Deploy to GitHub Pages (HMG)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: hmg
 
   deploy-prd:
-    name: Deploy PRD
-    runs-on: ubuntu-latest
+    name: Deploy PRD (Requires Approval)
     needs: deploy-hmg
+    runs-on: ubuntu-latest
     environment:
       name: prd
-      url: https://josenilto.github.io/
+      url: https://josenilto.github.io
+      reviewers: ['josenilto']
 
     steps:
-      - name: Executar deploy PRD
-        run: echo "Deploy PRD executado"
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist
+
+      - name: Deploy to GitHub Pages (PRD)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: .
