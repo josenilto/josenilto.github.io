@@ -1,42 +1,113 @@
-name: CI/CD PipeLines
+name: CI/CD Pipeline – Static GitHub Pages (DEV/HMG/PRD)
+
 on:
   workflow_dispatch:
 
 jobs:
+  # ============================================================
+  # JOB 1 — BUILD + ARTEFATO
+  # ============================================================
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests (optional)
+        run: npm test --if-present
+
+      - name: Build project
+        run: npm run build --if-present
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: |
+            dist
+            build
+          retention-days: 7
+
+  # ============================================================
+  # JOB 2 — DEPLOY DEV
+  # ============================================================
   deploy-dev:
     runs-on: ubuntu-latest
-    environment: 
-      name: dev
-      url: 'josenilto.github.io'
     needs: build
-    steps:
-      - name: Run a one-line script
-        run: echo Deploy Dev
+    environment:
+      name: dev
+      url: https://josenilto.github.io/dev
 
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+
+      - name: Deploy to GitHub Pages (DEV folder)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          destination_dir: dev
+
+  # ============================================================
+  # JOB 3 — DEPLOY HMG (manual approval)
+  # ============================================================
   deploy-hmg:
     runs-on: ubuntu-latest
-    environment: 
-      name: hmg
-      url: 'josenilto.github.io'
     needs: deploy-dev
+    environment:
+      name: hmg
+      url: https://josenilto.github.io/hmg
+
     steps:
-      - name: Run a one-line script
-        run: echo Deploy HMG
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
 
+      - name: Deploy to GitHub Pages (HMG folder)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          destination_dir: hmg
 
+  # ============================================================
+  # JOB 4 — DEPLOY PRD (manual approval)
+  # ============================================================
   deploy-prd:
     runs-on: ubuntu-latest
-    environment: 
-      name: prd
-      url: 'josenilto.github.io'
     needs: deploy-hmg
+    environment:
+      name: prd
+      url: https://josenilto.github.io/
+
     steps:
-      - name: Run a one-line script
-        run: echo Deploy PRD
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+
+      - name: Deploy to GitHub Pages (root folder)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist
+          destination_dir: .
