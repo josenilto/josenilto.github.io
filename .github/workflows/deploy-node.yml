@@ -28,6 +28,8 @@ jobs:
     - run: npm test      
     - name: Run a one-line script
       run: echo Deploy Dev
+    - name: Install deps
+      run: npm install
 
   deploy-hmg:
     runs-on: ubuntu-latest
