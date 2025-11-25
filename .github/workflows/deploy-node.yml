@@ -2,10 +2,10 @@ name: CI/CD Intelligent Pipeline
 
 on:
   push:
-    branches: [ "dev", "hmg", "master" ]
+    branches: [ "dev", "hmg", "prd" ]
     tags: [ "v*" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "prd" ]
   workflow_dispatch:
 
 jobs:
