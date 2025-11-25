@@ -1,61 +1,102 @@
-name: CI/CD PipeLines
+name: CI/CD Intelligent Pipeline
+
 on:
+  push:
+    branches: [ "dev", "hmg", "master" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
+
+  # ============================================================
+  # 1) BUILD ÚNICO (para qualquer origem)
+  # ============================================================
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
 
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  # ============================================================
+  # 2) Deploy DEV (automático quando branch = dev)
+  # ============================================================
   deploy-dev:
-    runs-on: ubuntu-latest
-    environment: 
-      name: dev
-      url: 'josenilto.github.io/dev'
     needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    environment:
+      name: dev
+      url: https://josenilto.github.io/dev
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
-        cache: npm
+      - name: Deploy to DEV
+        run: echo "Deploy DEV concluído!"
 
-    - name: Install dependencies (npm install)
-      run: npm install
-
-    - name: Build project
-      run: npm run build --if-present
-
-    - name: Run tests
-      run: npm test
-
-    - name: Deploy Dev
-      run: echo "Deploy Dev finalizado!"
-
-
+  # ============================================================
+  # 3) Deploy HMG (somente quando branch = hmg)
+  # ============================================================
   deploy-hmg:
+    needs: build
     runs-on: ubuntu-latest
-    environment: 
+    if: github.ref == 'refs/heads/hmg'
+    environment:
       name: hmg
-      url: 'josenilto.github.io/hmg'
-    needs: deploy-dev
+      url: https://josenilto.github.io/hmg
+
     steps:
-      - name: Run a one-line script
-        run: echo Deploy HMG
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
 
+      - name: Deploy to HMG
+        run: echo "Deploy HMG concluído!"
 
+  # ============================================================
+  # 4) Deploy PRD (apenas quando criar TAG vX.X.X)
+  # ============================================================
   deploy-prd:
+    needs: build
     runs-on: ubuntu-latest
-    environment: 
+    if: startsWith(github.ref, 'refs/tags/v')
+    environment:
       name: prd
-      url: 'josenilto.github.io'
-    needs: deploy-hmg
+      url: https://josenilto.github.io
+
     steps:
-      - name: Run a one-line script
-        run: echo Deploy PRD
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+
+      - name: Deploy to PRD
+        run: echo "Deploy PRD concluído!"
