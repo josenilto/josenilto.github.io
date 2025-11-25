@@ -1,0 +1,92 @@
+name: CI/CD Intelligent Pipeline v2.0
+
+on:
+  push:
+    branches: [ "dev", "hmg", "prd" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "prd" ]
+  workflow_dispatch:
+
+jobs:
+
+  # ============================================================
+  # 1) BUILD ÚNICO
+  # ============================================================
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 3
+
+
+  # ============================================================
+  # 2) DEPLOY DINÂMICO
+  #    - DEV  -> push na branch dev
+  #    - HMG  -> push na branch hmg
+  #    - PRD  -> push de TAG vX.X.X
+  # ============================================================
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    # Executa apenas se for branch de ambiente OU tag v*
+    if: |
+      startsWith(github.ref, 'refs/heads/dev') ||
+      startsWith(github.ref, 'refs/heads/hmg') ||
+      startsWith(github.ref, 'refs/tags/v')
+
+    env:
+      # Define o ambiente dinamicamente
+      ENV_NAME: ${{ startsWith(github.ref, 'refs/heads/dev') && 'dev' ||
+                   startsWith(github.ref, 'refs/heads/hmg') && 'hmg' ||
+                   startsWith(github.ref, 'refs/tags/v') && 'prd' }}
+
+      # Define a URL de deploy automaticamente
+      ENV_URL: ${{ startsWith(github.ref, 'refs/heads/dev') && 'https://josenilto.github.io/dev' ||
+                   startsWith(github.ref, 'refs/heads/hmg') && 'https://josenilto.github.io/hmg' ||
+                   startsWith(github.ref, 'refs/tags/v') && 'https://josenilto.github.io' }}
+
+    environment:
+      name: ${{ env.ENV_NAME }}
+      url:  ${{ env.ENV_URL }}
+
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+
+      - name: Mostrar ambiente selecionado
+        run: |
+          echo "Ambiente detectado: $ENV_NAME"
+          echo "URL do ambiente:    $ENV_URL"
+
+      - name: Deploy (dinâmico)
+        run: |
+          echo "Executando deploy para: $ENV_NAME"
+          echo "URL: $ENV_URL"
+          echo "Deploy concluído com sucesso!"

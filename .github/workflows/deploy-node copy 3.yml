@@ -1,0 +1,100 @@
+name: CI/CD Intelligent Pipeline v3.0
+
+on:
+  push:
+    branches: [ "dev", "hmg", "prd" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "prd" ]
+  workflow_dispatch:
+
+jobs:
+
+  # ============================================================
+  # 1) BUILD ÚNICO
+  # ============================================================
+  build:
+    runs-on: ubuntu-latest
+
+    outputs:
+      ref: ${{ github.ref }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 3
+
+
+  # ============================================================
+  # 2) DEPLOY INTELIGENTE COM MATRIX
+  #
+  # Cada entrada da matrix representa um ambiente.
+  # O deploy só é executado se a branch/tag combinar com "trigger".
+  # ============================================================
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    # MAPPING DOS AMBIENTES
+    strategy:
+      matrix:
+        environment:
+          - name: dev
+            trigger: refs/heads/dev
+            url: https://josenilto.github.io/dev
+
+          - name: hmg
+            trigger: refs/heads/hmg
+            url: https://josenilto.github.io/hmg
+
+          - name: prd
+            trigger: refs/tags/v
+            url: https://josenilto.github.io
+
+    # Só executa o item da matrix cujo trigger combina com o ref atual
+    if: startsWith(github.ref, matrix.environment.trigger)
+
+    environment:
+      name: ${{ matrix.environment.name }}
+      url:  ${{ matrix.environment.url }}
+
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+
+      - name: Detalhes do ambiente
+        run: |
+          echo "=== Deploy Automático Inteligente (Matrix) ==="
+          echo "Ambiente........: ${{ matrix.environment.name }}"
+          echo "Trigger.........: ${{ matrix.environment.trigger }}"
+          echo "URL.............: ${{ matrix.environment.url }}"
+          echo "Git Ref.........: $GITHUB_REF"
+
+      - name: Deploy
+        run: |
+          echo "Deploy iniciado para o ambiente: ${{ matrix.environment.name }}"
+          echo "Publicando em: ${{ matrix.environment.url }}"
+          echo "Deploy finalizado com sucesso!"
