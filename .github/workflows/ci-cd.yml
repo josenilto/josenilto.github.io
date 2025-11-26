@@ -1,0 +1,293 @@
+name: CI/CD Intelligent Pipeline
+
+# Dispara automaticamente para pushes nas branches dev/hmg/prd,
+# PRs para dev/hmg e permite execução manual para promover builds.
+on:
+  push:
+    branches: ['dev', 'hmg', 'prd']
+  pull_request:
+    branches: ['dev', 'hmg']
+  workflow_dispatch:
+    inputs:
+      promote_from:
+        description: 'Promote from (dev or hmg)'
+        required: false
+        default: ''
+      target_env:
+        description: 'Target environment when manually triggered (dev/hmg/prd)'
+        required: false
+        default: ''
+
+# Evita execuções concorrentes por ambiente (chave usa ref ou input)
+concurrency:
+  group: ci-cd-${{ github.ref_name }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+env:
+  IMAGE_NAME: myorg/myapp           # ajuste conforme seu registry
+  REGISTRY: ghcr.io                 # ex: ghcr.io, docker.io, registry.aws
+  NODE_VERSION: 20
+
+jobs:
+  # =========================
+  # 1) LINT / TEST / BUILD
+  # =========================
+  build_and_test:
+    name: Build & Test (${{ matrix.os }} / node-${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 20]          # matrix inteligente: testa múltiplas versões Node
+        os: [ubuntu-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'npm'
+
+      - name: Cache yarn/npm (extra)
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node }}-npm-
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Run lint
+        run: npm run lint --if-present
+
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-build
+          path: |
+            dist
+            build
+            # ajuste para sua pasta de build
+
+  # =========================
+  # 2) Docker Build & Push
+  #    (gera image tags: branch, sha, env)
+  # =========================
+  docker_build_push:
+    name: Docker Build & Push
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-build
+          path: ./artifact
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push image
+        id: build-image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache
+          cache-to: type=inline
+
+      - name: Set outputs
+        run: |
+          echo "image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}" >> $GITHUB_OUTPUT
+
+  # =========================
+  # 3) Deploy to DEV (automatic on push to dev)
+  # =========================
+  deploy_dev:
+    name: Deploy DEV
+    needs: docker_build_push
+    runs-on: ubuntu-latest
+    if: >
+      (github.ref == 'refs/heads/dev') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.target_env == 'dev')
+    environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to DEV via SSH (example)
+        if: ${{ secrets.DEV_SSH_KEY != '' }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          script: |
+            set -e
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} myapp:dev
+            docker compose -f /opt/myapp/docker-compose.dev.yml up -d --no-deps --build
+
+      - name: Kubernetes deploy (example)
+        if: ${{ secrets.DEV_KUBECONFIG != '' }}
+        run: |
+          echo "${{ secrets.DEV_KUBECONFIG }}" > kubeconfig
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl set image deployment/myapp myapp=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --namespace dev
+          kubectl rollout status deployment/myapp --namespace dev
+
+  # =========================
+  # 4) Deploy to HMG (automatic on push to hmg OR promoted from dev)
+  # =========================
+  deploy_hmg:
+    name: Deploy HMG
+    needs: docker_build_push
+    runs-on: ubuntu-latest
+    if: >
+      (github.ref == 'refs/heads/hmg') ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.target_env == 'hmg' || github.event.inputs.promote_from == 'dev'))
+    environment: hmg
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to HMG via SSH (example)
+        if: ${{ secrets.HMG_SSH_KEY != '' }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HMG_HOST }}
+          username: ${{ secrets.HMG_USER }}
+          key: ${{ secrets.HMG_SSH_KEY }}
+          script: |
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} myapp:hmg
+            docker compose -f /opt/myapp/docker-compose.hmg.yml up -d --no-deps --build
+
+      - name: Kubernetes deploy to hmg (example)
+        if: ${{ secrets.HMG_KUBECONFIG != '' }}
+        run: |
+          echo "${{ secrets.HMG_KUBECONFIG }}" > kubeconfig
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl set image deployment/myapp myapp=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --namespace hmg
+          kubectl rollout status deployment/myapp --namespace hmg
+
+  # =========================
+  # 5) Deploy to PRD (protected: exige aprovação nos Environments)
+  #    -> Só roda quando push na branch prd OU workflow_dispatch target_env=prd
+  # =========================
+  deploy_prd:
+    name: Deploy PRD (requires environment approval)
+    needs: docker_build_push
+    runs-on: ubuntu-latest
+    if: >
+      (github.ref == 'refs/heads/prd') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.target_env == 'prd' && github.event.inputs.promote_from != '')
+    environment: production  # configure reviewers & protection in GitHub repo settings
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Confirm image
+        run: echo "Deploying image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+
+      - name: Backup DB (optional) - via SSH example
+        if: ${{ secrets.PRD_BACKUP_SSH_KEY != '' }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PRD_HOST }}
+          username: ${{ secrets.PRD_USER }}
+          key: ${{ secrets.PRD_BACKUP_SSH_KEY }}
+          script: |
+            # Exemplo: fazer dump antes do deploy
+            pg_dump -U $DB_USER -h localhost mydb > /tmp/pre_deploy_$(date +%F_%T).sql
+
+      - name: Deploy to PRD via SSH
+        if: ${{ secrets.PRD_SSH_KEY != '' }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PRD_HOST }}
+          username: ${{ secrets.PRD_USER }}
+          key: ${{ secrets.PRD_SSH_KEY }}
+          script: |
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} myapp:prd
+            docker compose -f /opt/myapp/docker-compose.prd.yml up -d --no-deps --build
+            # health check example
+            sleep 5
+            curl -f http://localhost:8080/health || exit 1
+
+      - name: Kubernetes deploy to prd (example)
+        if: ${{ secrets.PRD_KUBECONFIG != '' }}
+        run: |
+          echo "${{ secrets.PRD_KUBECONFIG }}" > kubeconfig
+          export KUBECONFIG=$(pwd)/kubeconfig
+          kubectl set image deployment/myapp myapp=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --namespace production
+          kubectl rollout status deployment/myapp --namespace production
+
+      - name: Create PRD Tag
+        if: github.ref == 'refs/heads/prd' || (github.event_name == 'workflow_dispatch' && github.event.inputs.target_env == 'prd')
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch
+          tag_prefix: "prd-"
+
+  # =========================
+  # 6) Cleanup job (optional): remove old images, notify, etc.
+  # =========================
+  post_cleanup:
+    name: Post-deploy notifications & cleanup
+    needs: [deploy_dev, deploy_hmg, deploy_prd]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Notify Slack (optional)
+        if: ${{ secrets.SLACK_WEBHOOK != '' }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,commit,author
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Prune local docker images (runner)
+        run: docker system prune -af || true
