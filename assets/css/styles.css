@@ -538,7 +538,7 @@ img {
 
   .home__container {
     height: 100vh;
-    justify-items: self-end;
+    justify-items: center;
   }
 
   .services__container,
