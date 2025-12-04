@@ -13,7 +13,11 @@ function cancel(){
 const texts = [
     "DevOps",
     "SRE",
-    "SysAdmin"
+    "SysAdmin",
+    "CloudOps",
+    "ITOps",
+    "FinOps",
+    "AIOps",
 ]
 
 let speed  =100;

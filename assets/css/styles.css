@@ -141,7 +141,7 @@ img {
 
 /*========== LAYOUT ==========*/
 .bd-container {
-  max-width: 960px;
+  max-width: 1000px;
   width: calc(100% - 2rem);
   margin-left: var(--mb-2);
   margin-right: var(--mb-2);
@@ -538,7 +538,7 @@ img {
 
   .home__container {
     height: 100vh;
-    justify-items: center;
+    justify-items: self-end;
   }
 
   .services__container,
@@ -581,7 +581,7 @@ img {
 /* For tall screens on mobiles y desktop*/
 @media screen and (min-height: 721px) {
   .home__container {
-    height: 640px;
+    height: 650px;
   }
 }
 
