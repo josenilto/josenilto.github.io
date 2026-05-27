@@ -12,9 +12,9 @@ jobs:
 
   deploy-dev:
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: dev
-      url: 'josenilto.github.io/dev'
+      url: 'https://josenilto.github.io/dev'
     needs: build
     steps:
     - name: Checkout
@@ -23,17 +23,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 18
-        cache: npm
-
-    - name: Install dependencies (npm install)
-      run: npm install
-
-    - name: Build project
-      run: npm run build --if-present
-
-    - name: Run tests
-      run: npm test
+        node-version: 24
 
     - name: Deploy Dev
       run: echo "Deploy Dev finalizado!"
@@ -41,9 +31,9 @@ jobs:
 
   deploy-hmg:
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: hmg
-      url: 'josenilto.github.io/hmg'
+      url: 'https://josenilto.github.io/hmg'
     needs: deploy-dev
     steps:
       - name: Run a one-line script
@@ -52,9 +42,9 @@ jobs:
 
   deploy-prd:
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: prd
-      url: 'josenilto.github.io'
+      url: 'https://josenilto.github.io'
     needs: deploy-hmg
     steps:
       - name: Run a one-line script
