@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: [ "master" ]
 
+# Força todas as actions a rodarem com Node.js 24 (obrigatório a partir de jun/2026)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   build:
 
@@ -16,8 +20,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [20.x, 22.x, 24.x]
+        # Node 18 EOL abr/2025 — ver https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4

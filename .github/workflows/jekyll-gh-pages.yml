@@ -21,6 +21,10 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+# Força todas as actions a rodarem com Node.js 24 (obrigatório a partir de jun/2026)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   # Build job
   build:

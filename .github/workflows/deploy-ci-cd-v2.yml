@@ -8,6 +8,10 @@ on:
     branches: [ "prd" ]
   workflow_dispatch:
 
+# Força todas as actions a rodarem com Node.js 24 (obrigatório a partir de jun/2026)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
 
   # ============================================================
@@ -23,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
