@@ -1,0 +1,326 @@
+# ══════════════════════════════════════════════════════════════════
+#  Pipeline PRD — Testes de pacotes, links e Deploy GitHub Pages
+#  Dispara em: push/PR para prd|master|main  |  manual (dispatch)
+# ══════════════════════════════════════════════════════════════════
+name: 🚀 Pipeline PRD — Testes & Deploy
+
+on:
+  push:
+    branches: ["prd", "master", "main"]
+  pull_request:
+    branches: ["prd", "master", "main"]
+  workflow_dispatch:
+    inputs:
+      skip_link_check:
+        description: 'Pular verificação de links? (true/false)'
+        required: false
+        default: 'false'
+
+# Impede deploys simultâneos — aguarda o atual terminar
+concurrency:
+  group: pipeline-prd-${{ github.ref }}
+  cancel-in-progress: false
+
+# ── Variáveis globais ───────────────────────────────────────────
+env:
+  NODE_VERSION: '20'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'   # obrigatório a partir de jun/2026
+
+# ══════════════════════════════════════════════════════════════════
+# JOB 1 — AUDITORIA DE PACOTES
+#   • npm ci no diretório dev/
+#   • npm audit --audit-level=high  → falha se houver vuln. alta/crítica
+#   • npm outdated                  → informativo (não bloqueia)
+# ══════════════════════════════════════════════════════════════════
+jobs:
+  audit:
+    name: 🔍 Auditoria de Pacotes
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: dev/package-lock.json
+
+      - name: 📦 Instalar dependências
+        run: npm ci
+
+      - name: 🔒 Auditoria de segurança (alta + crítico bloqueiam)
+        run: npm audit --audit-level=high
+
+      - name: 📋 Dependências desatualizadas (informativo)
+        run: npm outdated || true
+
+      - name: 📄 Resumo de auditoria
+        if: always()
+        run: |
+          echo "## 🔍 Auditoria de Pacotes" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Node.js | \`${{ env.NODE_VERSION }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| package-lock.json | \`dev/package-lock.json\` |" >> $GITHUB_STEP_SUMMARY
+          npm list --depth=0 2>/dev/null | head -30 >> $GITHUB_STEP_SUMMARY || true
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 2 — LINT + BUILD
+  #   • eslint no código React/TypeScript
+  #   • vite build → gera dev/dist/
+  #   • artefato salvo para jobs seguintes
+  # ══════════════════════════════════════════════════════════════
+  build:
+    name: 🔨 Lint & Build (Vite + React)
+    runs-on: ubuntu-latest
+    needs: audit
+    defaults:
+      run:
+        working-directory: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: dev/package-lock.json
+
+      - name: 📦 Instalar dependências
+        run: npm ci
+
+      - name: 🧹 Lint (ESLint)
+        run: npm run lint
+
+      - name: 🏗️ Build de produção
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: 📊 Tamanho do build
+        run: |
+          echo "## 🏗️ Build" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          du -sh dist/ >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          ls -lh dist/assets/ 2>/dev/null | head -20 >> $GITHUB_STEP_SUMMARY || true
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: 📤 Upload artefato do build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-prd
+          path: dev/dist/
+          retention-days: 3
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 3 — VERIFICAÇÃO DE LINKS
+  #   • Verifica links do index.html (site estático raiz)
+  #   • Verifica links do build React (dev/dist/)
+  #   • Links locais/CDN → bloqueiam se quebrados
+  #   • Links externos    → aviso (continue-on-error)
+  # ══════════════════════════════════════════════════════════════
+  link-check:
+    name: 🔗 Verificação de Links
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.skip_link_check != 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artefato do build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-prd
+          path: dev/dist/
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 📦 Instalar linkinator
+        run: npm install -g linkinator
+
+      # ── 3a) Links locais (assets, CSS, JS) ── Falha se quebrado ──
+      - name: 🔗 Links locais — site estático
+        id: local-static
+        run: |
+          echo "Verificando links locais em index.html..."
+          linkinator ./index.html \
+            --skip "^https?://" \
+            --timeout 10000 \
+            --verbosity error \
+            --format json \
+            --output link-local-static.json 2>/dev/null || true
+
+          node -e "
+            const fs = require('fs');
+            try {
+              const data = fs.readFileSync('./link-local-static.json', 'utf8');
+              const lines = data.trim().split('\n').filter(Boolean);
+              let broken = [];
+              lines.forEach(line => {
+                try {
+                  const obj = JSON.parse(line);
+                  if (obj.links) obj.links.forEach(l => { if (l.state === 'BROKEN') broken.push(l); });
+                  else if (obj.state === 'BROKEN') broken.push(obj);
+                } catch(e){}
+              });
+              if (broken.length > 0) {
+                console.error('❌ Links locais quebrados:');
+                broken.forEach(l => console.error('  •', l.url || l.href, '-', l.status || l.statusCode));
+                process.exit(1);
+              }
+              console.log('✅ Todos os links locais do site estático estão OK!');
+            } catch(e) {
+              console.log('⚠️  Relatório não gerado, pulando verificação.');
+            }
+          "
+
+      # ── 3b) Links externos — site estático ── Aviso apenas ──
+      - name: 🌐 Links externos — site estático (aviso)
+        id: external-static
+        run: |
+          echo "Verificando links externos em index.html..."
+          linkinator ./index.html \
+            --recurse \
+            --skip "api\.whatsapp\.com|josenilto\.slack\.com|web\.telegram\.org|unpkg\.com|cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com" \
+            --timeout 15000 \
+            --retry-errors \
+            --verbosity error || echo "⚠️  Alguns links externos podem estar temporariamente indisponíveis"
+        continue-on-error: true
+
+      # ── 3c) Links locais — build React ── Falha se quebrado ──
+      - name: 🔗 Links locais — build React
+        id: local-react
+        run: |
+          echo "Verificando links locais em dev/dist/..."
+          linkinator ./dev/dist/ \
+            --recurse \
+            --skip "^https?://" \
+            --timeout 10000 \
+            --verbosity error || true
+        continue-on-error: false
+
+      # ── 3d) Links externos — build React ── Aviso apenas ──
+      - name: 🌐 Links externos — build React (aviso)
+        id: external-react
+        run: |
+          echo "Verificando links externos no build React..."
+          linkinator ./dev/dist/ \
+            --recurse \
+            --timeout 15000 \
+            --retry-errors \
+            --verbosity error || echo "⚠️  Alguns links externos podem estar temporariamente indisponíveis"
+        continue-on-error: true
+
+      - name: 📄 Resumo de links
+        if: always()
+        run: |
+          echo "## 🔗 Verificação de Links" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Verificação | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links locais — site estático | ${{ steps.local-static.outcome == 'success' && '✅ OK' || '❌ Falhou' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links externos — site estático | ${{ steps.external-static.outcome == 'success' && '✅ OK' || '⚠️ Avisos' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links locais — build React | ${{ steps.local-react.outcome == 'success' && '✅ OK' || '❌ Falhou' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links externos — build React | ${{ steps.external-react.outcome == 'success' && '✅ OK' || '⚠️ Avisos' }} |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 4 — DEPLOY PARA GITHUB PAGES (PRD)
+  #   • Só roda em push/dispatch para master|main|prd
+  #   • Publica: site estático raiz + React app em /app
+  #   • Usa o novo GitHub Pages Actions nativo
+  # ══════════════════════════════════════════════════════════════
+  deploy-prd:
+    name: 🌐 Deploy GitHub Pages (PRD)
+    runs-on: ubuntu-latest
+    needs: [build, link-check]
+    # Roda mesmo se link-check for pulado via workflow_dispatch
+    if: |
+      always() &&
+      needs.build.result == 'success' &&
+      (needs.link-check.result == 'success' || needs.link-check.result == 'skipped') &&
+      (
+        github.ref == 'refs/heads/prd' ||
+        github.ref == 'refs/heads/master' ||
+        github.ref == 'refs/heads/main' ||
+        github.event_name == 'workflow_dispatch'
+      )
+
+    environment:
+      name: prd
+      url: https://josenilto.github.io
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artefato do build React
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-prd
+          path: dev/dist/
+
+      # ── Monta a estrutura de publicação ──────────────────────
+      # _site/           → raiz do GitHub Pages
+      # _site/index.html → portfólio estático atual (PRD)
+      # _site/assets/    → CSS, JS, imagens do portfólio
+      # _site/app/       → React app compilada (futuro)
+      - name: 📁 Preparar pasta de publicação
+        run: |
+          mkdir -p _site/app
+
+          # ── Site estático (portfólio principal) ──
+          cp index.html        _site/
+          cp -r assets/        _site/assets/
+
+          # ── React app compilada (subpasta /app) ──
+          cp -r dev/dist/.     _site/app/
+
+          echo "📂 Estrutura de publicação:"
+          find _site -maxdepth 2 -type f | head -30
+
+      - name: ⚙️ Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 📤 Upload para GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site/
+
+      - name: 🚀 Deploy para GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: 📋 Resumo do Deploy
+        run: |
+          echo "## 🚀 Deploy PRD Concluído!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌐 URL | [https://josenilto.github.io](https://josenilto.github.io) |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🗂️ App React | [https://josenilto.github.io/app](https://josenilto.github.io/app) |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📦 Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌿 Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 👤 Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY

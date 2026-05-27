@@ -1,13 +1,18 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+# ⚠️  DEPRECATED — Substituído por pipeline-prd.yml
+# Este workflow foi desativado para evitar conflito de deploy no GitHub Pages.
+# Use o workflow "🚀 Pipeline PRD — Testes & Deploy" em seu lugar.
+name: "[DEPRECATED] Deploy Jekyll with GitHub Pages"
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["prd"]
-
-  # Allows you to run this workflow manually from the Actions tab
+  # Desativado: push automático removido para evitar conflito com pipeline-prd.yml
+  # push:
+  #   branches: ["prd"]
   workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Este workflow está DEPRECATED. Use pipeline-prd.yml'
+        required: true
+        default: 'cancelar'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:

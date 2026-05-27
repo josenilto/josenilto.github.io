@@ -1,11 +1,13 @@
-name: CI/CD Intelligent Pipeline v2.0
+# ⚠️  DEPRECATED — Substituído por pipeline-prd.yml
+name: "[DEPRECATED] CI/CD Intelligent Pipeline v2.0"
 
 on:
-  push:
-    branches: [ "dev", "hmg", "prd" ]
-    tags: [ "v*" ]
-  pull_request:
-    branches: [ "prd" ]
+  # Desativado: uso pipeline-prd.yml
+  # push:
+  #   branches: [ "dev", "hmg", "prd" ]
+  #   tags: [ "v*" ]
+  # pull_request:
+  #   branches: [ "prd" ]
   workflow_dispatch:
 
 # Força todas as actions a rodarem com Node.js 24 (obrigatório a partir de jun/2026)
