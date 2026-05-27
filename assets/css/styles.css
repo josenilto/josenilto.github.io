@@ -9,7 +9,7 @@
   --first-color: #ffcb00;
   --first-color-alt: #006400;
   --title-color: #393939;
-  --text-color: #cc43sd;
+  --text-color: #707070;
   --text-color-light: #a6a6a6;
   --body-color: #ffffff;
   --container-color: #fcfcfc;
@@ -285,9 +285,7 @@ img {
   justify-self: center;
 }
 
-#far fa-calendar-alt {
-  size: 7x;
-}
+/* removed invalid selector and property: #far fa-calendar-alt { size: 7x; } */
 
 /*========== BUTTONS ==========*/
 .button {

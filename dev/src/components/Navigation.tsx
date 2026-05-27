@@ -18,9 +18,9 @@ const Navigation = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-glow-subtle flex items-center justify-center">
-              <span className="text-xl font-display font-bold">P</span>
+              <span className="text-xl font-display font-bold">JLS</span>
             </div>
-            <span className="font-display text-lg font-bold hidden sm:block">Portfolio</span>
+            <span className="font-display text-lg font-bold hidden sm:block">Josenilto L Silva</span>
           </div>
 
           <div className="hidden md:flex items-center space-x-8">

@@ -1,0 +1,15 @@
+# Normalize line endings: always LF in repo, checkout as native
+* text=auto eol=lf
+
+# Binary files — no conversion
+*.png  binary
+*.webp binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.eot  binary
+*.ttf  binary
+*.woff binary
+*.woff2 binary
+*.lockb binary

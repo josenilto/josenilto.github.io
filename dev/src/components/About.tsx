@@ -3,20 +3,24 @@ import { Card } from "@/components/ui/card";
 const About = () => {
   const highlights = [
     {
-      title: "Experience & Credentials",
-      description: "Over 10 years in technology with multiple certifications and a degree in Computer Science",
+      title: "Experiência & Formação",
+      description:
+        "Mais de 13 anos em TI com certificações SFPC®, DEPC®, LGPDF™ e duas graduações: Sistemas da Informação (UNESA) e Ciência da Computação (UVA).",
     },
     {
-      title: "Technical Specialization",
-      description: "Platform Engineer specialized in cloud architectures and digital transformation",
+      title: "Especialização Técnica",
+      description:
+        "SRE/DevOps especializado em infraestrutura, virtualização de servidores e arquitetura de soluções em nuvem (Azure, AWS, GCP, OCI, IBM).",
     },
     {
-      title: "Tools Stack",
-      description: "Azure, Terraform, Kubernetes, Docker, CI/CD with GitHub Actions and DevOps tools",
+      title: "Stack de Ferramentas",
+      description:
+        "Terraform, Ansible, Kubernetes, Docker, Jenkins, GitHub Actions, Zabbix, Grafana, Prometheus, Elastic e muito mais.",
     },
     {
-      title: "Community & Content",
-      description: "Active speaker, mentor and technical content creator in the tech community",
+      title: "Comunidade & Conteúdo",
+      description:
+        "Criador de tutoriais técnicos no GitHub, com repositórios sobre Zabbix, Grafana, Prometheus, Nginx, Kubernetes e diversas outras tecnologias.",
     },
   ];
 
@@ -26,21 +30,22 @@ const About = () => {
         <div className="max-w-4xl mx-auto space-y-12 animate-fade-in-up">
           <div className="text-center space-y-4">
             <h2 className="text-4xl md:text-5xl font-display font-bold">
-              About <span className="text-primary">Me</span>
+              Sobre <span className="text-primary">Mim</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Platform Engineer specialized in Cloud and DevOps, focused on digital transformation through innovative solutions.
+              SRE/DevOps focado em transformação digital através de infraestrutura como código,
+              automação e arquiteturas cloud-native.
             </p>
           </div>
 
           <div className="relative p-8 rounded-2xl border border-primary/20 bg-card/50 backdrop-blur-sm">
             <div className="absolute -top-4 left-8">
               <div className="bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-semibold">
-                Quote
+                Filosofia
               </div>
             </div>
             <blockquote className="text-2xl md:text-3xl font-display italic text-center pt-4">
-              "Technology is a bridge, not a barrier, and I build bridges every day."
+              "Infraestrutura resiliente não é um destino — é uma prática contínua."
             </blockquote>
           </div>
 
@@ -54,9 +59,7 @@ const About = () => {
                 <h3 className="text-xl font-display font-bold mb-3 group-hover:text-primary transition-colors duration-300">
                   {highlight.title}
                 </h3>
-                <p className="text-muted-foreground">
-                  {highlight.description}
-                </p>
+                <p className="text-muted-foreground">{highlight.description}</p>
               </Card>
             ))}
           </div>

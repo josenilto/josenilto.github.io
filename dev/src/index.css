@@ -162,11 +162,11 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Work Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Orbitron', 'Inter', sans-serif;
+    font-family: 'Orbitron', 'Work Sans', sans-serif;
     font-weight: 700;
   }
 }
