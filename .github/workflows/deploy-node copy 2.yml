@@ -28,7 +28,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
 
       - name: Install dependencies
         run: npm ci
@@ -74,9 +73,10 @@ jobs:
                    startsWith(github.ref, 'refs/heads/hmg') && 'https://josenilto.github.io/hmg' ||
                    startsWith(github.ref, 'refs/tags/v') && 'https://josenilto.github.io' }}
 
+    # Usa github context diretamente (env context não é suportado em environment:)
     environment:
-      name: ${{ env.ENV_NAME }}
-      url:  ${{ env.ENV_URL }}
+      name: ${{ startsWith(github.ref, 'refs/heads/dev') && 'dev' || startsWith(github.ref, 'refs/heads/hmg') && 'hmg' || startsWith(github.ref, 'refs/tags/v') && 'prd' || 'dev' }}
+      url:  ${{ startsWith(github.ref, 'refs/heads/dev') && 'https://josenilto.github.io/dev' || startsWith(github.ref, 'refs/heads/hmg') && 'https://josenilto.github.io/hmg' || startsWith(github.ref, 'refs/tags/v') && 'https://josenilto.github.io' || 'https://josenilto.github.io/dev' }}
 
     steps:
       - name: Download build
