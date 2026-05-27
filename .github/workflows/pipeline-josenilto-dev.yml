@@ -1,0 +1,325 @@
+# ══════════════════════════════════════════════════════════════════
+#  Pipeline → josenilto-dev.github.io
+#  Dispara em: push/PR para dev  |  manual (dispatch)
+#
+#  PRÉ-REQUISITOS (uma só vez, manual no GitHub):
+#    1. Criar Organização: github.com/organizations/new → "josenilto-dev"
+#    2. Criar repositório: josenilto-dev/josenilto-dev.github.io (público)
+#    3. Ativar GitHub Pages no novo repo:
+#         Settings → Pages → Source → "Deploy from a branch"
+#         Branch: gh-pages  |  Folder: / (root)
+#    4. Criar PAT (Personal Access Token):
+#         github.com/settings/tokens/new → repo (full) → copiar
+#    5. Adicionar secret no repo ORIGEM (josenilto.github.io):
+#         Settings → Secrets → Actions → DEV_DEPLOY_TOKEN = <PAT>
+#
+#  URL de resultado: https://josenilto-dev.github.io
+#  App React:        https://josenilto-dev.github.io/app
+# ══════════════════════════════════════════════════════════════════
+name: 🛠️ Pipeline DEV → josenilto-dev.github.io
+
+on:
+  push:
+    branches: ["dev"]
+  pull_request:
+    branches: ["dev"]
+  workflow_dispatch:
+    inputs:
+      skip_link_check:
+        description: 'Pular verificação de links? (true/false)'
+        required: false
+        default: 'false'
+
+# DEV cancela runs em andamento — iterações rápidas
+concurrency:
+  group: pipeline-josenilto-dev-${{ github.ref }}
+  cancel-in-progress: true
+
+# ── Variáveis globais ───────────────────────────────────────────
+env:
+  NODE_VERSION: '20'
+  DEPLOY_REPO: 'josenilto-dev/josenilto-dev.github.io'  # repositório destino
+  SITE_URL: 'https://josenilto-dev.github.io'           # URL pública
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'            # obrigatório jun/2026
+
+# ══════════════════════════════════════════════════════════════════
+# JOB 1 — AUDITORIA DE PACOTES
+#   • npm audit --audit-level=moderate
+#   • npm outdated (informativo)
+# ══════════════════════════════════════════════════════════════════
+jobs:
+  audit:
+    name: 🔍 Auditoria de Pacotes
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: dev/package-lock.json
+
+      - name: 📦 Instalar dependências
+        run: npm ci
+
+      - name: 🔒 Auditoria de segurança (moderate+ bloqueiam)
+        run: npm audit --audit-level=moderate
+
+      - name: 📋 Dependências desatualizadas (informativo)
+        run: npm outdated || true
+
+      - name: 📄 Resumo de auditoria
+        if: always()
+        run: |
+          echo "## 🔍 Auditoria de Pacotes — josenilto-dev" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Node.js | \`${{ env.NODE_VERSION }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Repositório destino | \`${{ env.DEPLOY_REPO }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Nível de auditoria | \`moderate\` |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Pacotes instalados" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          npm list --depth=0 2>/dev/null | head -40 >> $GITHUB_STEP_SUMMARY || true
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 2 — LINT + BUILD
+  #   • eslint no código React/TypeScript
+  #   • vite build --mode development
+  #   • base path "/" → raiz de josenilto-dev.github.io
+  #   • artefato salvo como dist-josenilto-dev
+  # ══════════════════════════════════════════════════════════════
+  build:
+    name: 🔨 Lint & Build (Vite dev mode)
+    runs-on: ubuntu-latest
+    needs: audit
+    defaults:
+      run:
+        working-directory: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: dev/package-lock.json
+
+      - name: 📦 Instalar dependências
+        run: npm ci
+
+      - name: 🧹 Lint (ESLint)
+        run: npm run lint
+
+      - name: 🏗️ Build modo desenvolvimento (base /app/)
+        # --base /app/ → React app publicada em https://josenilto-dev.github.io/app/
+        run: npm run build:dev -- --base /app/
+        env:
+          NODE_ENV: development
+
+      - name: 📊 Tamanho do build
+        run: |
+          echo "## 🏗️ Build — josenilto-dev" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Modo | \`development\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Base path React | \`/app/\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Site estático | \`https://josenilto-dev.github.io\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| App React | \`https://josenilto-dev.github.io/app\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tamanho total | $(du -sh dist/ | cut -f1) |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📂 Arquivos gerados" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          ls -lh dist/assets/ 2>/dev/null | head -20 >> $GITHUB_STEP_SUMMARY || true
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: 📤 Upload artefato do build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-josenilto-dev
+          path: dev/dist/
+          retention-days: 1
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 3 — VERIFICAÇÃO DE LINKS (permissivo)
+  #   Todos os erros são ⚠️ avisos — nunca bloqueiam o deploy
+  # ══════════════════════════════════════════════════════════════
+  link-check:
+    name: 🔗 Verificação de Links
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.inputs.skip_link_check != 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artefato do build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-josenilto-dev
+          path: dev/dist/
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 📦 Instalar linkinator
+        run: npm install -g linkinator
+
+      - name: 🔗 Links locais — site estático
+        id: local-static
+        run: |
+          linkinator ./index.html \
+            --skip "^https?://" \
+            --timeout 10000 \
+            --verbosity error || echo "⚠️  Links locais quebrados detectados"
+        continue-on-error: true
+
+      - name: 🌐 Links externos — site estático
+        id: external-static
+        run: |
+          linkinator ./index.html \
+            --recurse \
+            --skip "api\.whatsapp\.com|josenilto\.slack\.com|web\.telegram\.org|unpkg\.com|cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com" \
+            --timeout 15000 \
+            --retry-errors \
+            --verbosity error || echo "⚠️  Alguns links externos indisponíveis"
+        continue-on-error: true
+
+      - name: 🔗 Links locais — build React
+        id: local-react
+        run: |
+          linkinator ./dev/dist/ \
+            --recurse \
+            --skip "^https?://" \
+            --timeout 10000 \
+            --verbosity error || echo "⚠️  Links locais quebrados no build React"
+        continue-on-error: true
+
+      - name: 🌐 Links externos — build React
+        id: external-react
+        run: |
+          linkinator ./dev/dist/ \
+            --recurse \
+            --timeout 15000 \
+            --retry-errors \
+            --verbosity error || echo "⚠️  Links externos indisponíveis no build React"
+        continue-on-error: true
+
+      - name: 📄 Resumo de links
+        if: always()
+        run: |
+          echo "## 🔗 Verificação de Links — josenilto-dev" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> ℹ️ Em DEV todos os erros de link são **avisos** (não bloqueiam o deploy)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Verificação | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links locais — site estático | ${{ steps.local-static.outcome == 'success' && '✅ OK' || '⚠️ Aviso' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links externos — site estático | ${{ steps.external-static.outcome == 'success' && '✅ OK' || '⚠️ Aviso' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links locais — build React | ${{ steps.local-react.outcome == 'success' && '✅ OK' || '⚠️ Aviso' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links externos — build React | ${{ steps.external-react.outcome == 'success' && '✅ OK' || '⚠️ Aviso' }} |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 4 — DEPLOY PARA josenilto-dev.github.io
+  #   • Usa peaceiris/actions-gh-pages@v4 com external_repository
+  #   • personal_token: DEV_DEPLOY_TOKEN → PAT com acesso ao repo destino
+  #   • Publica: site estático raiz + React app em /app/
+  #   • Deploy automático (sem aprovação manual)
+  # ══════════════════════════════════════════════════════════════
+  deploy-josenilto-dev:
+    name: 🌐 Deploy → josenilto-dev.github.io
+    runs-on: ubuntu-latest
+    needs: [build, link-check]
+    # DEV sempre deploya: link-check pode ser skipped ou ter avisos
+    if: |
+      always() &&
+      needs.build.result == 'success' &&
+      (needs.link-check.result == 'success' ||
+       needs.link-check.result == 'skipped' ||
+       needs.link-check.result == 'failure') &&
+      (
+        github.ref == 'refs/heads/dev' ||
+        github.event_name == 'workflow_dispatch'
+      )
+
+    environment:
+      name: dev
+      url: ${{ env.SITE_URL }}
+
+    permissions:
+      contents: read   # leitura do repo origem
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artefato do build React
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-josenilto-dev
+          path: dev/dist/
+
+      # ── Monta estrutura de publicação ───────────────────────
+      # _site-jdev/            → raiz de josenilto-dev.github.io
+      # _site-jdev/index.html  → portfólio estático (site principal)
+      # _site-jdev/assets/     → CSS, JS, imagens do portfólio
+      # _site-jdev/app/        → React app compilada (modo dev)
+      - name: 📁 Preparar pasta de publicação
+        run: |
+          mkdir -p _site-jdev/app
+
+          # ── Site estático (portfólio principal) ──
+          cp index.html       _site-jdev/
+          cp -r assets/       _site-jdev/assets/
+
+          # ── React app compilada (subpasta /app/) ──
+          cp -r dev/dist/.    _site-jdev/app/
+
+          echo "📂 Estrutura de publicação para josenilto-dev.github.io:"
+          find _site-jdev -maxdepth 3 -type f | head -30
+
+      - name: 🚀 Deploy para josenilto-dev/josenilto-dev.github.io
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          # PAT com acesso ao repositório destino
+          # Configurar em: Settings → Secrets → Actions → DEV_DEPLOY_TOKEN
+          personal_token: ${{ secrets.DEV_DEPLOY_TOKEN }}
+          external_repository: ${{ env.DEPLOY_REPO }}   # josenilto-dev/josenilto-dev.github.io
+          publish_dir: ./_site-jdev                     # pasta local a publicar
+          publish_branch: gh-pages                      # branch no repo destino
+          commit_message: |
+            deploy(dev): ${{ github.sha }} from josenilto/${{ github.event.repository.name }}@${{ github.ref_name }} by @${{ github.actor }}
+          enable_jekyll: false
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+      - name: 📋 Resumo do Deploy
+        run: |
+          echo "## 🛠️ Deploy DEV Concluído!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌐 Site | [${{ env.SITE_URL }}](${{ env.SITE_URL }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🗂️ App React | [${{ env.SITE_URL }}/app](${{ env.SITE_URL }}/app) |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📦 Commit origem | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌿 Branch origem | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📂 Repo destino | \`${{ env.DEPLOY_REPO }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌿 Branch destino | \`gh-pages\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 👤 Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
