@@ -1,12 +1,15 @@
 # ══════════════════════════════════════════════════════════════════
-#  Pipeline DEV — Testes de pacotes, links e Deploy /dev
+#  Pipeline DEV — Testes de pacotes, links e Deploy para site DEV
 #  Dispara em: push/PR para dev  |  manual (dispatch)
 #
-#  ATENÇÃO — Para o deploy funcionar, configure no GitHub:
-#    Repo → Settings → Pages → Source → "Deploy from a branch"
-#    Branch: gh-pages  |  Folder: / (root)
+#  ATENÇÃO — Pré-requisitos:
+#    1. Repositório josenilto-dev/josenilto-dev.github.io criado
+#    2. GitHub Pages habilitado: Settings → Pages → Branch: gh-pages
+#    3. Secret DEPLOY_TOKEN configurado neste repo com PAT que tem
+#       permissão de escrita em josenilto-dev/josenilto-dev.github.io
+#       (Scopes: repo  ou  contents: write no fine-grained token)
 #
-#  URL de resultado: https://josenilto.github.io/dev
+#  URL de resultado: https://josenilto-dev.github.io
 # ══════════════════════════════════════════════════════════════════
 name: 🛠️ Pipeline DEV — Testes & Deploy
 
@@ -30,9 +33,9 @@ concurrency:
 # ── Variáveis globais ───────────────────────────────────────────
 env:
   NODE_VERSION: '20'
-  DEPLOY_PATH: 'dev'                          # subpasta no gh-pages
-  SITE_URL: 'https://josenilto.github.io/dev' # URL pública do ambiente
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'  # obrigatório a partir de jun/2026
+  DEPLOY_REPO: 'josenilto-dev/josenilto-dev.github.io' # repo externo de destino
+  SITE_URL: 'https://josenilto-dev.github.io'           # URL pública do ambiente
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'            # obrigatório a partir de jun/2026
 
 # ══════════════════════════════════════════════════════════════════
 # JOB 1 — AUDITORIA DE PACOTES
@@ -116,9 +119,9 @@ jobs:
       - name: 🧹 Lint (ESLint)
         run: npm run lint
 
-      - name: 🏗️ Build modo desenvolvimento (base /dev/)
-        # --base /dev/ → assets gerados com prefixo /dev/ para rodar na subpasta
-        run: npm run build:dev -- --base /${{ env.DEPLOY_PATH }}/
+      - name: 🏗️ Build modo desenvolvimento (base /)
+        # --base / → site publicado na raiz de josenilto-dev.github.io
+        run: npm run build:dev -- --base /
         env:
           NODE_ENV: development
 
@@ -129,7 +132,7 @@ jobs:
           echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
           echo "| Modo | \`development\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Base path | \`/${{ env.DEPLOY_PATH }}/\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Base path | \`/\` (raiz — josenilto-dev.github.io) |" >> $GITHUB_STEP_SUMMARY
           echo "| Tamanho total | $(du -sh dist/ | cut -f1) |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📂 Arquivos gerados" >> $GITHUB_STEP_SUMMARY
@@ -238,14 +241,14 @@ jobs:
           echo "| Links externos — build React | ${{ steps.external-react.outcome == 'success' && '✅ OK' || '⚠️ Aviso' }} |" >> $GITHUB_STEP_SUMMARY
 
   # ══════════════════════════════════════════════════════════════
-  # JOB 4 — DEPLOY PARA GITHUB PAGES — subpasta /dev
-  #   • Usa peaceiris/actions-gh-pages → publica no branch gh-pages
-  #   • destination_dir: dev → disponível em /dev sem afetar PRD
-  #   • Publica: site estático raiz + React app compilada
+  # JOB 4 — DEPLOY PARA josenilto-dev.github.io
+  #   • Publica no repo externo josenilto-dev/josenilto-dev.github.io
+  #   • Requer secret DEPLOY_TOKEN (PAT com escrita no repo externo)
+  #   • Publica: site estático raiz + React app compilada em /app
   #   • Deploy automático (sem aprovação manual)
   # ══════════════════════════════════════════════════════════════
   deploy-dev:
-    name: 🌐 Deploy GitHub Pages (/dev)
+    name: 🌐 Deploy → josenilto-dev.github.io
     runs-on: ubuntu-latest
     needs: [build, link-check]
     # DEV sempre deploya: link-check pode ser skipped ou ter avisos
@@ -265,11 +268,23 @@ jobs:
       url: ${{ env.SITE_URL }}
 
     permissions:
-      contents: write   # necessário para push no gh-pages branch
+      contents: read
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: 🔑 Verificar secret DEPLOY_TOKEN
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Secret DEPLOY_TOKEN não configurado."
+            echo "Configure em: Settings → Secrets → Actions → New repository secret"
+            echo "O token precisa ter permissão de escrita em ${{ env.DEPLOY_REPO }}"
+            exit 1
+          fi
+          echo "✅ DEPLOY_TOKEN presente"
+        env:
+          TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
       - name: Download artefato do build React
         uses: actions/download-artifact@v4
@@ -277,8 +292,7 @@ jobs:
           name: dist-dev
           path: dev/dist/
 
-      # ── Monta estrutura: estático + React app ───────────────
-      # _site-dev/           → será publicado em /dev/ do gh-pages
+      # ── Estrutura publicada na raiz de josenilto-dev.github.io ──
       # _site-dev/index.html → portfólio estático
       # _site-dev/assets/    → CSS, JS, imagens
       # _site-dev/app/       → React app compilada
@@ -286,27 +300,21 @@ jobs:
         run: |
           mkdir -p _site-dev/app
 
-          # ── Site estático (portfólio principal) ──
-          cp index.html       _site-dev/
-          cp -r assets/       _site-dev/assets/
-
-          # ── React app compilada (subpasta /app) ──
-          cp -r dev/dist/.    _site-dev/app/
+          cp index.html    _site-dev/
+          cp -r assets/    _site-dev/assets/
+          cp -r dev/dist/. _site-dev/app/
 
           echo "📂 Estrutura de publicação DEV:"
           find _site-dev -maxdepth 2 -type f | head -30
 
-      - name: 🚀 Deploy para gh-pages branch (subpasta /dev)
+      - name: 🚀 Deploy para josenilto-dev.github.io
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site-dev           # pasta local a publicar
-          destination_dir: ${{ env.DEPLOY_PATH }}  # → /dev no gh-pages branch
-          commit_message: |
-            deploy(dev): ${{ github.sha }} by @${{ github.actor }}
-          # Preserva arquivos de outros deploys no mesmo gh-pages branch
-          keep_files: true
-          # Não gera Jekyll (site estático puro)
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          external_repository: ${{ env.DEPLOY_REPO }}
+          publish_branch: gh-pages
+          publish_dir: ./_site-dev
+          commit_message: "deploy(dev): ${{ github.sha }} by @${{ github.actor }}"
           enable_jekyll: false
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
@@ -322,5 +330,5 @@ jobs:
           echo "| 📦 Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 🌿 Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 👤 Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| 📂 gh-pages dir | \`/${{ env.DEPLOY_PATH }}/\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🗂️ Repo destino | \`${{ env.DEPLOY_REPO }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
