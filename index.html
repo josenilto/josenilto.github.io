@@ -54,6 +54,7 @@
                     <li class="nav__item"><a href="#story" class="nav__link">Story</a></li>
                     <!-- <li class="nav__item"><a href="#time" class="nav__link">Time</a></li> -->
                     <li class="nav__item"><a href="#skills" class="nav__link">Skills</a></li>
+                    <li class="nav__item"><a href="#engagement" class="nav__link">Consulting</a></li>
                     <li class="nav__item"><a href="#jbos" class="nav__link">Jobs</a></li>
                     <li class="nav__item"><a href="#contact" class="nav__link">Contact</a></li>
                     <!-- <li class="nav__item"><a
@@ -72,8 +73,17 @@
 
         <!--========== CAREER ==========-->
         <section class="about career section bd-container" id="career">
+            <canvas id="career-particles" aria-hidden="true"></canvas>
             <div class="home__container bd-container bd-grid">
                 <div class="home__data">
+
+                    <div class="home__greeting" data-aos="fade-right" data-aos-duration="600" data-aos-delay="200">
+                        <span class="home__greeting-text" id="greeting-text"></span>
+                        <span class="home__greeting-sep">·</span>
+                        <span class="home__greeting-date" id="greeting-date"></span>
+                        <span class="home__greeting-sep">·</span>
+                        <span class="home__greeting-clock" id="greeting-clock"></span>
+                    </div>
 
                     <h1 class="home__title" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500">Hey I'm
                     </h1>
@@ -119,6 +129,7 @@
 
         <!--========== STORY ==========-->
         <section class="about story section bd-container" id="story">
+            <canvas id="story-hex" aria-hidden="true"></canvas>
             <span class="section-subtitle">Story</span>
             <h2 class="section-title">Cloud Solutions Architect & DevOps Engineer</h2>
             <p class="about__description" data-aos="flip-down" data-aos-duration="1500" data-aos-delay="900">
@@ -217,6 +228,7 @@
 
         <!--========== SKILLS ==========-->
         <section class="about skills section bd-container" id="skills">
+            <canvas id="skills-canvas" aria-hidden="true"></canvas>
             <div class="home__container bd-container">
                 <span class="section-subtitle">Benefits</span>
                 <h2 class="section-title">Why work with me?</h2>
@@ -249,8 +261,48 @@
             </div>
         </section>
 
+        <!--========== ENGAGEMENT ==========-->
+        <section class="engagement section bd-container" id="engagement">
+            <canvas id="engagement-canvas" aria-hidden="true"></canvas>
+            <span class="section-subtitle">Consulting</span>
+            <h2 class="section-title">How We Can Work Together</h2>
+
+            <div class="engagement__container bd-grid">
+
+                <div class="engagement__card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                    <div class="engagement__icon-wrapper">
+                        <i class="fas fa-laptop engagement__icon"></i>
+                    </div>
+                    <h3 class="engagement__title">Virtual</h3>
+                    <p class="engagement__description">Remote SRE/DevOps consulting and infrastructure support — anywhere in the world, fully asynchronous or synchronous.</p>
+                    <a href="#contact" class="engagement__btn">Read More</a>
+                </div>
+
+                <div class="engagement__card engagement__card--featured" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+                    <div class="engagement__icon-wrapper">
+                        <i class="fas fa-user engagement__icon"></i>
+                    </div>
+                    <h3 class="engagement__title">Hybrid</h3>
+                    <p class="engagement__description">A blend of remote and on-site collaboration — ideal for projects requiring both flexibility and hands-on presence.</p>
+                    <a href="#contact" class="engagement__btn engagement__btn--dark">Read More</a>
+                </div>
+
+                <div class="engagement__card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">
+                    <div class="engagement__icon-wrapper">
+                        <i class="fas fa-user-group engagement__icon"></i>
+                    </div>
+                    <h3 class="engagement__title">In Person</h3>
+                    <p class="engagement__description">On-site architecture sessions, workshops, and strategic planning — direct collaboration at your location.</p>
+                    <a href="#contact" class="engagement__btn">Read More</a>
+                </div>
+
+
+            </div>
+        </section>
+
         <!--========== JBOS ==========-->
         <section class="jbos section bd-container" id="jbos">
+            <canvas id="jbos-canvas" aria-hidden="true"></canvas>
             <div class="bd-container">
                 <span class="section-subtitle">Open source repos &mdash; click to explore on GitHub</span>
                 <h2 class="section-title">Tutorials &amp; Projects</h2>
@@ -301,7 +353,7 @@
                     </div>
 
                     <div class="menu__content">
-                        <h4 class="menu__category"><i class="fas fa-network-wired"></i> Load Balance &amp; Proxy</h4>
+                        <h4 class="menu__category"><i class="fas fa-scale-balanced"></i> Load Balance &amp; Proxy</h4>
                         <div class="menu__tags">
                             <a href="https://github.com/josenilto/dev.haproxy" target="_blank" rel="noopener noreferrer" class="menu__name">HAProxy</a>
                             <a href="https://github.com/josenilto/dev.pfsense" target="_blank" rel="noopener noreferrer" class="menu__name">pfSense</a>
@@ -434,64 +486,74 @@
     </a>
 
     <!--========== FOOTER ==========-->
-    <footer class="footer section bd-container">
-        <div class="footer__container bd-grid">
+    <footer class="footer">
+        <div class="footer__inner bd-container">
 
-            <!-- <div class="footer__content">
-                <h3 class="footer__title">Menu</h3>
-                <ul>
-                    <li><a href="#home" class="footer__link">Home</a></li>
-                    <li><a href="#about" class="footer__link">About</a></li>
-                    <li><a href="#skills" class="footer__link">Skills</a></li>
-                    <li><a href="#jbos" class="footer__link">Jobs</a></li>
-                    <li><a href="#contact" class="footer__link">Contact</a></li>
-                </ul>
-            </div> -->
+            <div class="footer__container bd-grid">
 
-            <div class="footer__content">
-                <span class="footer__logo">Josenilto L da Silva</span>
-                <span class="footer__description">Cloud Solutions Architect & DevOps Engineer</span>
-                <p class="footer__brand-text">Specialist in DevOps<br>Development &amp; Operations.</p>
+                <!-- Brand -->
+                <div class="footer__content footer__content--brand">
+                    <span class="footer__logo">Josenilto L da Silva</span>
+                    <span class="footer__description">Cloud Solutions Architect &amp; DevOps Engineer</span>
+                    <p class="footer__brand-text">13+ years designing and automating resilient infrastructure across Azure, AWS and GCP — from bare-metal to Kubernetes.</p>
+                    <div class="footer__available">
+                        <span class="footer__available-dot"></span>
+                        Available for consulting &amp; freelance
+                    </div>
+                    <div class="footer__stack">
+                        <span>Azure</span><span>AWS</span><span>GCP</span><span>Kubernetes</span><span>Terraform</span>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="footer__content">
+                    <span class="footer__logo">Navigation</span>
+                    <ul class="footer__nav">
+                        <li><a href="#career" class="footer__link"><i class="fas fa-chevron-right"></i> Career</a></li>
+                        <li><a href="#story" class="footer__link"><i class="fas fa-chevron-right"></i> Story</a></li>
+                        <li><a href="#skills" class="footer__link"><i class="fas fa-chevron-right"></i> Skills</a></li>
+                        <li><a href="#engagement" class="footer__link"><i class="fas fa-chevron-right"></i> Consulting</a></li>
+                        <li><a href="#jbos" class="footer__link"><i class="fas fa-chevron-right"></i> Jobs</a></li>
+                        <li><a href="#contact" class="footer__link"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="footer__content">
+                    <span class="footer__logo">Get in Touch</span>
+                    <ul class="footer__info">
+                        <li><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, Brazil</li>
+                        <li><i class="fas fa-globe"></i> Open to remote worldwide</li>
+                    </ul>
+                    <div class="footer__socials">
+                        <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade."
+                            target="_blank" rel="noopener noreferrer" class="footer__social footer__social--whatsapp" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--linkedin" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--github" title="GitHub">
+                            <i class="fab fa-github-alt"></i></a>
+                        <a href="https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--youtube" title="YouTube">
+                            <i class="fab fa-youtube"></i></a>
+                        <a href="https://www.instagram.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--instagram" title="Instagram">
+                            <i class="fab fa-instagram"></i></a>
+                        <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--telegram" title="Telegram">
+                            <i class="fab fa-telegram-plane"></i></a>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="footer__content">
-                <span class="footer__logo">Contact</span>
-                <span class="footer__description"><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, Brazil</span>
-                <div class="footer__socials">
-                    <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade."
-                        target="_blank" rel="noopener noreferrer" class="footer__social footer__social--whatsapp">
-                        <i class="fab fa-whatsapp"></i></a>
-                    <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--telegram">
-                        <i class="fab fa-telegram-plane"></i></a>
-                    <a href="https://josenilto.slack.com/" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--slack">
-                        <i class="fab fa-slack-hash"></i></a>
-                </div>
-            </div>
-
-            <div class="footer__content">
-                <span class="footer__logo">Connect</span>
-                <span class="footer__description">Find me online</span>
-                <div class="footer__socials">
-                    <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--github">
-                        <i class="fab fa-github-alt"></i></a>
-                    <a href="https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--youtube">
-                        <i class="fab fa-youtube"></i></a>
-                    <a href="https://www.instagram.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--instagram">
-                        <i class="fab fa-instagram"></i></a>
-                    <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--linkedin">
-                        <i class="fab fa-linkedin-in"></i></a>
-                </div>
+            <div class="footer__bottom">
+                <p class="footer__copy">&#169; 2026 Josenilto L da Silva. All rights reserved.</p>
+                <p class="footer__copy footer__copy--right">Crafted with <i class="fas fa-heart footer__heart"></i> passion &amp; powered by <i class="fas fa-terminal footer__terminal"></i> terminal</p>
             </div>
 
         </div>
-
-        <p class="footer__copy">&#169; 2026 Josenilto L da Silva.</p>
-
     </footer>
 
     <script src="./assets/js/scrollreveal.js"></script>
     <script src="./assets/js/main.js"></script>
-    <script defer src="./assets/js/all.js"></script>
 
 
 
@@ -509,52 +571,500 @@
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
 
-        const FONT_SIZE = 13;
-        const CHARS = '01アイウエカキクサシスタチナハヤラ<>{}[]|/\\∞∑∆';
-        let columns, drops;
+        const NODE_COUNT = 52;
+        const MAX_DIST   = 165;
+        let nodes  = [];
+        let pulses = [];
+
+        function buildNetwork() {
+            nodes = Array.from({ length: NODE_COUNT }, () => ({
+                x:    Math.random() * canvas.width,
+                y:    Math.random() * canvas.height,
+                act:  Math.random() * 0.18,
+                r:    Math.random() * 2 + 1.5,
+                conns: []
+            }));
+            for (let i = 0; i < nodes.length; i++) {
+                nodes[i].conns = [];
+                for (let j = 0; j < nodes.length; j++) {
+                    if (i === j) continue;
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    if (dx * dx + dy * dy < MAX_DIST * MAX_DIST) {
+                        nodes[i].conns.push(j);
+                    }
+                }
+            }
+        }
 
         function resize() {
             const section = document.getElementById('contact');
             canvas.width  = section.offsetWidth;
             canvas.height = section.offsetHeight;
-            columns = Math.floor(canvas.width / FONT_SIZE);
-            drops = Array.from({ length: columns }, () => Math.random() * -80);
+            buildNetwork();
         }
         resize();
         window.addEventListener('resize', resize);
 
-        function trailColor() {
-            return document.body.classList.contains('dark-theme')
-                ? 'rgba(29, 37, 33, 0.13)'
-                : 'rgba(252, 252, 252, 0.13)';
+        setInterval(() => {
+            if (pulses.length >= 32) return;
+            const fi = Math.floor(Math.random() * nodes.length);
+            const n  = nodes[fi];
+            if (!n.conns.length) return;
+            const ti = n.conns[Math.floor(Math.random() * n.conns.length)];
+            const t  = nodes[ti];
+            const d  = Math.sqrt((t.x - n.x) ** 2 + (t.y - n.y) ** 2);
+            pulses.push({ fi, ti, prog: 0, spd: 1.9 / d });
+            n.act = Math.min(1, n.act + 0.5);
+        }, 160);
+
+        function isDark() {
+            return document.body.classList.contains('dark-theme');
         }
 
-        let last = 0;
-        function draw(ts) {
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const dark = isDark();
+            const [cr, cg, cb] = dark ? [0, 230, 100] : [0, 140, 10];
+
+            for (let i = 0; i < nodes.length; i++) {
+                const a = nodes[i];
+                for (const j of a.conns) {
+                    if (j <= i) continue;
+                    const b = nodes[j];
+                    const alpha = 0.04 + (a.act + b.act) * 0.11;
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.strokeStyle = `rgba(${cr},${cg},${cb},${alpha})`;
+                    ctx.lineWidth = 0.65;
+                    ctx.stroke();
+                }
+            }
+
+            pulses = pulses.filter(p => p.prog <= 1);
+            for (const p of pulses) {
+                p.prog += p.spd;
+                const t  = Math.min(p.prog, 1);
+                const fn = nodes[p.fi], tn = nodes[p.ti];
+                const px = fn.x + (tn.x - fn.x) * t;
+                const py = fn.y + (tn.y - fn.y) * t;
+
+                const grd = ctx.createRadialGradient(px, py, 0, px, py, 8);
+                grd.addColorStop(0, `rgba(${cr},${cg},${cb},0.9)`);
+                grd.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+                ctx.beginPath();
+                ctx.arc(px, py, 8, 0, Math.PI * 2);
+                ctx.fillStyle = grd;
+                ctx.fill();
+
+                if (t >= 1) tn.act = Math.min(1, tn.act + 0.55);
+            }
+
+            for (const n of nodes) {
+                n.act = Math.max(0, n.act - 0.007);
+                const nr    = n.r + n.act * 2.5;
+                const alpha = 0.15 + n.act * 0.78;
+
+                if (n.act > 0.08) {
+                    const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, nr * 5);
+                    glow.addColorStop(0, `rgba(${cr},${cg},${cb},${n.act * 0.28})`);
+                    glow.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, nr * 5, 0, Math.PI * 2);
+                    ctx.fillStyle = glow;
+                    ctx.fill();
+                }
+
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, nr, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${cr},${cg},${cb},${alpha})`;
+                ctx.fill();
+            }
+
             requestAnimationFrame(draw);
-            if (ts - last < 55) return; // ~18 fps
-            last = ts;
+        }
+        draw();
+    })();
+    </script>
 
-            ctx.fillStyle = trailColor();
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    <script>
+    (function () {
+        const greetingEl = document.getElementById('greeting-text');
+        const dateEl     = document.getElementById('greeting-date');
+        const clockEl    = document.getElementById('greeting-clock');
+        if (!greetingEl) return;
 
-            ctx.font = FONT_SIZE + "px 'Courier New', monospace";
+        const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-            for (let i = 0; i < columns; i++) {
-                const y = drops[i] * FONT_SIZE;
-                const char = CHARS[Math.floor(Math.random() * CHARS.length)];
+        function pad(n) { return String(n).padStart(2, '0'); }
 
-                // Leading char slightly brighter
-                ctx.fillStyle = drops[i] > 0
-                    ? 'rgba(0, 180, 0, 0.28)'
-                    : 'rgba(0, 220, 0, 0.45)';
-                ctx.fillText(char, i * FONT_SIZE, y);
+        function tick() {
+            const now  = new Date();
+            const h    = now.getHours();
+            const greeting = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
 
-                if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i] += 0.5;
+            greetingEl.textContent = greeting;
+            dateEl.textContent     = `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()} ${now.getFullYear()}`;
+            clockEl.textContent    = `${pad(h)}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        }
+        tick();
+        setInterval(tick, 1000);
+    })();
+    </script>
+
+    <script>
+    (function () {
+        const canvas = document.getElementById('story-hex');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const R = 26;
+
+        function resize() {
+            const s = document.getElementById('story');
+            canvas.width  = s.offsetWidth;
+            canvas.height = s.offsetHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function hexPath(cx, cy) {
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const a = Math.PI / 3 * i - Math.PI / 6;
+                const px = cx + (R - 1) * Math.cos(a);
+                const py = cy + (R - 1) * Math.sin(a);
+                i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+        }
+
+        const W = R * Math.sqrt(3);
+        const H = R * 2;
+        const COLS_PAD = 2, ROWS_PAD = 2;
+
+        const waypoints = [
+            [0.15, 0.25], [0.65, 0.15], [0.85, 0.55],
+            [0.55, 0.80], [0.20, 0.70], [0.40, 0.40],
+        ];
+        let wp = 0, t = 0;
+
+        function lerp(a, b, x) { return a + (b - a) * x; }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            t += 0.004;
+            if (t >= 1) { t = 0; wp = (wp + 1) % waypoints.length; }
+
+            const cur  = waypoints[wp];
+            const next = waypoints[(wp + 1) % waypoints.length];
+            const gx   = lerp(cur[0]  * canvas.width,  next[0] * canvas.width,  t);
+            const gy   = lerp(cur[1] * canvas.height, next[1] * canvas.height, t);
+            const GLOW = 200;
+
+            const cols = Math.ceil(canvas.width  / W) + COLS_PAD;
+            const rows = Math.ceil(canvas.height / (H * 0.75)) + ROWS_PAD;
+
+            for (let row = -ROWS_PAD; row < rows; row++) {
+                for (let col = -COLS_PAD; col < cols; col++) {
+                    const cx = col * W + (row % 2 !== 0 ? W / 2 : 0);
+                    const cy = row * H * 0.75;
+                    const dist = Math.hypot(cx - gx, cy - gy);
+                    const base  = 0.045;
+                    const boost = dist < GLOW ? (1 - dist / GLOW) * 0.22 : 0;
+
+                    hexPath(cx, cy);
+                    ctx.strokeStyle = `rgba(0,100,0,${base + boost})`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+
+                    if (boost > 0) {
+                        ctx.fillStyle = `rgba(0,130,0,${boost * 0.18})`;
+                        ctx.fill();
+                    }
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+    })();
+    </script>
+
+    <script>
+    (function () {
+        const canvas = document.getElementById('career-particles');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const PARTICLE_COUNT = 55;
+        const MAX_DIST = 130;
+        let particles = [];
+
+        function resize() {
+            const section = document.getElementById('career');
+            canvas.width  = section.offsetWidth;
+            canvas.height = section.offsetHeight;
+        }
+        resize();
+        window.addEventListener('resize', () => { resize(); init(); });
+
+        function isDark() {
+            return document.body.classList.contains('dark-theme');
+        }
+
+        function particleColor() {
+            return isDark() ? 'rgba(0,200,80,' : 'rgba(0,100,0,';
+        }
+
+        function init() {
+            particles = Array.from({ length: PARTICLE_COUNT }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                r: Math.random() * 2 + 1.5,
+            }));
+        }
+        init();
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const base = particleColor();
+
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = base + '0.5)';
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const q = particles[j];
+                    const dx = p.x - q.x, dy = p.y - q.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < MAX_DIST) {
+                        const alpha = (1 - dist / MAX_DIST) * 0.18;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(q.x, q.y);
+                        ctx.strokeStyle = base + alpha + ')';
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+    })();
+    </script>
+
+    <!-- Skills: keyword rain -->
+    <script>
+    (function () {
+        const canvas = document.getElementById('skills-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const WORDS = [
+            'kubectl','docker','terraform','ansible','helm','argocd',
+            'git','bash','python','yaml','linux','CI/CD','IaC','SRE',
+            'azure','aws','gcp','kubernetes','nginx','prometheus',
+            'grafana','vault','redis','agile','scrum','devops',
+            'k8s','ssh','tls','dns','HPA','VPC','rbac','ingress'
+        ];
+
+        let cols = [];
+
+        function resize() {
+            const s = document.getElementById('skills');
+            canvas.width  = s.offsetWidth;
+            canvas.height = s.offsetHeight;
+            init();
+        }
+
+        function init() {
+            const n = Math.max(8, Math.floor(canvas.width / 88));
+            cols = Array.from({ length: n }, (_, i) => ({
+                x:   (i + 0.5) * (canvas.width / n),
+                y:   Math.random() * canvas.height,
+                spd: Math.random() * 0.28 + 0.1,
+                w:   WORDS[Math.floor(Math.random() * WORDS.length)],
+                sz:  Math.floor(Math.random() * 3) + 9
+            }));
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+
+        function isDark() { return document.body.classList.contains('dark-theme'); }
+
+        function draw() {
+            requestAnimationFrame(draw);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const [r, g, b] = isDark() ? [0, 200, 80] : [0, 120, 0];
+
+            for (const c of cols) {
+                c.y += c.spd;
+                if (c.y > canvas.height + 30) {
+                    c.y = -20;
+                    c.w = WORDS[Math.floor(Math.random() * WORDS.length)];
+                    c.spd = Math.random() * 0.28 + 0.1;
+                }
+                const fadeY = Math.min(c.y / 80, 1) * Math.min((canvas.height - c.y) / 80, 1);
+                const alpha = 0.09 * Math.max(fadeY, 0);
+                ctx.font      = `${c.sz}px 'Courier New', monospace`;
+                ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+                ctx.fillText(c.w, c.x - ctx.measureText(c.w).width / 2, c.y);
             }
         }
-        requestAnimationFrame(draw);
+        draw();
+    })();
+    </script>
+
+    <!-- Engagement: horizontal data streams -->
+    <script>
+    (function () {
+        const canvas = document.getElementById('engagement-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const STREAMS = [
+            'TCP  SYN > ACK', 'SSH  AUTH OK', 'HTTPS 443 > 200',
+            'GIT  PUSH OK', 'K8S  POD RUNNING', '0xFF:4A:C0 > HOST',
+            'DEPLOY > LIVE', 'CI/CD PASS', 'DNS RESOLVED',
+            'VPN CONNECTED', 'TLS 1.3 HS OK', 'GET /api/v2 200',
+            'HPA SCALE 2→4', 'CERT VALID 2026', 'INGRESS ROUTED',
+            'ANSIBLE OK 12/12', 'PROM ALERT CLEAR', 'KUBECTL APPLY OK'
+        ];
+
+        let streams = [];
+
+        function resize() {
+            const s = document.getElementById('engagement');
+            canvas.width  = s.offsetWidth;
+            canvas.height = s.offsetHeight;
+            init();
+        }
+
+        function init() {
+            const n = Math.max(6, Math.floor(canvas.height / 58));
+            streams = Array.from({ length: n }, (_, i) => ({
+                x:     -Math.random() * canvas.width,
+                y:     (i + 0.5) * (canvas.height / n),
+                spd:   Math.random() * 0.38 + 0.15,
+                txt:   STREAMS[Math.floor(Math.random() * STREAMS.length)],
+                alpha: Math.random() * 0.05 + 0.04
+            }));
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+
+        function isDark() { return document.body.classList.contains('dark-theme'); }
+
+        function draw() {
+            requestAnimationFrame(draw);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const [r, g, b] = isDark() ? [0, 200, 80] : [0, 120, 0];
+            ctx.font = "10px 'Courier New', monospace";
+
+            for (const s of streams) {
+                s.x += s.spd;
+                const w = ctx.measureText(s.txt).width;
+                if (s.x > canvas.width + w) {
+                    s.x   = -w - 10;
+                    s.txt  = STREAMS[Math.floor(Math.random() * STREAMS.length)];
+                    s.spd  = Math.random() * 0.38 + 0.15;
+                    s.alpha = Math.random() * 0.05 + 0.04;
+                }
+                const fadeIn  = Math.min((s.x + w) / 90, 1);
+                const fadeOut = Math.min((canvas.width - s.x) / 90, 1);
+                const alpha   = s.alpha * Math.max(Math.min(fadeIn, fadeOut), 0);
+                ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+                ctx.fillText(s.txt, s.x, s.y);
+            }
+        }
+        draw();
+    })();
+    </script>
+
+    <!-- Jobs: floating CLI commands -->
+    <script>
+    (function () {
+        const canvas = document.getElementById('jbos-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const CMDS = [
+            '$ kubectl apply -f deployment.yaml',
+            '$ terraform plan --out tfplan',
+            '$ ansible-playbook -i hosts site.yml',
+            '$ docker build -t app:v2.1 .',
+            '$ git push origin main --tags',
+            '$ helm upgrade --install app ./chart',
+            '$ kubectl rollout status deploy/api',
+            '$ aws eks update-kubeconfig --name prod',
+            '$ az aks get-credentials --name cluster',
+            '$ systemctl restart nginx.service',
+            '$ prometheus --config.file=prom.yml',
+            '$ vault kv put secret/app token=...',
+            '$ kubectl get pods -n production',
+            '$ terraform apply -auto-approve tfplan',
+            '$ ssh -i ~/.ssh/key user@10.0.1.42'
+        ];
+
+        let items = [];
+
+        function resize() {
+            const s = document.getElementById('jbos');
+            canvas.width  = s.offsetWidth;
+            canvas.height = s.offsetHeight;
+            init();
+        }
+
+        function init() {
+            items = CMDS.map(txt => ({
+                x:     Math.random() * canvas.width,
+                y:     Math.random() * canvas.height,
+                vx:    (Math.random() - 0.5) * 0.22,
+                vy:    (Math.random() - 0.5) * 0.16,
+                txt,
+                alpha: Math.random() * 0.055 + 0.025
+            }));
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+
+        function isDark() { return document.body.classList.contains('dark-theme'); }
+
+        function draw() {
+            requestAnimationFrame(draw);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const [r, g, b] = isDark() ? [0, 200, 80] : [0, 120, 0];
+            ctx.font = "10px 'Courier New', monospace";
+
+            for (const c of items) {
+                c.x += c.vx;
+                c.y += c.vy;
+                const w = ctx.measureText(c.txt).width;
+                if (c.x > canvas.width + w)  c.x = -w;
+                if (c.x < -w)                c.x = canvas.width + w;
+                if (c.y > canvas.height + 14) c.y = -14;
+                if (c.y < -14)               c.y = canvas.height + 14;
+
+                ctx.fillStyle = `rgba(${r},${g},${b},${c.alpha})`;
+                ctx.fillText(c.txt, c.x, c.y);
+            }
+        }
+        draw();
     })();
     </script>
 
