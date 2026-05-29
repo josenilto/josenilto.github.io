@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>404 — Not Found | Josenilto Luis da Silva</title>
+    <link href="./assets/img/favicon.png" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --green:      #006400;
+            --green-dark: #004d00;
+            --green-glow: rgba(0, 100, 0, 0.25);
+            --bg:         #f8fbf8;
+            --title:      #1d2520;
+            --text:       #4a5c4b;
+            --border:     rgba(0, 100, 0, 0.15);
+            --card-bg:    rgba(255, 255, 255, 0.82);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg:       #0d1a0e;
+                --title:    #e8f5e9;
+                --text:     #a5c8a6;
+                --border:   rgba(0, 200, 80, 0.18);
+                --card-bg:  rgba(15, 30, 16, 0.82);
+                --green:    #00c853;
+                --green-dark: #009624;
+                --green-glow: rgba(0, 200, 80, 0.3);
+            }
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--title);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            max-width: 520px;
+            width: 100%;
+        }
+
+        /* ---- 404 glitch number ---- */
+        .code {
+            font-family: 'Courier New', monospace;
+            font-size: clamp(5.5rem, 22vw, 9.5rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -4px;
+            color: var(--green);
+            text-shadow:
+                0 0 30px var(--green-glow),
+                0 0 80px var(--green-glow);
+            animation: flicker 4s infinite;
+            user-select: none;
+        }
+
+        @keyframes flicker {
+            0%, 94%, 98%, 100% { opacity: 1; }
+            95%                { opacity: 0.82; }
+            97%                { opacity: 0.95; }
+        }
+
+        /* ---- card ---- */
+        .card {
+            margin-top: 1.75rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem 2.25rem 2.25rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--title);
+            letter-spacing: -0.02em;
+        }
+
+        .card p {
+            margin-top: 0.6rem;
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.65;
+        }
+
+        /* ---- terminal block ---- */
+        .terminal {
+            margin: 1.5rem 0;
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--green);
+            border-radius: 0.5rem;
+            padding: 0.9rem 1.1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.78rem;
+            text-align: left;
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .terminal .prompt { color: var(--green); font-weight: 700; }
+        .terminal .err    { color: #c62828; }
+        .terminal .dim    { opacity: 0.55; }
+        .terminal .cursor {
+            display: inline-block;
+            width: 7px; height: 13px;
+            background: var(--green);
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ---- button ---- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.75rem 1.8rem;
+            background: var(--green);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 0.6rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            box-shadow: 0 4px 18px var(--green-glow);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px var(--green-glow);
+        }
+
+        .btn i { font-size: 0.85rem; }
+
+        /* ---- badge ---- */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1.5rem;
+            font-size: 0.72rem;
+            font-family: 'Courier New', monospace;
+            color: var(--text);
+            opacity: 0.55;
+        }
+
+        .badge-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.4; transform: scale(0.7); }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+    <div class="wrapper">
+
+        <div class="code" aria-label="Error 404">404</div>
+
+        <div class="card">
+            <h1>Page Not Found</h1>
+            <p>This route doesn't exist or has been moved.<br>Let's get you back on track.</p>
+
+            <div class="terminal" aria-hidden="true">
+                <div><span class="prompt">$ </span>curl -sI https://josenilto.github.io<span class="dim">/???</span></div>
+                <div><span class="err">HTTP/2 404  file not found</span></div>
+                <div><span class="prompt">$ </span>cd ~ <span class="dim"># return to home</span></div>
+                <div><span class="prompt">$ </span><span class="cursor"></span></div>
+            </div>
+
+            <a href="/" class="btn">
+                <i class="fas fa-terminal"></i>
+                Back to Home
+            </a>
+
+            <div class="badge">
+                <span class="badge-dot"></span>
+                josenilto.github.io &nbsp;·&nbsp; SRE / DevOps Engineer
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+    (function () {
+        const canvas = document.getElementById('bg-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const NODE_COUNT = 45;
+        const MAX_DIST   = 150;
+        let nodes  = [];
+        let pulses = [];
+
+        function buildNetwork() {
+            nodes = Array.from({ length: NODE_COUNT }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                act: Math.random() * 0.15,
+                r:   Math.random() * 2 + 1.5,
+                conns: []
+            }));
+            for (let i = 0; i < nodes.length; i++) {
+                nodes[i].conns = [];
+                for (let j = 0; j < nodes.length; j++) {
+                    if (i === j) continue;
+                    const dx = nodes[i].x - nodes[j].x;
+                    const dy = nodes[i].y - nodes[j].y;
+                    if (dx * dx + dy * dy < MAX_DIST * MAX_DIST) nodes[i].conns.push(j);
+                }
+            }
+        }
+
+        function resize() {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+            buildNetwork();
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        setInterval(() => {
+            if (pulses.length >= 28) return;
+            const fi = Math.floor(Math.random() * nodes.length);
+            const n  = nodes[fi];
+            if (!n.conns.length) return;
+            const ti = n.conns[Math.floor(Math.random() * n.conns.length)];
+            const t  = nodes[ti];
+            const d  = Math.sqrt((t.x - n.x) ** 2 + (t.y - n.y) ** 2);
+            pulses.push({ fi, ti, prog: 0, spd: 1.8 / d });
+            n.act = Math.min(1, n.act + 0.5);
+        }, 180);
+
+        function isDark() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const dark = isDark();
+            const [r, g, b] = dark ? [0, 220, 90] : [0, 130, 10];
+
+            for (let i = 0; i < nodes.length; i++) {
+                const a = nodes[i];
+                for (const j of a.conns) {
+                    if (j <= i) continue;
+                    const bnode = nodes[j];
+                    const alpha = 0.04 + (a.act + bnode.act) * 0.10;
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(bnode.x, bnode.y);
+                    ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
+                    ctx.lineWidth = 0.6;
+                    ctx.stroke();
+                }
+            }
+
+            pulses = pulses.filter(p => p.prog <= 1);
+            for (const p of pulses) {
+                p.prog += p.spd;
+                const t  = Math.min(p.prog, 1);
+                const fn = nodes[p.fi], tn = nodes[p.ti];
+                const px = fn.x + (tn.x - fn.x) * t;
+                const py = fn.y + (tn.y - fn.y) * t;
+                const grd = ctx.createRadialGradient(px, py, 0, px, py, 7);
+                grd.addColorStop(0, `rgba(${r},${g},${b},0.85)`);
+                grd.addColorStop(1, `rgba(${r},${g},${b},0)`);
+                ctx.beginPath();
+                ctx.arc(px, py, 7, 0, Math.PI * 2);
+                ctx.fillStyle = grd;
+                ctx.fill();
+                if (t >= 1) tn.act = Math.min(1, tn.act + 0.55);
+            }
+
+            for (const n of nodes) {
+                n.act = Math.max(0, n.act - 0.007);
+                const nr    = n.r + n.act * 2.5;
+                const alpha = 0.15 + n.act * 0.75;
+                if (n.act > 0.08) {
+                    const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, nr * 5);
+                    glow.addColorStop(0, `rgba(${r},${g},${b},${n.act * 0.25})`);
+                    glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, nr * 5, 0, Math.PI * 2);
+                    ctx.fillStyle = glow;
+                    ctx.fill();
+                }
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, nr, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+                ctx.fill();
+            }
+
+            requestAnimationFrame(draw);
+        }
+        draw();
+    })();
+    </script>
+
+</body>
+</html>
