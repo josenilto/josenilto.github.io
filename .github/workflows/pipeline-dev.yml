@@ -371,6 +371,7 @@ jobs:
           mkdir -p _site-dev/app
 
           cp index.html    _site-dev/
+          cp 404.html      _site-dev/
           cp -r assets/    _site-dev/assets/
           cp -r dev/dist/. _site-dev/app/
 
