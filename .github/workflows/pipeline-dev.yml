@@ -148,7 +148,75 @@ jobs:
           retention-days: 1   # DEV tem retenção mais curta
 
   # ══════════════════════════════════════════════════════════════
-  # JOB 3 — VERIFICAÇÃO DE LINKS
+  # JOB 3 — SMOKE TEST (dev server)
+  #   • npm i         → instala dependências (inclui devDependencies)
+  #   • npm run dev   → inicia servidor Vite em background (porta 5173)
+  #   • Aguarda até 30s a porta ficar pronta (curl polling)
+  #   • Health-check HTTP → aviso se não retornar 200
+  #   • Processo encerrado automaticamente ao fim do job
+  # ══════════════════════════════════════════════════════════════
+  dev-server:
+    name: 🧪 Smoke Test — Dev Server
+    runs-on: ubuntu-latest
+    needs: audit
+    defaults:
+      run:
+        working-directory: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: dev/package-lock.json
+
+      # Step 3: Install the necessary dependencies.
+      - name: 📦 Instalar dependências
+        run: npm i
+
+      # Step 4: Start the development server with auto-reloading and an instant preview.
+      - name: 🚀 Iniciar servidor de desenvolvimento (background)
+        run: npm run dev &
+        env:
+          NODE_ENV: development
+
+      - name: ⏳ Aguardar servidor ficar pronto (porta 5173)
+        run: |
+          echo "Aguardando http://localhost:5173 ..."
+          timeout 30 bash -c \
+            'until curl -sf http://localhost:5173 > /dev/null 2>&1; do sleep 1; done' \
+            && echo "✅ Servidor respondendo" \
+            || (echo "::error::Timeout — servidor não respondeu em 30s" && exit 1)
+
+      - name: 🔍 Health-check HTTP
+        id: health
+        run: |
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:5173)
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "HTTP status: $STATUS"
+          [ "$STATUS" = "200" ] \
+            && echo "✅ HTTP 200 OK" \
+            || echo "::warning::Dev server retornou HTTP $STATUS (esperado 200)"
+        continue-on-error: true
+
+      - name: 📋 Resumo do Smoke Test
+        if: always()
+        run: |
+          echo "## 🧪 Smoke Test — Dev Server" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Servidor | \`http://localhost:5173\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| HTTP Status | \`${{ steps.health.outputs.status || 'N/A' }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Node.js | \`${{ env.NODE_VERSION }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Resultado | ${{ job.status == 'success' && '✅ Passou' || '⚠️ Aviso' }} |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 5 — VERIFICAÇÃO DE LINKS
   #   DEV é mais permissivo que PRD:
   #   • Links locais quebrados → ⚠️ aviso (não bloqueia deploy)
   #   • Links externos         → ⚠️ aviso (não bloqueia deploy)
@@ -157,7 +225,7 @@ jobs:
   link-check:
     name: 🔗 Verificação de Links
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, dev-server]
     if: github.event.inputs.skip_link_check != 'true'
 
     steps:
@@ -241,7 +309,7 @@ jobs:
           echo "| Links externos — build React | ${{ steps.external-react.outcome == 'success' && '✅ OK' || '⚠️ Aviso' }} |" >> $GITHUB_STEP_SUMMARY
 
   # ══════════════════════════════════════════════════════════════
-  # JOB 4 — DEPLOY PARA josenilto-dev.github.io
+  # JOB 6 — DEPLOY PARA josenilto-dev.github.io
   #   • Publica no repo externo josenilto-dev/josenilto-dev.github.io
   #   • Requer secret DEPLOY_TOKEN (PAT com escrita no repo externo)
   #   • Publica: site estático raiz + React app compilada em /app
@@ -250,11 +318,13 @@ jobs:
   deploy-dev:
     name: 🌐 Deploy → josenilto-dev.github.io
     runs-on: ubuntu-latest
-    needs: [build, link-check]
-    # DEV sempre deploya: link-check pode ser skipped ou ter avisos
+    needs: [build, dev-server, link-check]
+    # DEV sempre deploya: dev-server e link-check podem ter avisos
     if: |
       always() &&
       needs.build.result == 'success' &&
+      (needs.dev-server.result == 'success' ||
+       needs.dev-server.result == 'failure') &&
       (needs.link-check.result == 'success' ||
        needs.link-check.result == 'skipped' ||
        needs.link-check.result == 'failure') &&
