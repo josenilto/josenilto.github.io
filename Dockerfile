@@ -33,7 +33,7 @@ LABEL org.opencontainers.image.title="josenilto.github.io" \
 #                      CVE-2025-14524, CVE-2025-15079 (curl não é usado em runtime)
 # apk del fontconfig → elimina CVE-2026-34085 (fontconfig não é necessário para nginx)
 RUN apk upgrade --no-cache && \
-    apk del --no-cache curl fontconfig
+    apk del --no-cache curl fontconfig freetype libavif 2>/dev/null || true
 
 # Remove config padrão do nginx
 RUN rm /etc/nginx/conf.d/default.conf

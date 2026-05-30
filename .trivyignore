@@ -1,0 +1,8 @@
+# CVEs sem correção disponível nos repositórios Alpine (upstream unfixed)
+# Revisitar quando o Alpine liberar pacotes corrigidos.
+
+# busybox 1.37.0-r14 — sem fix upstream disponível
+CVE-2025-60876
+
+# libxml2 2.13.9-r0 — sem fix upstream disponível
+CVE-2026-6732
