@@ -1,0 +1,30 @@
+# Dependências e builds locais
+dev/node_modules/
+dev/dist/
+dev/dist-ssr/
+dev/*.local
+
+# Git e CI
+.git/
+.github/
+.gitattributes
+.gitignore
+
+# Documentação e ambientes
+readme.md
+docs/
+hmg/
+src/
+public/
+
+# Editor e OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.sw?
+
+# Logs
+logs/
+*.log

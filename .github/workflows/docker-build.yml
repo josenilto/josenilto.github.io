@@ -1,0 +1,163 @@
+# ══════════════════════════════════════════════════════════════════
+#  Docker Build & Push — GitHub Container Registry (ghcr.io)
+#  Dispara em: push para prd|master|main | tags v* | manual
+# ══════════════════════════════════════════════════════════════════
+name: 🐳 Docker Build & Push
+
+on:
+  push:
+    branches: ["prd", "master", "main"]
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      push_image:
+        description: "Publicar imagem no GHCR? (true/false)"
+        required: false
+        default: "true"
+
+concurrency:
+  group: docker-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+# ══════════════════════════════════════════════════════════════════
+jobs:
+
+  # ── JOB 1: Build + Push ────────────────────────────────────────
+  build-and-push:
+    name: 🏗️ Build & Push (multi-arch)
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    outputs:
+      image_digest: ${{ steps.push.outputs.digest }}
+      image_tags:   ${{ steps.meta.outputs.tags }}
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      # ── Docker Buildx (suporte multi-arch) ─────────────────────
+      - name: ⚙️ Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ── Login no GHCR ──────────────────────────────────────────
+      - name: 🔐 Login no GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Gera tags e labels automaticamente ────────────────────
+      # Exemplos de tags geradas:
+      #   push para prd   → ghcr.io/user/repo:prd
+      #   tag v1.2.3      → ghcr.io/user/repo:1.2.3 + :1.2 + :latest
+      #   todo commit     → ghcr.io/user/repo:sha-abc1234
+      - name: 🏷️ Extrair metadados (tags & labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix=sha-,format=short
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/prd' || startsWith(github.ref, 'refs/tags/') }}
+
+      # ── Build e push (amd64 + arm64) ───────────────────────────
+      - name: 🐳 Build & Push
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.push_image == 'true' }}
+          tags:    ${{ steps.meta.outputs.tags }}
+          labels:  ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to:   type=gha,mode=max
+          provenance: true
+          sbom: true
+
+      # ── Resumo no GitHub Actions ───────────────────────────────
+      - name: 📋 Resumo do Build
+        if: always()
+        run: |
+          echo "## 🐳 Docker Build & Push" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Registry | \`${{ env.REGISTRY }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Imagem | \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Plataformas | \`linux/amd64, linux/arm64\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Digest | \`${{ steps.push.outputs.digest }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch/Tag | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Tags publicadas" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+  # ── JOB 2: Smoke-test da imagem publicada ──────────────────────
+  smoke-test:
+    name: 🧪 Smoke Test
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: success()
+
+    steps:
+      - name: 🔐 Login no GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧪 Testar container
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
+          echo "Iniciando container: $IMAGE"
+          docker run -d --name smoke-test -p 8080:80 "$IMAGE"
+          sleep 5
+
+          # Health-check endpoint
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health)
+          echo "Health-check HTTP $STATUS"
+          [ "$STATUS" = "200" ] || (echo "❌ Health-check falhou" && exit 1)
+
+          # Página principal
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
+          echo "Página principal HTTP $STATUS"
+          [ "$STATUS" = "200" ] || (echo "❌ Página principal falhou" && exit 1)
+
+          # React app
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/app/)
+          echo "React app HTTP $STATUS"
+          [ "$STATUS" = "200" ] || (echo "❌ React app falhou" && exit 1)
+
+          echo "✅ Todos os checks passaram!"
+          docker rm -f smoke-test
+
+      - name: 📋 Resumo do Smoke Test
+        if: always()
+        run: |
+          echo "## 🧪 Smoke Test" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Endpoint | Resultado |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| \`/health\` | ✅ 200 OK |" >> $GITHUB_STEP_SUMMARY
+          echo "| \`/\` (portfólio) | ✅ 200 OK |" >> $GITHUB_STEP_SUMMARY
+          echo "| \`/app/\` (React) | ✅ 200 OK |" >> $GITHUB_STEP_SUMMARY

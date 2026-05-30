@@ -151,6 +151,61 @@ UI Components: shadcn/ui · Tailwind CSS
 
 ---
 
+## 🐳 Docker — Microserviço
+
+O projeto também está disponível como microserviço Docker com Nginx, servindo o portfólio estático e a React app no mesmo container.
+
+### Arquivos criados
+
+| Arquivo | Descrição |
+|---|---|
+| [`Dockerfile`](Dockerfile) | Multi-stage: Node 20 Alpine (build React) → Nginx Alpine (serve) |
+| [`nginx.conf`](nginx.conf) | Serve portfólio em `/`, React app em `/app/`, gzip + headers de segurança |
+| [`docker-compose.yml`](docker-compose.yml) | Sobe o container localmente na porta `8080` |
+| [`.dockerignore`](.dockerignore) | Exclui `node_modules`, `.git`, docs — mantém a imagem enxuta |
+| [`.github/workflows/docker-build.yml`](.github/workflows/docker-build.yml) | Pipeline CI/CD para build e push no GHCR |
+
+### Como executar localmente
+
+```bash
+# Build e sobe
+docker compose up --build
+
+# Acesse:
+#   http://localhost:8080/        → portfólio estático
+#   http://localhost:8080/app/    → React app
+#   http://localhost:8080/health  → health-check
+```
+
+### Pipeline Docker (GitHub Actions)
+
+**Trigger:** push para `prd`, tags `v*` ou manual.
+
+```text
+build-and-push
+├── Login no ghcr.io (GitHub Container Registry)
+├── Tags automáticas:
+│     prd branch  → :prd + :latest
+│     tag v1.2.3  → :1.2.3 + :1.2 + :latest
+│     qualquer    → :sha-abc1234
+├── Build multi-arch (linux/amd64 + linux/arm64)
+├── Push com SBOM + provenance (supply chain security)
+└── Resumo no GitHub Actions
+
+smoke-test (roda após o push)
+└── Valida /health, / e /app/ com HTTP 200
+```
+
+A imagem é publicada em:
+
+```text
+ghcr.io/josenilto/josenilto.github.io:prd
+```
+
+> Sem segredos extras — usa o `GITHUB_TOKEN` automático do GitHub Actions.
+
+---
+
 <div align="center">
 
 **Obrigado pela visita!** 🙏
