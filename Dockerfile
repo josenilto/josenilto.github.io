@@ -26,13 +26,14 @@ LABEL org.opencontainers.image.title="josenilto.github.io" \
       org.opencontainers.image.source="https://github.com/josenilto/josenilto.github.io" \
       org.opencontainers.image.licenses="MIT"
 
-# Atualiza todos os pacotes Alpine para corrigir CVEs:
-# openssl (CVE-2026-31789, CVE-2025-15467, CVE-2026-28387)
-# expat   (CVE-2026-32767)
-# libxml2 (CVE-2025-49796, CVE-2025-49794, CVE-2025-6021)
-# libpng  (CVE-2026-25646, CVE-2026-33636)
-# musl    (CVE-2026-40200)
-RUN apk upgrade --no-cache
+# Atualiza todos os pacotes Alpine e remove pacotes desnecessários em runtime:
+# apk upgrade → corrige openssl, expat, libxml2, libpng, musl (CVEs críticos/altos)
+# apk del curl       → elimina CVEs médios: CVE-2025-13034, CVE-2026-4873, CVE-2026-6253,
+#                      CVE-2026-3783, CVE-2026-7168, CVE-2026-6429, CVE-2025-14819,
+#                      CVE-2025-14524, CVE-2025-15079 (curl não é usado em runtime)
+# apk del fontconfig → elimina CVE-2026-34085 (fontconfig não é necessário para nginx)
+RUN apk upgrade --no-cache && \
+    apk del --no-cache curl fontconfig
 
 # Remove config padrão do nginx
 RUN rm /etc/nginx/conf.d/default.conf
