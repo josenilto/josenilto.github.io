@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>404 — Not Found | Josenilto Luis da Silva</title>
+    <link href="./assets/img/favicon.png" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --green:      #006400;
+            --green-dark: #004d00;
+            --green-glow: rgba(0, 100, 0, 0.25);
+            --bg:         #f8fbf8;
+            --title:      #1d2520;
+            --text:       #4a5c4b;
+            --border:     rgba(0, 100, 0, 0.15);
+            --card-bg:    rgba(255, 255, 255, 0.88);
+            --card-fill:  #ffffff;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg:         #0d1a0e;
+                --title:      #e8f5e9;
+                --text:       #a5c8a6;
+                --border:     rgba(0, 200, 80, 0.18);
+                --card-bg:    rgba(15, 30, 16, 0.88);
+                --card-fill:  #0d1a0e;
+                --green:      #00c853;
+                --green-dark: #009624;
+                --green-glow: rgba(0, 200, 80, 0.3);
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--title);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ──────── layout ──────── */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            max-width: 480px;
+            width: 100%;
+        }
+
+        /* ──────── robot ──────── */
+        .robot-wrap {
+            position: relative;
+            width: 210px;
+            height: 230px;
+            margin-bottom: 0.5rem;
+        }
+
+        .robot {
+            width: 100%;
+            height: auto;
+            animation: float 3.8s ease-in-out infinite;
+            filter: drop-shadow(0 8px 22px var(--green-glow));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            30%       { transform: translateY(-9px) rotate(-1deg); }
+            70%       { transform: translateY(-5px) rotate(0.8deg); }
+        }
+
+        .robot .sparks {
+            animation: spark 2.4s steps(1) infinite;
+        }
+        .robot .spark2 {
+            animation: spark 2.4s steps(1) 0.6s infinite;
+        }
+
+        @keyframes spark {
+            0%, 55%, 75%, 100% { opacity: 1; }
+            60%, 70%           { opacity: 0; }
+        }
+
+        /* eye blink */
+        .robot .eye-r {
+            animation: eye-blink 4s ease-in-out 1.5s infinite;
+        }
+
+        @keyframes eye-blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95%           { transform: scaleY(0.15); }
+        }
+
+        /* ──────── 404 ──────── */
+        .code {
+            font-family: 'Courier New', monospace;
+            font-size: clamp(4rem, 18vw, 7rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -3px;
+            color: var(--green);
+            text-shadow: 0 0 36px var(--green-glow), 0 0 80px var(--green-glow);
+            animation: flicker 5s infinite;
+            user-select: none;
+        }
+
+        @keyframes flicker {
+            0%, 92%, 96%, 100% { opacity: 1; }
+            93%                { opacity: 0.75; }
+            95%                { opacity: 0.92; }
+        }
+
+        /* ──────── card ──────── */
+        .card {
+            margin-top: 1.5rem;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.75rem 2rem 2rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.07);
+        }
+
+        .card h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--title);
+            letter-spacing: -0.02em;
+        }
+
+        .card p {
+            margin-top: 0.5rem;
+            font-size: 0.88rem;
+            color: var(--text);
+            line-height: 1.65;
+        }
+
+        /* ──────── terminal ──────── */
+        .terminal {
+            margin: 1.35rem 0;
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--green);
+            border-radius: 0.5rem;
+            padding: 0.85rem 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.76rem;
+            text-align: left;
+            line-height: 1.85;
+            color: var(--text);
+        }
+
+        .terminal .prompt { color: var(--green); font-weight: 700; }
+        .terminal .err    { color: #c62828; }
+        .terminal .dim    { opacity: 0.5; }
+        .terminal .cursor {
+            display: inline-block;
+            width: 7px; height: 13px;
+            background: var(--green);
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ──────── button ──────── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.72rem 1.7rem;
+            background: var(--green);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 0.6rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            box-shadow: 0 4px 18px var(--green-glow);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px var(--green-glow);
+        }
+
+        /* ──────── badge ──────── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1.4rem;
+            font-size: 0.7rem;
+            font-family: 'Courier New', monospace;
+            color: var(--text);
+            opacity: 0.5;
+        }
+
+        .badge-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.35; transform: scale(0.65); }
+        }
+
+        body.dark-theme {
+            --bg:         #0d1a0e;
+            --title:      #e8f5e9;
+            --text:       #a5c8a6;
+            --border:     rgba(0, 200, 80, 0.18);
+            --card-bg:    rgba(15, 30, 16, 0.88);
+            --card-fill:  #0d1a0e;
+            --green:      #00c853;
+            --green-dark: #009624;
+            --green-glow: rgba(0, 200, 80, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <script>(function(){var t=localStorage.getItem('selected-theme');if(t==='dark')document.body.classList.add('dark-theme');})();</script>
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+    <div class="wrapper">
+
+        <!-- ===== ROBOT SVG ===== -->
+        <div class="robot-wrap">
+          <svg class="robot" viewBox="0 0 280 260" fill="none"
+               xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+            <!-- Antenna (bent/broken) -->
+            <line x1="137" y1="14" x2="130" y2="32" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="130" y1="32" x2="140" y2="50" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="135" cy="11" r="5.5" stroke="var(--green)" stroke-width="2.5" fill="var(--card-fill)"/>
+
+            <!-- Head (tilted -4°) -->
+            <g transform="rotate(-4 137 81)">
+              <rect x="94" y="50" width="86" height="62" rx="10"
+                    stroke="var(--green)" stroke-width="2.5" fill="var(--card-fill)"/>
+
+              <!-- Left eye — X broken -->
+              <line x1="111" y1="65" x2="125" y2="79" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="125" y1="65" x2="111" y2="79" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/>
+
+              <!-- Right eye — worried (blinking) -->
+              <g class="eye-r" style="transform-origin:156px 72px">
+                <circle cx="156" cy="72" r="9" stroke="var(--green)" stroke-width="2.5" fill="var(--card-fill)"/>
+                <circle cx="157" cy="71" r="3.5" fill="var(--green)"/>
+              </g>
+
+              <!-- Mouth — sad wave -->
+              <path d="M 112 96 Q 122 91 137 96 Q 152 101 162 96"
+                    stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/>
+            </g>
+
+            <!-- Sparks (malfunctioning) -->
+            <g class="sparks">
+              <path d="M 186 47 L 192 36 L 195 44 L 201 33"
+                    stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M 178 40 L 183 31 L 185 37"
+                    stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>
+            </g>
+            <g class="spark2">
+              <line x1="192" y1="55" x2="203" y2="48" stroke="var(--green)" stroke-width="2" stroke-linecap="round"/>
+              <line x1="190" y1="60" x2="202" y2="58" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"/>
+            </g>
+
+            <!-- Neck -->
+            <rect x="122" y="112" width="30" height="13" rx="5"
+                  stroke="var(--green)" stroke-width="2" fill="var(--card-fill)"/>
+
+            <!-- Body -->
+            <rect x="87" y="125" width="104" height="84" rx="13"
+                  stroke="var(--green)" stroke-width="2.5" fill="var(--card-fill)"/>
+
+            <!-- Body panel -->
+            <rect x="106" y="138" width="66" height="54" rx="6"
+                  stroke="var(--green)" stroke-width="1.5" fill="rgba(0,100,0,0.04)"/>
+
+            <!-- Error X on panel -->
+            <line x1="120" y1="152" x2="142" y2="174" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="142" y1="152" x2="120" y2="174" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"/>
+
+            <!-- Panel indicator lights -->
+            <circle cx="160" cy="152" r="3.5" fill="var(--green)" opacity="0.55"/>
+            <circle cx="160" cy="163" r="3.5" stroke="var(--green)" stroke-width="1.5"/>
+            <circle cx="160" cy="174" r="3.5" stroke="var(--green)" stroke-width="1.5"/>
+
+            <!-- Left arm (drooping, loose) -->
+            <rect x="50" y="128" width="38" height="14" rx="7"
+                  stroke="var(--green)" stroke-width="2.5" fill="var(--card-fill)"
+                  transform="rotate(26 69 135)"/>
+            <circle cx="45" cy="158" r="9" stroke="var(--green)" stroke-width="2" fill="var(--card-fill)"/>
+
+            <!-- Right arm (outstretched) -->
+            <rect x="191" y="127" width="42" height="14" rx="7"
+                  stroke="var(--green)" stroke-width="2.5" fill="var(--card-fill)"
+                  transform="rotate(-14 212 134)"/>
+            <!-- Claw -->
+            <circle cx="235" cy="117" r="9.5" stroke="var(--green)" stroke-width="2" fill="var(--card-fill)"/>
+            <line x1="228" y1="111" x2="242" y2="111" stroke="var(--green)" stroke-width="2" stroke-linecap="round"/>
+            <line x1="228" y1="117" x2="242" y2="117" stroke="var(--green)" stroke-width="2" stroke-linecap="round"/>
+            <line x1="228" y1="123" x2="242" y2="123" stroke="var(--green)" stroke-width="2" stroke-linecap="round"/>
+
+            <!-- Left leg -->
+            <rect x="98" y="209" width="30" height="38" rx="8"
+                  stroke="var(--green)" stroke-width="2.5" fill="var(--card-fill)"/>
+            <rect x="90" y="243" width="44" height="14" rx="6"
+                  stroke="var(--green)" stroke-width="2" fill="var(--card-fill)"/>
+
+            <!-- Right leg (slightly rotated outward) -->
+            <rect x="151" y="209" width="30" height="38" rx="8"
+                  stroke="var(--green)" stroke-width="2.5" fill="var(--card-fill)"
+                  transform="rotate(6 166 228)"/>
+            <rect x="146" y="243" width="44" height="14" rx="6"
+                  stroke="var(--green)" stroke-width="2" fill="var(--card-fill)"
+                  transform="rotate(6 168 250)"/>
+
+            <!-- ════ SCATTERED PARTS ════ -->
+
+            <!-- Large gear (bottom-left) -->
+            <circle cx="38" cy="242" r="17" stroke="var(--green)" stroke-width="2"/>
+            <circle cx="38" cy="242" r="7"  stroke="var(--green)" stroke-width="1.5"/>
+            <line x1="38" y1="223" x2="38" y2="218" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="38" y1="261" x2="38" y2="266" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="19"  y1="242" x2="14"  y2="242" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="57"  y1="242" x2="62"  y2="242" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="26" y1="230" x2="22" y2="226" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="254" x2="54" y2="258" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="26" y1="254" x2="22" y2="258" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+            <line x1="50" y1="230" x2="54" y2="226" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+
+            <!-- Small gear (bottom-right) -->
+            <circle cx="236" cy="237" r="11" stroke="var(--green)" stroke-width="1.8"/>
+            <circle cx="236" cy="237" r="4.5" stroke="var(--green)" stroke-width="1.5"/>
+            <line x1="236" y1="224" x2="236" y2="221" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="236" y1="250" x2="236" y2="253" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="223" y1="237" x2="220" y2="237" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="249" y1="237" x2="252" y2="237" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="227" y1="228" x2="224" y2="225" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="245" y1="246" x2="248" y2="249" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="227" y1="246" x2="224" y2="249" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="245" y1="228" x2="248" y2="225" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/>
+
+            <!-- Bolt / screw (top-right) -->
+            <circle cx="258" cy="68" r="8.5" stroke="var(--green)" stroke-width="2"/>
+            <line x1="258" y1="59" x2="258" y2="77" stroke="var(--green)" stroke-width="1.5"/>
+            <line x1="249" y1="68" x2="267" y2="68" stroke="var(--green)" stroke-width="1.5"/>
+
+            <!-- Small screw (left) -->
+            <circle cx="18" cy="188" r="5.5" stroke="var(--green)" stroke-width="1.5"/>
+            <line x1="18" y1="182" x2="18" y2="194" stroke="var(--green)" stroke-width="1.5"/>
+            <line x1="12" y1="188" x2="24" y2="188" stroke="var(--green)" stroke-width="1.5"/>
+
+            <!-- Wrench (bottom-right) -->
+            <line x1="207" y1="255" x2="252" y2="228" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="203" cy="257" r="11" stroke="var(--green)" stroke-width="2" fill="none"/>
+            <path d="M 193 251 C 194 245 213 246 212 252"
+                  stroke="var(--green)" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+            <!-- Spring (left, fallen) -->
+            <path d="M 16 215 Q 24 209 32 215 Q 40 221 48 215 Q 56 209 64 215"
+                  stroke="var(--green)" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+            <!-- Detached forearm fragment (ground, left) -->
+            <rect x="16" y="226" width="36" height="13" rx="6"
+                  stroke="var(--green)" stroke-width="2" fill="var(--card-fill)"
+                  transform="rotate(-8 34 233)"/>
+
+            <!-- Small chip/rect parts -->
+            <rect x="68" y="255" width="22" height="10" rx="3"
+                  stroke="var(--green)" stroke-width="1.5"
+                  transform="rotate(-14 79 260)"/>
+            <rect x="196" y="207" width="19" height="9" rx="3"
+                  stroke="var(--green)" stroke-width="1.5"
+                  transform="rotate(10 205 212)"/>
+          </svg>
+        </div>
+        <!-- ===== END ROBOT ===== -->
+
+        <div class="code" aria-label="Error 404">404</div>
+
+        <div class="card">
+            <h1>Page Not Found</h1>
+            <p>This route doesn't exist or has been moved.<br>Let's get you back on track.</p>
+
+            <div class="terminal" aria-hidden="true">
+                <div><span class="prompt">$ </span>curl -sI https://josenilto.github.io<span class="dim">/???</span></div>
+                <div><span class="err">HTTP/2 404  file not found</span></div>
+                <div><span class="prompt">$ </span>cd ~ <span class="dim"># return to home</span></div>
+                <div><span class="prompt">$ </span><span class="cursor"></span></div>
+            </div>
+
+            <a href="/" class="btn">
+                <i class="fas fa-terminal"></i>
+                Back to Home
+            </a>
+
+            <div class="badge">
+                <span class="badge-dot"></span>
+                josenilto.github.io &nbsp;·&nbsp; SRE / DevOps Engineer
+            </div>
+        </div>
+
+    </div>
+
+    <script src="./assets/js/404-canvas.js" defer></script>
+
+</body>
+</html>
