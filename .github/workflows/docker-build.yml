@@ -63,7 +63,7 @@ jobs:
       #   todo commit     → ghcr.io/user/repo:sha-abc1234
       - name: 🏷️ Extrair metadados (tags & labels)
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
