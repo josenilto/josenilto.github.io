@@ -54,7 +54,7 @@ jobs:
           # cache: 'npm'  # removido: sem package-lock.json na raiz (site estático)
 
       - name: Cache yarn/npm (extra)
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ matrix.node }}-npm-${{ hashFiles('**/package-lock.json') }}
