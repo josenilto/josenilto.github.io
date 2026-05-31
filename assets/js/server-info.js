@@ -53,6 +53,51 @@
             el('p-dom').textContent  = ms(t.domContentLoadedEventEnd - t.navigationStart);
             el('p-load').textContent = ms(t.loadEventEnd - t.navigationStart);
         }
+
+        // ── Deploy info ───────────────────────────────────────────
+        var modified = new Date(document.lastModified);
+        el('d-modified').textContent = isNaN(modified.getTime())
+            ? '—'
+            : modified.toISOString().slice(0, 19).replace('T', ' ') + ' UTC';
+        el('d-https').textContent = location.protocol === 'https:' ? 'yes' : 'no';
+        el('d-nodes').textContent = document.querySelectorAll('*').length + ' nodes';
+
+        // ── Resource timing ───────────────────────────────────────
+        var res     = performance.getEntriesByType('resource');
+        var cached  = res.filter(function (r) { return r.transferSize === 0; }).length;
+        var txBytes = res.reduce(function (a, r) { return a + (r.transferSize || 0); }, 0);
+        var scripts = res.filter(function (r) { return r.initiatorType === 'script'; }).length;
+        var styles  = res.filter(function (r) { return /\.css(\?|$)/.test(r.name); }).length;
+        var images  = res.filter(function (r) { return r.initiatorType === 'img'; }).length;
+
+        el('r-total').textContent   = res.length + ' files';
+        el('r-cached').textContent  = cached + ' / ' + res.length;
+        el('r-size').textContent    = txBytes >= 1024
+            ? (txBytes / 1024).toFixed(1) + ' KB'
+            : txBytes + ' B';
+        el('r-scripts').textContent = scripts;
+        el('r-styles').textContent  = styles;
+        el('r-images').textContent  = images;
+
+        // ── Capabilities ──────────────────────────────────────────
+        el('cap-cpu').textContent   = navigator.hardwareConcurrency || '—';
+        el('cap-mem').textContent   = navigator.deviceMemory
+            ? navigator.deviceMemory + ' GB'
+            : 'n/a';
+        el('cap-dpr').textContent   = (window.devicePixelRatio || 1).toFixed(1) + 'x';
+        el('cap-touch').textContent = navigator.maxTouchPoints > 0
+            ? navigator.maxTouchPoints + ' pts'
+            : 'none';
+        el('cap-online').textContent = navigator.onLine ? 'yes' : 'no';
+        el('cap-sw').textContent     = 'serviceWorker' in navigator ? 'yes' : 'no';
+        el('cap-ls').textContent     = (function () {
+            try { return localStorage ? 'yes' : 'no'; } catch (e) { return 'blocked'; }
+        })();
+        var mem = performance.memory;
+        el('cap-heap').textContent = mem
+            ? (mem.usedJSHeapSize / 1048576).toFixed(1) + ' / ' +
+              (mem.totalJSHeapSize / 1048576).toFixed(1) + ' MB'
+            : 'n/a';
     });
 
     // ── Client info ───────────────────────────────────────────────

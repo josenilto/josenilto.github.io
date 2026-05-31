@@ -268,6 +268,45 @@
 
         .sec-item i { color: var(--green); font-size: 0.6rem; }
 
+        /* ── Capabilities grid ─────────────────────────────────── */
+        .cap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 0.65rem;
+            padding: 0.85rem 1rem;
+        }
+
+        .cap-item {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 0.55rem;
+            padding: 0.55rem 0.7rem;
+            text-align: center;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .cap-item { background: rgba(255, 255, 255, 0.03); }
+        }
+
+        body.dark-theme .cap-item { background: rgba(255, 255, 255, 0.03); }
+
+        .cap-label {
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            color: var(--text);
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.3rem;
+        }
+
+        .cap-value {
+            font-family: var(--mono);
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+
         /* ── Footer bar ─────────────────────────────────────────── */
         .footer-bar {
             display: flex;
@@ -361,6 +400,70 @@
                     <div class="info-row"><span class="lbl">viewport</span><code id="c-viewport">—</code></div>
                     <div class="info-row"><span class="lbl">language</span><code id="c-lang">—</code></div>
                     <div class="info-row"><span class="lbl">cookies</span><code id="c-cookies">—</code></div>
+                </div>
+            </div>
+
+            <!-- Deploy -->
+            <div class="panel">
+                <div class="panel-head"><i class="fas fa-rocket" aria-hidden="true"></i> deploy</div>
+                <div class="panel-body">
+                    <div class="info-row"><span class="lbl">branch</span><code>prd</code></div>
+                    <div class="info-row"><span class="lbl">repo</span><code>josenilto.github.io</code></div>
+                    <div class="info-row"><span class="lbl">last modified</span><code id="d-modified">—</code></div>
+                    <div class="info-row"><span class="lbl">https</span><code id="d-https">—</code></div>
+                    <div class="info-row"><span class="lbl">dom nodes</span><code id="d-nodes">—</code></div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div class="panel">
+                <div class="panel-head"><i class="fas fa-cubes" aria-hidden="true"></i> resources</div>
+                <div class="panel-body">
+                    <div class="info-row"><span class="lbl">total loaded</span><code id="r-total">—</code></div>
+                    <div class="info-row"><span class="lbl">from cache</span><code id="r-cached">—</code></div>
+                    <div class="info-row"><span class="lbl">transferred</span><code id="r-size">—</code></div>
+                    <div class="info-row"><span class="lbl">scripts</span><code id="r-scripts">—</code></div>
+                    <div class="info-row"><span class="lbl">styles</span><code id="r-styles">—</code></div>
+                    <div class="info-row"><span class="lbl">images</span><code id="r-images">—</code></div>
+                </div>
+            </div>
+
+            <!-- Capabilities -->
+            <div class="panel panel-full">
+                <div class="panel-head"><i class="fas fa-microchip" aria-hidden="true"></i> capabilities</div>
+                <div class="cap-grid">
+                    <div class="cap-item">
+                        <div class="cap-label">cpu cores</div>
+                        <div class="cap-value" id="cap-cpu">—</div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-label">device memory</div>
+                        <div class="cap-value" id="cap-mem">—</div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-label">pixel ratio</div>
+                        <div class="cap-value" id="cap-dpr">—</div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-label">touch points</div>
+                        <div class="cap-value" id="cap-touch">—</div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-label">online</div>
+                        <div class="cap-value" id="cap-online">—</div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-label">service worker</div>
+                        <div class="cap-value" id="cap-sw">—</div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-label">local storage</div>
+                        <div class="cap-value" id="cap-ls">—</div>
+                    </div>
+                    <div class="cap-item">
+                        <div class="cap-label">js heap</div>
+                        <div class="cap-value" id="cap-heap">—</div>
+                    </div>
                 </div>
             </div>
 
