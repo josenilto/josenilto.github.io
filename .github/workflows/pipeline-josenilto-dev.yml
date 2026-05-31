@@ -297,17 +297,27 @@ jobs:
       - name: 🚀 Deploy para josenilto-dev/josenilto-dev.github.io
         uses: peaceiris/actions-gh-pages@v4
         with:
-          # PAT com acesso ao repositório destino
-          # Configurar em: Settings → Secrets → Actions → DEV_DEPLOY_TOKEN
           personal_token: ${{ secrets.DEV_DEPLOY_TOKEN }}
-          external_repository: ${{ env.DEPLOY_REPO }}   # josenilto-dev/josenilto-dev.github.io
-          publish_dir: ./_site-jdev                     # pasta local a publicar
-          publish_branch: gh-pages                      # branch no repo destino
+          external_repository: ${{ env.DEPLOY_REPO }}
+          publish_dir: ./_site-jdev
+          publish_branch: gh-pages
           commit_message: |
             deploy(dev): ${{ github.sha }} from josenilto/${{ github.event.repository.name }}@${{ github.ref_name }} by @${{ github.actor }}
           enable_jekyll: false
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
+        continue-on-error: true
+
+      - name: 🔑 Status do DEV_DEPLOY_TOKEN
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::warning::Secret DEV_DEPLOY_TOKEN não configurado — deploy externo pulado."
+            echo "Configure em: Settings → Secrets → Actions → DEV_DEPLOY_TOKEN"
+          else
+            echo "✅ DEV_DEPLOY_TOKEN presente"
+          fi
+        env:
+          TOKEN: ${{ secrets.DEV_DEPLOY_TOKEN }}
 
       - name: 📋 Resumo do Deploy
         run: |

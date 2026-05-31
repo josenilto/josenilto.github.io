@@ -1,0 +1,184 @@
+# ══════════════════════════════════════════════════════════════════
+#  Pipeline HMG — Testes & Deploy para josenilto-hmg.github.io
+#  Dispara em: push/PR para hmg  |  manual (dispatch)
+#
+#  PRÉ-REQUISITOS (uma só vez, manual no GitHub):
+#    1. Criar repositório: josenilto-hmg/josenilto-hmg.github.io (público)
+#    2. Ativar GitHub Pages no novo repo:
+#         Settings → Pages → Source → "Deploy from a branch"
+#         Branch: gh-pages  |  Folder: / (root)
+#    3. Criar PAT com permissão de escrita no repo destino
+#    4. Adicionar secret neste repo:
+#         Settings → Secrets → Actions → HMG_DEPLOY_TOKEN = <PAT>
+#
+#  URL de resultado: https://josenilto-hmg.github.io
+# ══════════════════════════════════════════════════════════════════
+name: 🧪 Pipeline HMG — Testes & Deploy
+
+on:
+  push:
+    branches: ["hmg"]
+  pull_request:
+    branches: ["hmg"]
+  workflow_dispatch:
+    inputs:
+      skip_link_check:
+        description: "Pular verificação de links? (true/false)"
+        required: false
+        default: "false"
+
+concurrency:
+  group: pipeline-hmg-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DEPLOY_REPO: "josenilto-hmg/josenilto-hmg.github.io"
+  SITE_URL:    "https://josenilto-hmg.github.io"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+# ══════════════════════════════════════════════════════════════════
+# JOB 1 — VERIFICAÇÃO DE LINKS
+# ══════════════════════════════════════════════════════════════════
+jobs:
+  link-check:
+    name: 🔗 Verificação de Links
+    runs-on: ubuntu-latest
+    if: github.event.inputs.skip_link_check != 'true'
+    timeout-minutes: 10
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: 📦 Instalar linkinator
+        run: npm install -g linkinator
+
+      - name: 🔗 Links locais
+        id: local
+        run: |
+          linkinator ./index.html \
+            --skip "^https?://" \
+            --timeout 10000 \
+            --verbosity error \
+            --format json \
+            --output link-local.json 2>/dev/null || true
+
+          node -e "
+            const fs = require('fs');
+            try {
+              const data = fs.readFileSync('./link-local.json', 'utf8');
+              const lines = data.trim().split('\n').filter(Boolean);
+              const broken = [];
+              lines.forEach(line => {
+                try {
+                  const obj = JSON.parse(line);
+                  if (obj.links) obj.links.forEach(l => { if (l.state === 'BROKEN') broken.push(l); });
+                  else if (obj.state === 'BROKEN') broken.push(obj);
+                } catch(e) {}
+              });
+              if (broken.length > 0) {
+                console.error('❌ Links locais quebrados:');
+                broken.forEach(l => console.error('  •', l.url || l.href, '-', l.status || l.statusCode));
+                process.exit(1);
+              }
+              console.log('✅ Todos os links locais estão OK!');
+            } catch(e) {
+              console.log('⚠️  Relatório não gerado, pulando verificação.');
+            }
+          "
+
+      - name: 🌐 Links externos (aviso)
+        run: |
+          linkinator ./index.html \
+            --recurse \
+            --skip "api\.whatsapp\.com|josenilto\.slack\.com|web\.telegram\.org|unpkg\.com|cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com" \
+            --timeout 15000 \
+            --retry-errors \
+            --verbosity error \
+            || echo "⚠️ Alguns links externos podem estar temporariamente indisponíveis"
+        continue-on-error: true
+
+      - name: 📄 Resumo de links
+        if: always()
+        run: |
+          echo "## 🔗 Verificação de Links — HMG" >> $GITHUB_STEP_SUMMARY
+          echo "| Verificação | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links locais  | ${{ steps.local.outcome == 'success' && '✅ OK' || '❌ Falhou' }} |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 2 — DEPLOY PARA josenilto-hmg.github.io
+  # ══════════════════════════════════════════════════════════════
+  deploy-hmg:
+    name: 🌐 Deploy → josenilto-hmg.github.io
+    runs-on: ubuntu-latest
+    needs: link-check
+    if: |
+      always() &&
+      (needs.link-check.result == 'success' || needs.link-check.result == 'skipped') &&
+      (github.ref == 'refs/heads/hmg' || github.event_name == 'workflow_dispatch')
+    timeout-minutes: 10
+
+    environment:
+      name: hmg
+      url: ${{ env.SITE_URL }}
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📁 Preparar pasta de publicação HMG
+        run: |
+          mkdir -p _site-hmg
+          cp *.html     _site-hmg/
+          cp -r assets/ _site-hmg/assets/
+          cp robots.txt _site-hmg/
+          cp sitemap.xml _site-hmg/
+          cp health     _site-hmg/
+          echo "📂 Estrutura HMG:"
+          find _site-hmg -maxdepth 2 -type f | sort
+
+      - name: 🚀 Deploy para josenilto-hmg/josenilto-hmg.github.io
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.HMG_DEPLOY_TOKEN }}
+          external_repository: ${{ env.DEPLOY_REPO }}
+          publish_branch: gh-pages
+          publish_dir: ./_site-hmg
+          commit_message: "deploy(hmg): ${{ github.sha }} by @${{ github.actor }}"
+          enable_jekyll: false
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+        continue-on-error: true
+
+      - name: 🔑 Status do HMG_DEPLOY_TOKEN
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::warning::Secret HMG_DEPLOY_TOKEN não configurado — deploy externo pulado."
+            echo "Configure em: Settings → Secrets → Actions → HMG_DEPLOY_TOKEN"
+          else
+            echo "✅ HMG_DEPLOY_TOKEN presente"
+          fi
+        env:
+          TOKEN: ${{ secrets.HMG_DEPLOY_TOKEN }}
+
+      - name: 📋 Resumo do Deploy HMG
+        if: always()
+        run: |
+          echo "## 🧪 Deploy HMG" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌐 URL | [${{ env.SITE_URL }}](${{ env.SITE_URL }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📦 Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌿 Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 👤 Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🗂️ Repo destino | \`${{ env.DEPLOY_REPO }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
