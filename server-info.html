@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Server Info | josenilto.github.io</title>
+    <link href="./assets/img/favicon.png" rel="shortcut icon" type="image/x-icon" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --green:      #006400;
+            --green-dark: #004d00;
+            --green-glow: rgba(0, 100, 0, 0.25);
+            --bg:         #f8fbf8;
+            --title:      #1d2520;
+            --text:       #4a5c4b;
+            --border:     rgba(0, 100, 0, 0.15);
+            --card-bg:    rgba(255, 255, 255, 0.88);
+            --mono:       'Courier New', Courier, monospace;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg:         #0d1a0e;
+                --title:      #e8f5e9;
+                --text:       #a5c8a6;
+                --border:     rgba(0, 200, 80, 0.18);
+                --card-bg:    rgba(15, 30, 16, 0.88);
+                --green:      #00c853;
+                --green-dark: #009624;
+                --green-glow: rgba(0, 200, 80, 0.3);
+            }
+        }
+
+        body.dark-theme {
+            --bg:         #0d1a0e;
+            --title:      #e8f5e9;
+            --text:       #a5c8a6;
+            --border:     rgba(0, 200, 80, 0.18);
+            --card-bg:    rgba(15, 30, 16, 0.88);
+            --green:      #00c853;
+            --green-dark: #009624;
+            --green-glow: rgba(0, 200, 80, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--title);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+        }
+
+        /* ── Header ─────────────────────────────────────────────── */
+        .page-header { margin-bottom: 2rem; }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+            padding: 0.28rem 0.8rem;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .status-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #999;
+            transition: background 0.4s;
+            flex-shrink: 0;
+        }
+        .status-dot.ok  { background: var(--green); animation: pulse-dot 2s ease-in-out infinite; }
+        .status-dot.err { background: #c62828; }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.4; transform: scale(0.65); }
+        }
+
+        .back-link {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .back-link:hover { opacity: 1; }
+
+        h1 {
+            font-size: clamp(2.2rem, 9vw, 4rem);
+            font-family: var(--mono);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -3px;
+            color: var(--title);
+            user-select: none;
+        }
+        h1 .accent { color: var(--green); }
+
+        .page-sub {
+            margin-top: 0.45rem;
+            font-family: var(--mono);
+            font-size: 0.76rem;
+            color: var(--text);
+            opacity: 0.55;
+        }
+
+        /* ── Grid ───────────────────────────────────────────────── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 560px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Panel ──────────────────────────────────────────────── */
+        .panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border);
+            border-radius: 0.85rem;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .panel-full { grid-column: 1 / -1; }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.6rem 1rem;
+            font-family: var(--mono);
+            font-size: 0.67rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--green);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-body { padding: 0.7rem 1rem; }
+
+        /* ── Info rows ──────────────────────────────────────────── */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            gap: 0.75rem;
+            font-size: 0.76rem;
+        }
+        .info-row:last-child { border-bottom: none; }
+
+        .lbl {
+            color: var(--text);
+            opacity: 0.65;
+            flex-shrink: 0;
+            min-width: 75px;
+        }
+
+        code {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--title);
+            text-align: right;
+            word-break: break-all;
+        }
+
+        code.tag {
+            background: rgba(0, 100, 0, 0.1);
+            color: var(--green);
+            border: 1px solid rgba(0, 100, 0, 0.2);
+            padding: 0.08rem 0.45rem;
+            border-radius: 0.25rem;
+        }
+
+        body.dark-theme code.tag {
+            background: rgba(0, 200, 80, 0.1);
+            border-color: rgba(0, 200, 80, 0.2);
+        }
+
+        /* ── Health display ─────────────────────────────────────── */
+        .health-block {
+            text-align: center;
+            padding: 0.55rem 0 0.85rem;
+        }
+
+        .health-code {
+            font-family: var(--mono);
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--green);
+            line-height: 1;
+            text-shadow: 0 0 28px var(--green-glow);
+            transition: color 0.3s;
+        }
+
+        .health-label {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text);
+            margin-top: 0.2rem;
+            opacity: 0.65;
+        }
+
+        /* ── Security grid ──────────────────────────────────────── */
+        .sec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 0.5rem;
+            padding: 0.7rem 1rem;
+        }
+
+        .sec-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--mono);
+            font-size: 0.71rem;
+            color: var(--text);
+        }
+
+        .sec-item i { color: var(--green); font-size: 0.6rem; }
+
+        /* ── Footer bar ─────────────────────────────────────────── */
+        .footer-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-top: 1.5rem;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--text);
+            opacity: 0.5;
+        }
+
+        .badge-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            flex-shrink: 0;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <script>(function(){var t=localStorage.getItem('selected-theme');if(t==='dark')document.body.classList.add('dark-theme');})();</script>
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+    <div class="wrapper">
+
+        <header class="page-header">
+            <div class="header-top">
+                <div class="status-badge" role="status" aria-live="polite">
+                    <span class="status-dot" id="status-dot"></span>
+                    <span id="status-text">checking…</span>
+                </div>
+                <a href="/" class="back-link" aria-label="Voltar ao portfólio">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i> back
+                </a>
+            </div>
+            <h1>server<span class="accent">-info</span></h1>
+            <p class="page-sub">josenilto.github.io &nbsp;·&nbsp; production &nbsp;·&nbsp; nginx / alpine</p>
+        </header>
+
+        <div class="grid">
+
+            <!-- Origin -->
+            <div class="panel">
+                <div class="panel-head"><i class="fas fa-server" aria-hidden="true"></i> origin</div>
+                <div class="panel-body">
+                    <div class="info-row"><span class="lbl">server</span><code>nginx / alpine</code></div>
+                    <div class="info-row"><span class="lbl">platform</span><code>github pages</code></div>
+                    <div class="info-row"><span class="lbl">env</span><code class="tag">production</code></div>
+                    <div class="info-row"><span class="lbl">protocol</span><code id="i-protocol">—</code></div>
+                    <div class="info-row"><span class="lbl">host</span><code id="i-host">—</code></div>
+                </div>
+            </div>
+
+            <!-- Health -->
+            <div class="panel">
+                <div class="panel-head"><i class="fas fa-heart" aria-hidden="true"></i> health</div>
+                <div class="panel-body">
+                    <div class="health-block" aria-live="polite">
+                        <div class="health-code" id="h-code">—</div>
+                        <div class="health-label" id="h-label">checking…</div>
+                    </div>
+                    <div class="info-row"><span class="lbl">endpoint</span><code>/health</code></div>
+                    <div class="info-row"><span class="lbl">latency</span><code id="h-latency">—</code></div>
+                    <div class="info-row"><span class="lbl">checked at</span><code id="h-ts">—</code></div>
+                </div>
+            </div>
+
+            <!-- Performance -->
+            <div class="panel">
+                <div class="panel-head"><i class="fas fa-bolt" aria-hidden="true"></i> performance</div>
+                <div class="panel-body">
+                    <div class="info-row"><span class="lbl">dns</span><code id="p-dns">—</code></div>
+                    <div class="info-row"><span class="lbl">tcp</span><code id="p-tcp">—</code></div>
+                    <div class="info-row"><span class="lbl">tls</span><code id="p-tls">—</code></div>
+                    <div class="info-row"><span class="lbl">ttfb</span><code id="p-ttfb">—</code></div>
+                    <div class="info-row"><span class="lbl">dom ready</span><code id="p-dom">—</code></div>
+                    <div class="info-row"><span class="lbl">page load</span><code id="p-load">—</code></div>
+                </div>
+            </div>
+
+            <!-- Client -->
+            <div class="panel">
+                <div class="panel-head"><i class="fas fa-desktop" aria-hidden="true"></i> client</div>
+                <div class="panel-body">
+                    <div class="info-row"><span class="lbl">browser</span><code id="c-browser">—</code></div>
+                    <div class="info-row"><span class="lbl">os</span><code id="c-os">—</code></div>
+                    <div class="info-row"><span class="lbl">connection</span><code id="c-conn">—</code></div>
+                    <div class="info-row"><span class="lbl">viewport</span><code id="c-viewport">—</code></div>
+                    <div class="info-row"><span class="lbl">language</span><code id="c-lang">—</code></div>
+                    <div class="info-row"><span class="lbl">cookies</span><code id="c-cookies">—</code></div>
+                </div>
+            </div>
+
+            <!-- Security Headers -->
+            <div class="panel panel-full">
+                <div class="panel-head"><i class="fas fa-lock" aria-hidden="true"></i> security headers</div>
+                <div class="sec-grid">
+                    <div class="sec-item"><i class="fas fa-check" aria-hidden="true"></i>Strict-Transport-Security</div>
+                    <div class="sec-item"><i class="fas fa-check" aria-hidden="true"></i>Content-Security-Policy</div>
+                    <div class="sec-item"><i class="fas fa-check" aria-hidden="true"></i>X-Frame-Options</div>
+                    <div class="sec-item"><i class="fas fa-check" aria-hidden="true"></i>X-Content-Type-Options</div>
+                    <div class="sec-item"><i class="fas fa-check" aria-hidden="true"></i>Referrer-Policy</div>
+                    <div class="sec-item"><i class="fas fa-check" aria-hidden="true"></i>Permissions-Policy</div>
+                    <div class="sec-item"><i class="fas fa-check" aria-hidden="true"></i>X-Permitted-Cross-Domain-Policies</div>
+                    <div class="sec-item"><i class="fas fa-check" aria-hidden="true"></i>server_tokens off</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bar" aria-hidden="true">
+            <span class="badge-dot"></span>
+            <span id="live-time">—</span>
+            &nbsp;·&nbsp; UTC
+        </div>
+
+    </div>
+
+    <script src="./assets/js/server-info.js" defer></script>
+    <script src="./assets/js/404-canvas.js" defer></script>
+</body>
+</html>

@@ -1,5 +1,16 @@
-/*===== GOOGLE FONTS =====*/
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap");
+/*===== FONT DISPLAY OVERRIDE =====*/
+/* Font Awesome served from CDN does not declare font-display;
+   this block forces swap so text remains visible while icons load. */
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-display: swap;
+  src: local("Font Awesome 6 Free");
+}
+@font-face {
+  font-family: "Font Awesome 6 Brands";
+  font-display: swap;
+  src: local("Font Awesome 6 Brands");
+}
 
 /*===== VARIABLES CSS =====*/
 :root {
@@ -540,15 +551,9 @@ img {
   text-align: center;
 }
 
-.about__description {
+.story > .about__description {
   margin-bottom: 1.25rem;
   line-height: 1.75;
-}
-
-.about__img {
-  width: 280px;
-  border-radius: 0.5rem;
-  justify-self: center;
 }
 
 /*========== STORY ==========*/
@@ -777,13 +782,6 @@ img {
   0%   { transform: rotateY(0deg); }
   50%  { transform: rotateY(90deg) scale(0.85); }
   100% { transform: rotateY(360deg) scale(1); }
-}
-
-.services__img {
-  width: 64px;
-  height: 64px;
-  fill: var(--first-color);
-  margin-bottom: var(--mb-2);
 }
 
 .services__title {
@@ -1043,8 +1041,7 @@ img {
   margin-top: 0.25rem;
 }
 
-.menu__name,
-.menu__preci {
+.menu__name {
   font-weight: var(--font-semi-bold);
   color: var(--title-color);
 }
@@ -1065,38 +1062,6 @@ img {
   border-color: var(--first-color-alt);
   transform: translateY(-2px);
   box-shadow: 0 0 8px rgba(0, 100, 0, 0.5), 0 0 18px rgba(0, 100, 0, 0.2);
-}
-
-.menu__detail,
-.menu__preci {
-  font-size: var(--small-font-size);
-}
-
-.menu__detail {
-  margin-bottom: var(--mb-1);
-}
-
-/*========== APP ==========*/
-.app__data {
-  text-align: center;
-}
-
-.app__description {
-  margin-bottom: var(--mb-5);
-}
-
-.app__stores {
-  margin-bottom: var(--mb-4);
-}
-
-.app__store {
-  width: 120px;
-  margin: 0 var(--mb-1);
-}
-
-.app__img {
-  width: 230px;
-  justify-self: center;
 }
 
 /*========== STORY IMAGE ==========*/
@@ -1511,34 +1476,20 @@ img {
 
 /*========== MEDIA QUERIES ==========*/
 @media screen and (min-width: 576px) {
-  .home__container,
-  .about__container,
-  .app__container {
+  .home__container {
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
   }
 
-  .about__data,
-  .about__initial,
-  .app__data,
-  .app__initial,
-  .contact__container,
-  .contact__initial {
+  .about__data {
     text-align: initial;
   }
 
-  /* description acima do grid fica centralizada */
   .story > .about__description {
     text-align: center;
     max-width: 640px;
     margin-left: auto;
     margin-right: auto;
-  }
-
-  .about__img,
-  .app__img {
-    width: 380px;
-    order: -1;
   }
 
   .story__img-wrapper {
@@ -1607,9 +1558,6 @@ img {
     padding: 1.5rem;
   }
 
-  .app__store {
-    margin: 0 var(--mb-1) 0 0;
-  }
 }
 
 @media screen and (min-width: 960px) {
@@ -1627,10 +1575,6 @@ img {
     height: 340px;
   }
 
-  .about__container,
-  .app__container {
-    column-gap: 7rem;
-  }
 }
 
 
@@ -1701,6 +1645,223 @@ img {
   .home__img {
     width: 220px;
     height: 220px;
+  }
+}
+
+/*========== PRINT ==========*/
+@media print {
+  /* Reset para impressão */
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Tipografia legível em papel */
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #000;
+  }
+
+  /* Esconder elementos não relevantes para impressão */
+  canvas,
+  .scrolltop,
+  .nav__toggle,
+  .change-theme,
+  .nav__close,
+  [data-aos],
+  .theme-icon,
+  .footer__copy {
+    display: none !important;
+  }
+
+  /* Header: fixo vira estático e sem fundo */
+  .l-header {
+    position: static;
+    box-shadow: none;
+    border-bottom: 1pt solid #ccc;
+    padding: 0.5rem 0;
+  }
+
+  /* Navegação: lista horizontal simples */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav__menu {
+    display: block !important;
+    background: none;
+    position: static;
+  }
+
+  .nav__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav__link {
+    font-size: 9pt;
+    color: #000 !important;
+    text-decoration: none;
+    border-right: 1pt solid #ccc;
+    padding-right: 0.5rem;
+  }
+
+  .nav__link:last-child {
+    border-right: none;
+  }
+
+  /* Imagem de perfil: tamanho controlado */
+  .home__img {
+    width: 120px !important;
+    height: 120px !important;
+    border-radius: 50%;
+    float: right;
+    margin-left: 1rem;
+    border: 2pt solid #000;
+  }
+
+  .container {
+    width: auto !important;
+    height: auto !important;
+    background: none !important;
+    float: right;
+  }
+
+  /* Seções: sem padding excessivo, quebra de página controlada */
+  .section {
+    padding: 1rem 0 !important;
+    page-break-inside: avoid;
+  }
+
+  .section-title {
+    font-size: 14pt;
+    border-bottom: 1pt solid #000;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-subtitle {
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #555 !important;
+  }
+
+  /* Cards de serviços / engagement */
+  .engagement__card,
+  .services__content {
+    break-inside: avoid;
+    border: 1pt solid #ccc;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Tags de skills */
+  .story__tag,
+  .story__tags {
+    display: inline;
+  }
+
+  .story__tag {
+    border: 1pt solid #555;
+    border-radius: 2pt;
+    padding: 1pt 4pt;
+    font-size: 8pt;
+    margin: 1pt;
+    display: inline-block;
+  }
+
+  /* Jobs / projetos: links exibem URL */
+  .menu__name {
+    display: inline-block;
+    font-size: 9pt;
+    margin: 1pt 4pt;
+  }
+
+  .menu__name::after {
+    content: " (" attr(href) ")";
+    font-size: 7pt;
+    color: #555 !important;
+  }
+
+  /* Links externos gerais: mostrar URL */
+  a[href^="http"]::after,
+  a[href^="https"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #555 !important;
+    word-break: break-all;
+  }
+
+  /* Botões de contato e redes sociais: omitir URL de links âncora internos */
+  .nav__link::after,
+  a[href^="#"]::after {
+    content: none !important;
+  }
+
+  /* Contact: mostrar como lista */
+  .contact__cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .contact__card {
+    border: 1pt solid #ccc;
+    padding: 0.4rem 0.8rem;
+    font-size: 10pt;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 1rem;
+    border-top: 1pt solid #ccc;
+    padding-top: 0.5rem;
+    font-size: 9pt;
+  }
+
+  /* Controle de quebra de página */
+  #career { page-break-after: avoid; }
+  #story   { page-break-before: avoid; }
+  #jbos    { page-break-before: always; }
+  #contact { page-break-before: avoid; }
+
+  /* Botões de ação (GitHub, LinkedIn, PDF): exibir como texto */
+  .button {
+    display: inline-block;
+    border: 1pt solid #000;
+    padding: 2pt 6pt;
+    font-size: 9pt;
+    margin: 2pt;
+    text-decoration: none;
+  }
+
+  /* Grade e layout: colapsar para 1 coluna */
+  .bd-grid,
+  .services__container,
+  .menu__container,
+  .contact__cards {
+    display: block !important;
+    grid-template-columns: none !important;
+  }
+
+  /* Remover animações e transformações AOS */
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 

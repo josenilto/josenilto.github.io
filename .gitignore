@@ -27,5 +27,10 @@ _site/
 *.sln
 *.sw?
 
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+
 # --- OS ---
 Thumbs.db

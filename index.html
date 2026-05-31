@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,8 @@
     <meta name="keywords" content="SRE, DevOps, Cloud, Azure, AWS, GCP, Linux, Infrastructure, Solutions Architect, Josenilto Luis da Silva">
     <meta name="author" content="Josenilto Luis da Silva">
     <meta name="robots" content="index, follow">
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+    <link rel="canonical" href="https://josenilto.github.io/">
 
     <!-- Open Graph (LinkedIn, Facebook, WhatsApp) -->
     <meta property="og:type" content="website">
@@ -29,8 +31,46 @@
     <link href="./assets/img/favicon.png" rel="shortcut icon" type="image/x-icon" />
     <link href="./assets/img/favicon.png" rel="icon" type="image/png" />
     <title>Josenilto Luis da Silva | SRE/DevOps Engineer</title>
-    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet' />
+
+    <!-- Preconnect para reduzir latência de DNS/TLS antes do CSS ser lido -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    <!-- Google Fonts com font-display=swap — carregado via <link> (não @import) para não bloquear renderização -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
     <link href="./assets/css/styles.css" rel="stylesheet" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Josenilto Luis da Silva",
+      "url": "https://josenilto.github.io/",
+      "image": "https://josenilto.github.io/assets/img/profile-josenilto.webp",
+      "jobTitle": "SRE / DevOps Engineer",
+      "description": "SRE/DevOps Engineer with 13+ years in IT. Expert in Cloud (Azure, AWS, GCP), Linux, Infrastructure & Solutions Architecture.",
+      "knowsAbout": [
+        "Site Reliability Engineering",
+        "DevOps",
+        "Cloud Computing",
+        "Microsoft Azure",
+        "Amazon Web Services",
+        "Google Cloud Platform",
+        "Kubernetes",
+        "Linux",
+        "Infrastructure as Code",
+        "Solutions Architecture",
+        "Microservices"
+      ],
+      "sameAs": [
+        "https://github.com/josenilto",
+        "https://www.linkedin.com/in/josenilto"
+      ]
+    }
+    </script>
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -48,23 +88,22 @@
                 <span class="nav__logo-text"><span class="nav__logo-bracket">&lt;</span>JLS<span class="nav__logo-bracket">/&gt;</span></span>
             </a>
 
-            <div class="nav__menu" id="nav-menu">
+            <div class="nav__menu" id="nav-menu" aria-label="Menu principal">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="#career" class="nav__link active-link">Career</a></li>
                     <li class="nav__item"><a href="#story" class="nav__link">Story</a></li>
-                    <!-- <li class="nav__item"><a href="#time" class="nav__link">Time</a></li> -->
                     <li class="nav__item"><a href="#skills" class="nav__link">Skills</a></li>
                     <li class="nav__item"><a href="#engagement" class="nav__link">Consulting</a></li>
                     <li class="nav__item"><a href="#jbos" class="nav__link">Jobs</a></li>
                     <li class="nav__item"><a href="#contact" class="nav__link">Contact</a></li>
-                    <!-- <li class="nav__item"><a
-                            href="https://josenilto.github.io/resumo/CV_Josenilto_L_da_Silva_2024_V.1.2.pdf"
-                            class="nav__link">Download CV</a></li> -->
-                    <li><i class='bx bx-moon change-theme' id="theme-button"></i></li>
+                    <li><span class="change-theme" id="theme-button" role="button" tabindex="0" aria-label="Alternar tema claro/escuro">
+                        <svg class="theme-icon theme-icon--moon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z"/></svg>
+                        <svg class="theme-icon theme-icon--sun" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l1.414-1.414 2.122 2.122-1.414 1.414zM16.24 6.344l1.414-1.414 2.122 2.122-1.414 1.414zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z"/></svg>
+                    </span></li>
                 </ul>
             </div>
-            <div class="nav__toggle" id="nav-toggle">
-                <i class="bx bx-menu"></i>
+            <div class="nav__toggle" id="nav-toggle" role="button" tabindex="0" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-menu">
+                <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
             </div>
         </nav>
     </header>
@@ -87,7 +126,6 @@
 
                     <h1 class="home__title" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500">Hey I'm
                     </h1>
-                    <!-- <h2 class="home__subtitle" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="700"><span>Josenilto</span> L Silva</h2> -->
 
                     <div class="text" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="700">
                         <span>Josenilto</span> Luis da Silva
@@ -103,26 +141,19 @@
                     </p>
 
                     <div>
-                        <a href="https://github.com/josenilto" class="button" target="_blank" rel="noopener noreferrer" data-aos="fade-right"
-                            data-aos-duration="1500" data-aos-delay="1300"><i class="fa-brands fa-github"></i></a>
-                        <a href="https://www.linkedin.com/in/josenilto" class="button" target="_blank" rel="noopener noreferrer" data-aos="fade-right"
-                            data-aos-duration="1000" data-aos-delay="1000"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="https://github.com/josenilto" class="button" target="_blank" rel="noopener noreferrer" aria-label="Perfil no GitHub (abre em nova aba)" data-aos="fade-right"
+                            data-aos-duration="1500" data-aos-delay="1300"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/in/josenilto" class="button" target="_blank" rel="noopener noreferrer" aria-label="Perfil no LinkedIn (abre em nova aba)" data-aos="fade-right"
+                            data-aos-duration="1000" data-aos-delay="1000"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
                         <a href="https://josenilto.github.io/docs/CV_Josenilto_L_da_Silva_2024_V.1.2.pdf" class="button"
-                            target="_blank" rel="noopener noreferrer" data-aos="fade-right" data-aos-duration="500" data-aos-delay="700"><i
-                                class="fa-solid fa-file-pdf"></i></a>
+                            target="_blank" rel="noopener noreferrer" aria-label="Baixar currículo em PDF (abre em nova aba)" data-aos="fade-right" data-aos-duration="500" data-aos-delay="700"><i
+                                class="fa-solid fa-file-pdf" aria-hidden="true"></i></a>
                     </div>
                 </div>
                 <div class="container" data-aos="fade-left">
-                    <!-- <div class="flip"> -->
-                    <!-- <div class="frente"> -->
                     <img class="home__img" src="./assets/img/profile-josenilto.webp" alt="Foto de Perfil do Josenilto"
+                        width="297" height="300"
                         data-aos="zoom-left" data-aos-duration="3000">
-                    <!-- </div>
-            
-                        <div class="tras">
-                            <p>Josenilto</p>
-                        </div> -->
-                    <!-- </div> -->
                 </div>
             </div>
         </section>
@@ -181,7 +212,8 @@
 
                 <div class="story__img-wrapper" data-aos="fade-right" data-aos-duration="800" data-aos-delay="700">
                     <div class="story__img-frame">
-                        <img src="./assets/img/computador.webp" alt="DevOps infinity loop diagram" class="story__img">
+                        <img src="./assets/img/computador.webp" alt="DevOps infinity loop diagram" class="story__img"
+                            width="380" height="275" loading="lazy">
                         <div class="story__img-badge">
                             <span class="story__img-badge-years">13+</span>
                             <span class="story__img-badge-label">years of<br>experience</span>
@@ -190,42 +222,6 @@
                 </div>
             </div>
         </section>
-        <!--========== TIME ==========-->
-        <!-- <section class="about time section bd-container" id="time">
-            <div class="home__container bd-container bd-grid">
-
-                <div class="home__img" data-aos="zoom-out" data-aos-duration="3000">
-                    <img src="./assets/img/profile-josenilto.webp" alt="Foto de Perfil do Josenilto">
-                </div>
-
-                <div class="content">
-                    <h1 data-aos="fade-left" data-aos-duration="1500" data-aos-delay="700">Hey I'm <span>.</span>
-                    </h1>
-                    <div class="typewriter" data-aos="fade-right" data-aos-duration="1500" data-aos-delay="900">I'm a
-                        <span class="typewriter-text"></span><label for="">|</label>
-                    </div>
-                    <p data-aos="flip-down" data-aos-duration="1500" data-aos-delay="1100">Lorem ipsum dolor sit amet
-                        consectetur, adipisicing elit. Fugit quasi commodi quia rerum, iste corporis expedita in
-                        excepturi nesciunt repellendus quisquam amet provident ad mollitia debitis odit voluptatem
-                        necessitatibus tempora.</p>
-                    <div class="social-links">
-                        <a href="#" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="1300"><i
-                                class="fa-brands fa-github"></i></a>
-                        <a href="#" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="1400"><i
-                                class="fa-brands fa-facebook"></i></a>
-                        <a href="#" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="1500"><i
-                                class="fa-brands fa-linkedin"></i></a>
-                        <a href="#" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="1600"><i
-                                class="fa-brands fa-twitter"></i></a>
-                    </div>
-                    <div class="btn" data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="1800">
-                        <button>Hire me</button>
-                    </div>
-                </div>
-            </div>
-
-        </section> -->
-
         <!--========== SKILLS ==========-->
         <section class="about skills section bd-container" id="skills">
             <canvas id="skills-canvas" aria-hidden="true"></canvas>
@@ -376,79 +372,6 @@
             </div>
         </section>
 
-                <!--========== Project ==========-->
-        <!-- <section class="jbos section home__container bd-container" id="jbos">
-            <div class="home__container bd-container">
-                <span class="section-subtitle">Access my Github to have access to all projects.<br>
-                    Click on the project you
-                    want to know about.</span>
-                <h2 class="section-title"> Some of my tutorials and projects</h2>
-
-                <div class="menu__container bd-grid">
-                    <div class="menu__content">
-                        <a href="https://github.com/josenilto/dev.zabbix" target="_blank" rel="noopener noreferrer" class="menu__name"> Zabbix</a>
-                        <a href="https://github.com/josenilto/dev.grafana" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            Grafana</a>
-                        <a href="https://github.com/josenilto/dev.telegraf" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            Telegraf</a>
-                        <a href="https://github.com/josenilto/dev.prometheus" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            Prometheus</a>
-                    </div>
-
-                    <div class="menu__content">
-                        <a href="https://github.com/josenilto/dev.nginx" target="_blank" rel="noopener noreferrer" class="menu__name"> Nginx</a>
-                        <a href="https://github.com/josenilto/dev.jboss" target="_blank" rel="noopener noreferrer" class="menu__name"> Jboss</a>
-                        <a href="https://github.com/josenilto/dev.apache" target="_blank" rel="noopener noreferrer" class="menu__name"> Apache</a>
-                    </div>
-
-                    <div class="menu__content">
-                        <a href="https://github.com/josenilto/dev.mysql" target="_blank" rel="noopener noreferrer" class="menu__name"> MySQL</a>
-                        <a href="https://github.com/josenilto/dev.influxdb" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            InfluxDB</a>
-                        <a href="https://github.com/josenilto/dev.mongodb" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            MongoDB</a>
-                        <a href="https://github.com/josenilto/dev.mysql" target="_blank" rel="noopener noreferrer" class="menu__name"> SQL
-                            Server</a>
-                        <a href="https://github.com/josenilto/dev.postgres" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            PostgreSQL</a>
-                    </div>
-
-                    <div class="menu__content">
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="menu__name"> SSH</a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="menu__name"> DNS</a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="menu__name"> LDAP</a>
-                        <a href="https://github.com/josenilto/dev.httpd" target="_blank" rel="noopener noreferrer" class="menu__name"> Httpd</a>
-                        <a href="https://github.com/josenilto/dev.proxysquid" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            Squid</a>
-                        <a href="https://github.com/josenilto/dev.firewall" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            Firewall</a>
-                    </div>
-
-                    <div class="menu__content">
-                        <a href="https://github.com/josenilto/dev.haproxy" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            HAProxy</a>
-                        <a href="https://github.com/josenilto/dev.pfsense" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            pfSense</a>
-                        <a href="https://github.com/josenilto/dev.webmin" target="_blank" rel="noopener noreferrer" class="menu__name"> Webmin</a>
-                    </div>
-
-                    <div class="menu__content">
-                        <a href="https://github.com/josenilto/dev.docker" target="_blank" rel="noopener noreferrer" class="menu__name"> Docker</a>
-                        <a href="https://github.com/josenilto/dev.ansible" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            Ansible</a>
-                        <a href="https://github.com/josenilto/dev.jenkins" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            Jenkins</a>
-                        <a href="https://github.com/josenilto/dev.vagrant" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            Vagrant</a>
-                        <a href="https://github.com/josenilto/dev.terraform" class="menu__name" target="_blank">
-                            Terraform</a>
-                        <a href="https://github.com/josenilto/dev.kubernetes" target="_blank" rel="noopener noreferrer" class="menu__name">
-                            Kubernetes</a>
-                    </div>
-                </div>
-            </div>
-        </section> -->
-
         <!--========== CONTACT ==========-->
         <section class="contact section bd-container" id="contact">
             <canvas id="contact-matrix" aria-hidden="true"></canvas>
@@ -481,8 +404,8 @@
     </main>
 
     <!--========== SCROLL TOP ==========-->
-    <a href="#career" class="scrolltop" id="scroll-top">
-        <i class="bx bx-up-arrow-alt scrolltop__icon"></i>
+    <a href="#career" class="scrolltop" id="scroll-top" aria-label="Voltar ao topo">
+        <svg class="scrolltop__icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m6.293 13.293 1.414 1.414L12 10.414l4.293 4.293 1.414-1.414L12 7.586z"/></svg>
     </a>
 
     <!--========== FOOTER ==========-->
@@ -527,18 +450,18 @@
                     </ul>
                     <div class="footer__socials">
                         <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade."
-                            target="_blank" rel="noopener noreferrer" class="footer__social footer__social--whatsapp" title="WhatsApp">
-                            <i class="fab fa-whatsapp"></i></a>
-                        <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--linkedin" title="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--github" title="GitHub">
-                            <i class="fab fa-github-alt"></i></a>
-                        <a href="https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--youtube" title="YouTube">
-                            <i class="fab fa-youtube"></i></a>
-                        <a href="https://www.instagram.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--instagram" title="Instagram">
-                            <i class="fab fa-instagram"></i></a>
-                        <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--telegram" title="Telegram">
-                            <i class="fab fa-telegram-plane"></i></a>
+                            target="_blank" rel="noopener noreferrer" class="footer__social footer__social--whatsapp" title="WhatsApp" aria-label="Contato pelo WhatsApp (abre em nova aba)">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--linkedin" title="LinkedIn" aria-label="Perfil no LinkedIn (abre em nova aba)">
+                            <i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                        <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--github" title="GitHub" aria-label="Perfil no GitHub (abre em nova aba)">
+                            <i class="fab fa-github-alt" aria-hidden="true"></i></a>
+                        <a href="https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--youtube" title="YouTube" aria-label="Canal no YouTube (abre em nova aba)">
+                            <i class="fab fa-youtube" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--instagram" title="Instagram" aria-label="Perfil no Instagram (abre em nova aba)">
+                            <i class="fab fa-instagram" aria-hidden="true"></i></a>
+                        <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--telegram" title="Telegram" aria-label="Contato pelo Telegram (abre em nova aba)">
+                            <i class="fab fa-telegram-plane" aria-hidden="true"></i></a>
                     </div>
                 </div>
 
@@ -558,515 +481,8 @@
 
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-
-    <script>
-        AOS.init({ offset: 0 });
-    </script>
-
     <script src="./assets/js/script.js"></script>
-
-    <script>
-    (function () {
-        const canvas = document.getElementById('contact-matrix');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-
-        const NODE_COUNT = 52;
-        const MAX_DIST   = 165;
-        let nodes  = [];
-        let pulses = [];
-
-        function buildNetwork() {
-            nodes = Array.from({ length: NODE_COUNT }, () => ({
-                x:    Math.random() * canvas.width,
-                y:    Math.random() * canvas.height,
-                act:  Math.random() * 0.18,
-                r:    Math.random() * 2 + 1.5,
-                conns: []
-            }));
-            for (let i = 0; i < nodes.length; i++) {
-                nodes[i].conns = [];
-                for (let j = 0; j < nodes.length; j++) {
-                    if (i === j) continue;
-                    const dx = nodes[i].x - nodes[j].x;
-                    const dy = nodes[i].y - nodes[j].y;
-                    if (dx * dx + dy * dy < MAX_DIST * MAX_DIST) {
-                        nodes[i].conns.push(j);
-                    }
-                }
-            }
-        }
-
-        function resize() {
-            const section = document.getElementById('contact');
-            canvas.width  = section.offsetWidth;
-            canvas.height = section.offsetHeight;
-            buildNetwork();
-        }
-        resize();
-        window.addEventListener('resize', resize);
-
-        setInterval(() => {
-            if (pulses.length >= 32) return;
-            const fi = Math.floor(Math.random() * nodes.length);
-            const n  = nodes[fi];
-            if (!n.conns.length) return;
-            const ti = n.conns[Math.floor(Math.random() * n.conns.length)];
-            const t  = nodes[ti];
-            const d  = Math.sqrt((t.x - n.x) ** 2 + (t.y - n.y) ** 2);
-            pulses.push({ fi, ti, prog: 0, spd: 1.9 / d });
-            n.act = Math.min(1, n.act + 0.5);
-        }, 160);
-
-        function isDark() {
-            return document.body.classList.contains('dark-theme');
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const dark = isDark();
-            const [cr, cg, cb] = dark ? [0, 230, 100] : [0, 140, 10];
-
-            for (let i = 0; i < nodes.length; i++) {
-                const a = nodes[i];
-                for (const j of a.conns) {
-                    if (j <= i) continue;
-                    const b = nodes[j];
-                    const alpha = 0.04 + (a.act + b.act) * 0.11;
-                    ctx.beginPath();
-                    ctx.moveTo(a.x, a.y);
-                    ctx.lineTo(b.x, b.y);
-                    ctx.strokeStyle = `rgba(${cr},${cg},${cb},${alpha})`;
-                    ctx.lineWidth = 0.65;
-                    ctx.stroke();
-                }
-            }
-
-            pulses = pulses.filter(p => p.prog <= 1);
-            for (const p of pulses) {
-                p.prog += p.spd;
-                const t  = Math.min(p.prog, 1);
-                const fn = nodes[p.fi], tn = nodes[p.ti];
-                const px = fn.x + (tn.x - fn.x) * t;
-                const py = fn.y + (tn.y - fn.y) * t;
-
-                const grd = ctx.createRadialGradient(px, py, 0, px, py, 8);
-                grd.addColorStop(0, `rgba(${cr},${cg},${cb},0.9)`);
-                grd.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
-                ctx.beginPath();
-                ctx.arc(px, py, 8, 0, Math.PI * 2);
-                ctx.fillStyle = grd;
-                ctx.fill();
-
-                if (t >= 1) tn.act = Math.min(1, tn.act + 0.55);
-            }
-
-            for (const n of nodes) {
-                n.act = Math.max(0, n.act - 0.007);
-                const nr    = n.r + n.act * 2.5;
-                const alpha = 0.15 + n.act * 0.78;
-
-                if (n.act > 0.08) {
-                    const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, nr * 5);
-                    glow.addColorStop(0, `rgba(${cr},${cg},${cb},${n.act * 0.28})`);
-                    glow.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
-                    ctx.beginPath();
-                    ctx.arc(n.x, n.y, nr * 5, 0, Math.PI * 2);
-                    ctx.fillStyle = glow;
-                    ctx.fill();
-                }
-
-                ctx.beginPath();
-                ctx.arc(n.x, n.y, nr, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${cr},${cg},${cb},${alpha})`;
-                ctx.fill();
-            }
-
-            requestAnimationFrame(draw);
-        }
-        draw();
-    })();
-    </script>
-
-    <script>
-    (function () {
-        const greetingEl = document.getElementById('greeting-text');
-        const dateEl     = document.getElementById('greeting-date');
-        const clockEl    = document.getElementById('greeting-clock');
-        if (!greetingEl) return;
-
-        const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-        const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
-        function pad(n) { return String(n).padStart(2, '0'); }
-
-        function tick() {
-            const now  = new Date();
-            const h    = now.getHours();
-            const greeting = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
-
-            greetingEl.textContent = greeting;
-            dateEl.textContent     = `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()} ${now.getFullYear()}`;
-            clockEl.textContent    = `${pad(h)}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-        }
-        tick();
-        setInterval(tick, 1000);
-    })();
-    </script>
-
-    <script>
-    (function () {
-        const canvas = document.getElementById('story-hex');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const R = 26;
-
-        function resize() {
-            const s = document.getElementById('story');
-            canvas.width  = s.offsetWidth;
-            canvas.height = s.offsetHeight;
-        }
-        resize();
-        window.addEventListener('resize', resize);
-
-        function hexPath(cx, cy) {
-            ctx.beginPath();
-            for (let i = 0; i < 6; i++) {
-                const a = Math.PI / 3 * i - Math.PI / 6;
-                const px = cx + (R - 1) * Math.cos(a);
-                const py = cy + (R - 1) * Math.sin(a);
-                i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-            }
-            ctx.closePath();
-        }
-
-        const W = R * Math.sqrt(3);
-        const H = R * 2;
-        const COLS_PAD = 2, ROWS_PAD = 2;
-
-        const waypoints = [
-            [0.15, 0.25], [0.65, 0.15], [0.85, 0.55],
-            [0.55, 0.80], [0.20, 0.70], [0.40, 0.40],
-        ];
-        let wp = 0, t = 0;
-
-        function lerp(a, b, x) { return a + (b - a) * x; }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            t += 0.004;
-            if (t >= 1) { t = 0; wp = (wp + 1) % waypoints.length; }
-
-            const cur  = waypoints[wp];
-            const next = waypoints[(wp + 1) % waypoints.length];
-            const gx   = lerp(cur[0]  * canvas.width,  next[0] * canvas.width,  t);
-            const gy   = lerp(cur[1] * canvas.height, next[1] * canvas.height, t);
-            const GLOW = 200;
-
-            const cols = Math.ceil(canvas.width  / W) + COLS_PAD;
-            const rows = Math.ceil(canvas.height / (H * 0.75)) + ROWS_PAD;
-
-            for (let row = -ROWS_PAD; row < rows; row++) {
-                for (let col = -COLS_PAD; col < cols; col++) {
-                    const cx = col * W + (row % 2 !== 0 ? W / 2 : 0);
-                    const cy = row * H * 0.75;
-                    const dist = Math.hypot(cx - gx, cy - gy);
-                    const base  = 0.045;
-                    const boost = dist < GLOW ? (1 - dist / GLOW) * 0.22 : 0;
-
-                    hexPath(cx, cy);
-                    ctx.strokeStyle = `rgba(0,100,0,${base + boost})`;
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-
-                    if (boost > 0) {
-                        ctx.fillStyle = `rgba(0,130,0,${boost * 0.18})`;
-                        ctx.fill();
-                    }
-                }
-            }
-            requestAnimationFrame(draw);
-        }
-        draw();
-    })();
-    </script>
-
-    <script>
-    (function () {
-        const canvas = document.getElementById('career-particles');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-
-        const PARTICLE_COUNT = 55;
-        const MAX_DIST = 130;
-        let particles = [];
-
-        function resize() {
-            const section = document.getElementById('career');
-            canvas.width  = section.offsetWidth;
-            canvas.height = section.offsetHeight;
-        }
-        resize();
-        window.addEventListener('resize', () => { resize(); init(); });
-
-        function isDark() {
-            return document.body.classList.contains('dark-theme');
-        }
-
-        function particleColor() {
-            return isDark() ? 'rgba(0,200,80,' : 'rgba(0,100,0,';
-        }
-
-        function init() {
-            particles = Array.from({ length: PARTICLE_COUNT }, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5,
-                r: Math.random() * 2 + 1.5,
-            }));
-        }
-        init();
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const base = particleColor();
-
-            for (let i = 0; i < particles.length; i++) {
-                const p = particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
-                if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = base + '0.5)';
-                ctx.fill();
-
-                for (let j = i + 1; j < particles.length; j++) {
-                    const q = particles[j];
-                    const dx = p.x - q.x, dy = p.y - q.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < MAX_DIST) {
-                        const alpha = (1 - dist / MAX_DIST) * 0.18;
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(q.x, q.y);
-                        ctx.strokeStyle = base + alpha + ')';
-                        ctx.lineWidth = 0.8;
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(draw);
-        }
-        draw();
-    })();
-    </script>
-
-    <!-- Skills: keyword rain -->
-    <script>
-    (function () {
-        const canvas = document.getElementById('skills-canvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-
-        const WORDS = [
-            'kubectl','docker','terraform','ansible','helm','argocd',
-            'git','bash','python','yaml','linux','CI/CD','IaC','SRE',
-            'azure','aws','gcp','kubernetes','nginx','prometheus',
-            'grafana','vault','redis','agile','scrum','devops',
-            'k8s','ssh','tls','dns','HPA','VPC','rbac','ingress'
-        ];
-
-        let cols = [];
-
-        function resize() {
-            const s = document.getElementById('skills');
-            canvas.width  = s.offsetWidth;
-            canvas.height = s.offsetHeight;
-            init();
-        }
-
-        function init() {
-            const n = Math.max(8, Math.floor(canvas.width / 88));
-            cols = Array.from({ length: n }, (_, i) => ({
-                x:   (i + 0.5) * (canvas.width / n),
-                y:   Math.random() * canvas.height,
-                spd: Math.random() * 0.28 + 0.1,
-                w:   WORDS[Math.floor(Math.random() * WORDS.length)],
-                sz:  Math.floor(Math.random() * 3) + 9
-            }));
-        }
-
-        resize();
-        window.addEventListener('resize', resize);
-
-        function isDark() { return document.body.classList.contains('dark-theme'); }
-
-        function draw() {
-            requestAnimationFrame(draw);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const [r, g, b] = isDark() ? [0, 200, 80] : [0, 120, 0];
-
-            for (const c of cols) {
-                c.y += c.spd;
-                if (c.y > canvas.height + 30) {
-                    c.y = -20;
-                    c.w = WORDS[Math.floor(Math.random() * WORDS.length)];
-                    c.spd = Math.random() * 0.28 + 0.1;
-                }
-                const fadeY = Math.min(c.y / 80, 1) * Math.min((canvas.height - c.y) / 80, 1);
-                const alpha = 0.09 * Math.max(fadeY, 0);
-                ctx.font      = `${c.sz}px 'Courier New', monospace`;
-                ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-                ctx.fillText(c.w, c.x - ctx.measureText(c.w).width / 2, c.y);
-            }
-        }
-        draw();
-    })();
-    </script>
-
-    <!-- Engagement: horizontal data streams -->
-    <script>
-    (function () {
-        const canvas = document.getElementById('engagement-canvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-
-        const STREAMS = [
-            'TCP  SYN > ACK', 'SSH  AUTH OK', 'HTTPS 443 > 200',
-            'GIT  PUSH OK', 'K8S  POD RUNNING', '0xFF:4A:C0 > HOST',
-            'DEPLOY > LIVE', 'CI/CD PASS', 'DNS RESOLVED',
-            'VPN CONNECTED', 'TLS 1.3 HS OK', 'GET /api/v2 200',
-            'HPA SCALE 2→4', 'CERT VALID 2026', 'INGRESS ROUTED',
-            'ANSIBLE OK 12/12', 'PROM ALERT CLEAR', 'KUBECTL APPLY OK'
-        ];
-
-        let streams = [];
-
-        function resize() {
-            const s = document.getElementById('engagement');
-            canvas.width  = s.offsetWidth;
-            canvas.height = s.offsetHeight;
-            init();
-        }
-
-        function init() {
-            const n = Math.max(6, Math.floor(canvas.height / 58));
-            streams = Array.from({ length: n }, (_, i) => ({
-                x:     -Math.random() * canvas.width,
-                y:     (i + 0.5) * (canvas.height / n),
-                spd:   Math.random() * 0.38 + 0.15,
-                txt:   STREAMS[Math.floor(Math.random() * STREAMS.length)],
-                alpha: Math.random() * 0.05 + 0.04
-            }));
-        }
-
-        resize();
-        window.addEventListener('resize', resize);
-
-        function isDark() { return document.body.classList.contains('dark-theme'); }
-
-        function draw() {
-            requestAnimationFrame(draw);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const [r, g, b] = isDark() ? [0, 200, 80] : [0, 120, 0];
-            ctx.font = "10px 'Courier New', monospace";
-
-            for (const s of streams) {
-                s.x += s.spd;
-                const w = ctx.measureText(s.txt).width;
-                if (s.x > canvas.width + w) {
-                    s.x   = -w - 10;
-                    s.txt  = STREAMS[Math.floor(Math.random() * STREAMS.length)];
-                    s.spd  = Math.random() * 0.38 + 0.15;
-                    s.alpha = Math.random() * 0.05 + 0.04;
-                }
-                const fadeIn  = Math.min((s.x + w) / 90, 1);
-                const fadeOut = Math.min((canvas.width - s.x) / 90, 1);
-                const alpha   = s.alpha * Math.max(Math.min(fadeIn, fadeOut), 0);
-                ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-                ctx.fillText(s.txt, s.x, s.y);
-            }
-        }
-        draw();
-    })();
-    </script>
-
-    <!-- Jobs: floating CLI commands -->
-    <script>
-    (function () {
-        const canvas = document.getElementById('jbos-canvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-
-        const CMDS = [
-            '$ kubectl apply -f deployment.yaml',
-            '$ terraform plan --out tfplan',
-            '$ ansible-playbook -i hosts site.yml',
-            '$ docker build -t app:v2.1 .',
-            '$ git push origin main --tags',
-            '$ helm upgrade --install app ./chart',
-            '$ kubectl rollout status deploy/api',
-            '$ aws eks update-kubeconfig --name prod',
-            '$ az aks get-credentials --name cluster',
-            '$ systemctl restart nginx.service',
-            '$ prometheus --config.file=prom.yml',
-            '$ vault kv put secret/app token=...',
-            '$ kubectl get pods -n production',
-            '$ terraform apply -auto-approve tfplan',
-            '$ ssh -i ~/.ssh/key user@10.0.1.42'
-        ];
-
-        let items = [];
-
-        function resize() {
-            const s = document.getElementById('jbos');
-            canvas.width  = s.offsetWidth;
-            canvas.height = s.offsetHeight;
-            init();
-        }
-
-        function init() {
-            items = CMDS.map(txt => ({
-                x:     Math.random() * canvas.width,
-                y:     Math.random() * canvas.height,
-                vx:    (Math.random() - 0.5) * 0.22,
-                vy:    (Math.random() - 0.5) * 0.16,
-                txt,
-                alpha: Math.random() * 0.055 + 0.025
-            }));
-        }
-
-        resize();
-        window.addEventListener('resize', resize);
-
-        function isDark() { return document.body.classList.contains('dark-theme'); }
-
-        function draw() {
-            requestAnimationFrame(draw);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const [r, g, b] = isDark() ? [0, 200, 80] : [0, 120, 0];
-            ctx.font = "10px 'Courier New', monospace";
-
-            for (const c of items) {
-                c.x += c.vx;
-                c.y += c.vy;
-                const w = ctx.measureText(c.txt).width;
-                if (c.x > canvas.width + w)  c.x = -w;
-                if (c.x < -w)                c.x = canvas.width + w;
-                if (c.y > canvas.height + 14) c.y = -14;
-                if (c.y < -14)               c.y = canvas.height + 14;
-
-                ctx.fillStyle = `rgba(${r},${g},${b},${c.alpha})`;
-                ctx.fillText(c.txt, c.x, c.y);
-            }
-        }
-        draw();
-    })();
-    </script>
+    <script src="./assets/js/canvas-animations.js" defer></script>
 
 </body>
 

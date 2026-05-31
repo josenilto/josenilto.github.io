@@ -5,7 +5,9 @@ const showMenu = (toggleId, navId) => {
 
   if (toggle && nav) {
     toggle.addEventListener("click", () => {
-      nav.classList.toggle("show-menu");
+      const isOpen = nav.classList.toggle("show-menu");
+      toggle.setAttribute("aria-expanded", isOpen);
+      toggle.setAttribute("aria-label", isOpen ? "Fechar menu de navegação" : "Abrir menu de navegação");
     });
   }
 };
@@ -16,8 +18,13 @@ const navLinks = document.querySelectorAll(".nav__link");
 
 const linkAction = () => {
   const navMenu = document.getElementById("nav-menu");
+  const navToggle = document.getElementById("nav-toggle");
   if (navMenu) {
     navMenu.classList.remove("show-menu");
+    if (navToggle) {
+      navToggle.setAttribute("aria-expanded", "false");
+      navToggle.setAttribute("aria-label", "Abrir menu de navegação");
+    }
   }
 };
 
