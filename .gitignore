@@ -11,6 +11,11 @@ npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
 
+# --- CI Artifacts ---
+*.sarif
+link-*.json
+_site/
+
 # --- Editor ---
 .vscode/*
 !.vscode/extensions.json

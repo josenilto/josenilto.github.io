@@ -1,0 +1,48 @@
+version: 2
+updates:
+  # Dependências npm do app React (dev/)
+  - package-ecosystem: "npm"
+    directory: "/dev"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "josenilto"
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
+      tailwind:
+        patterns:
+          - "tailwind*"
+          - "postcss*"
+          - "autoprefixer"
+
+  # Actions do GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "josenilto"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(ci)"

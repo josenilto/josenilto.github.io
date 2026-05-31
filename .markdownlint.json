@@ -1,0 +1,15 @@
+{
+  "default": true,
+
+  "MD033": {
+    "allowed_elements": ["div", "br"]
+  },
+
+  "MD041": false,
+
+  "MD001": false,
+
+  "MD060": false,
+
+  "MD013": false
+}

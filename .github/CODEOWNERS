@@ -1,0 +1,10 @@
+# Revisão obrigatória para qualquer mudança no repositório
+* @josenilto
+
+# Arquivos críticos de infraestrutura — revisão obrigatória
+.github/workflows/  @josenilto
+Dockerfile          @josenilto
+nginx.conf          @josenilto
+docker-compose.yml  @josenilto
+.trivyignore        @josenilto
+.docker/            @josenilto

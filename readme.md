@@ -4,10 +4,11 @@
 
 ### 🚀 Cloud Architect · DevOps · SRE · DevSecOps
 
-[![Deploy GitHub Pages](https://github.com/josenilto/josenilto.github.io/actions/workflows/jekyll-gh-pages.yml/badge.svg)](https://github.com/josenilto/josenilto.github.io/actions/workflows/jekyll-gh-pages.yml)
+[![Pipeline PRD](https://github.com/josenilto/josenilto.github.io/actions/workflows/pipeline-prd.yml/badge.svg)](https://github.com/josenilto/josenilto.github.io/actions/workflows/pipeline-prd.yml)
+[![Docker Build](https://github.com/josenilto/josenilto.github.io/actions/workflows/docker-build.yml/badge.svg)](https://github.com/josenilto/josenilto.github.io/actions/workflows/docker-build.yml)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-brightgreen?logo=github)](https://josenilto.github.io)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?logo=linkedin)](https://www.linkedin.com/in/josenilto)
-[![Experiência](https://img.shields.io/badge/Experi%C3%AAncia-12%2B%20anos-blue)](#)
+[![Experiência](https://img.shields.io/badge/Experi%C3%AAncia-13%2B%20anos-blue)](https://josenilto.github.io)
 
 > Profissional com mais de **12 anos** de experiência em TI, especializado em infraestrutura, cloud computing, DevOps e SRE. Apaixonado por automatizar processos, escalar sistemas e entregar soluções de alto impacto.
 
@@ -30,7 +31,7 @@
 
 Este repositório hospeda o **portfólio e currículo online** de Josenilto L da Silva, publicado via **GitHub Pages** com pipeline de deploy automatizado usando **Jekyll + GitHub Actions**.
 
-```
+```text
 🌍 URL de Produção → https://josenilto.github.io
 ```
 
@@ -135,6 +136,16 @@ Este repositório hospeda o **portfólio e currículo online** de Josenilto L da
 | [Zabbix](https://www.zabbix.com) | Monitoramento de rede e servidores |
 | [Nagios](https://www.nagios.org) | Monitoramento de infraestrutura |
 | [OCS Inventory](https://ocsinventory-ng.org) | Inventário de hardware/software |
+
+---
+
+## 🌿 Branch Strategy
+
+| Branch | Ambiente | Descrição |
+| --- | --- | --- |
+| `prd` | Produção | GitHub Pages + Docker GHCR — deploy automático |
+| `hmg` | Staging | Homologação antes de subir para prd |
+| `dev` | Desenvolvimento | React app + testes — código-fonte frontend |
 
 ---
 
