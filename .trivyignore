@@ -1,38 +1,19 @@
-# ══════════════════════════════════════════════════════════════════
-#  .trivyignore — CVEs aceitos como risco gerenciado
-#  Revisitar mensalmente ou quando Alpine liberar pacotes corrigidos.
-#  Última revisão: 2026-05-30
-# ══════════════════════════════════════════════════════════════════
+# CVEs aceitos como risco gerenciado — base: nginx:stable-alpine3.23
+# Revisitar mensalmente ou quando Alpine liberar pacotes corrigidos.
+# Ultima revisao: 2026-05-30
 
-# ── UNFIXED UPSTREAM — sem correção disponível no Alpine ─────────
-
-# busybox ≤ 1.37.0-r14 — fix disponível em r20+ (Alpine 3.22)
-# TAR listing oculta nomes via terminal escape sequences (6.3 M)
-# Resolvido ao usar nginx:stable-alpine (Alpine 3.22 / busybox r30)
-CVE-2025-60876
-CVE-2025-46394
-
-# libxml2 2.13.9-r0 — sem fix upstream disponível
-# CVE-2026-6732: aguardando patch no Alpine (6.5 M)
-CVE-2026-6732
-
-# ── DEPENDÊNCIAS DO NGINX — não podem ser removidas ──────────────
-# Os pacotes abaixo são dependências transitivas de nginx:alpine.
-# O `apk del` falha silenciosamente; remoção quebraria o nginx.
-
-# libgcrypt 1.10.3-r1 — dependência indireta do nginx (6.7 M)
-# Fixável no Alpine — aguardando pacote atualizado nos repos
-CVE-2026-41989
-
-# fontconfig 2.15.0-r1 — dependência do nginx (5.9 M)
-CVE-2026-34085
-
-# freetype 2.13.3-r0 — dependência do nginx via fontconfig (5.3 M)
+# freetype 2.14.1-r0 — fix em 2.14.2, Alpine 3.23 ainda em 2.14.1 (6.5 M)
 CVE-2026-23865
 
-# util-linux 2.40.4-r1 — utilitário base do Alpine, não removível (4.7 M)
+# libxml2 2.13.9-r0 — sem patch disponivel no Alpine 3.23 (6.5 M)
+CVE-2026-6732
+
+# libgcrypt — dependencia indireta do nginx, aguardando pacote Alpine (6.7 M)
+CVE-2026-41989
+
+# util-linux — utilitario base do Alpine, nao removivel (4.7 M)
 CVE-2026-27456
 
-# libavif 1.0.4-r0 — dependência do nginx (4.5 M)
+# libavif — dependencia do nginx (4.5 M)
 CVE-2025-48174
 CVE-2025-48175
