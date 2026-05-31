@@ -3,8 +3,26 @@
   "@id": "https://github.com/josenilto/josenilto.github.io/vex/2026-05-30",
   "author": "Josenilto Luis da Silva <josenilto@outlook.com>",
   "timestamp": "2026-05-30T00:00:00Z",
-  "version": 1,
+  "version": 2,
   "statements": [
+    {
+      "vulnerability": {
+        "@id": "https://www.cve.org/CVERecord?id=CVE-2025-60876",
+        "name": "CVE-2025-60876"
+      },
+      "timestamp": "2026-05-30T00:00:00Z",
+      "products": [
+        {
+          "@id": "pkg:oci/josenilto.github.io",
+          "subcomponents": [
+            { "@id": "pkg:apk/alpine/busybox@1.37.0-r30" }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "busybox é utilitário base do Alpine sem shell exposto externamente. O container executa apenas nginx; nenhuma rota pública invoca binários busybox. Sem versão corrigida disponível no Alpine (affected range <=1.37.0-r30). Risco aceito e revisado em 2026-05-30."
+    },
     {
       "vulnerability": {
         "@id": "https://www.cve.org/CVERecord?id=CVE-2026-6732",
