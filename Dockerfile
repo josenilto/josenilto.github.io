@@ -25,13 +25,21 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copia o site estático com permissões corretas para o usuário nginx
-COPY --chown=nginx:nginx index.html /usr/share/nginx/html/index.html
-COPY --chown=nginx:nginx 404.html   /usr/share/nginx/html/404.html
-COPY --chown=nginx:nginx assets/    /usr/share/nginx/html/assets/
+COPY --chown=nginx:nginx index.html       /usr/share/nginx/html/index.html
+COPY --chown=nginx:nginx 404.html         /usr/share/nginx/html/404.html
+COPY --chown=nginx:nginx server-info.html /usr/share/nginx/html/server-info.html
+COPY --chown=nginx:nginx robots.txt       /usr/share/nginx/html/robots.txt
+COPY --chown=nginx:nginx sitemap.xml      /usr/share/nginx/html/sitemap.xml
+COPY --chown=nginx:nginx health           /usr/share/nginx/html/health
+COPY --chown=nginx:nginx assets/          /usr/share/nginx/html/assets/
+
+# Script de coleta de métricas: lê /proc/stat e /proc/meminfo → /tmp/metrics.json
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
   CMD wget -qO- http://localhost/health || exit 1
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/entrypoint.sh"]

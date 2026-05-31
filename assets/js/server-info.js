@@ -2,10 +2,12 @@
     function el(id) { return document.getElementById(id); }
     function ms(n)  { return isFinite(n) && n >= 0 ? Math.round(n) + ' ms' : '—'; }
 
-    // ── Real-time charts (FPS + JS Heap) ─────────────────────────
+    // ── Real-time charts — métricas reais do servidor ─────────────
+    // Fonte: GET /metrics.json (entrypoint.sh → /proc/stat + /proc/meminfo)
+    // Em GitHub Pages (sem container) retorna 404 → exibe "n/a"
     (function realtimeCharts() {
         var MAX = 60;
-        var fpsData = new Array(MAX).fill(0);
+        var cpuData = new Array(MAX).fill(0);
         var memData = new Array(MAX).fill(0);
 
         var cpuCanvas = document.getElementById('cpu-chart');
@@ -13,10 +15,6 @@
         if (!cpuCanvas || !memCanvas) return;
         var cpuCtx = cpuCanvas.getContext('2d');
         var memCtx = memCanvas.getContext('2d');
-
-        // FPS: count rAF callbacks per second
-        var frameCount = 0;
-        (function countFrames() { frameCount++; requestAnimationFrame(countFrames); })();
 
         function colors() {
             var dark = document.body.classList.contains('dark-theme') ||
@@ -65,33 +63,35 @@
         }
 
         function tick() {
-            // FPS (max 100 na escala do grafico = 60fps em display)
-            var fps = frameCount; frameCount = 0;
-            var fpsPct = Math.min(100, Math.round(fps / 60 * 100));
-            fpsData.push(fpsPct); if (fpsData.length > MAX) fpsData.shift();
-            var cpuVal = el('cpu-val');
-            if (cpuVal) cpuVal.textContent = fps + ' fps';
-            draw(cpuCanvas, cpuCtx, fpsData);
+            fetch('/metrics.json', { cache: 'no-store' })
+                .then(function (res) { return res.json(); })
+                .then(function (d) {
+                    var cpu = Math.min(100, Math.max(0, d.cpu || 0));
+                    cpuData.push(cpu); if (cpuData.length > MAX) cpuData.shift();
+                    var cpuVal = el('cpu-val');
+                    if (cpuVal) cpuVal.textContent = cpu + '%';
+                    draw(cpuCanvas, cpuCtx, cpuData);
 
-            // Memory (JS heap, Chrome/Edge only)
-            var mem = performance.memory;
-            var memPct = mem ? Math.round(mem.usedJSHeapSize / mem.jsHeapSizeLimit * 100) : 0;
-            memData.push(memPct); if (memData.length > MAX) memData.shift();
-            var memVal = el('mem-val');
-            if (memVal) {
-                memVal.textContent = mem
-                    ? (mem.usedJSHeapSize / 1048576).toFixed(1) + ' MB  ' + memPct + '%'
-                    : 'n/a';
-            }
-            draw(memCanvas, memCtx, memData);
+                    var mem = Math.min(100, Math.max(0, d.mem_pct || 0));
+                    memData.push(mem); if (memData.length > MAX) memData.shift();
+                    var memVal = el('mem-val');
+                    if (memVal) memVal.textContent = (d.mem_used_mb || 0) + ' MB  ' + mem + '%';
+                    draw(memCanvas, memCtx, memData);
+                })
+                .catch(function () {
+                    var cpuVal = el('cpu-val');
+                    var memVal = el('mem-val');
+                    if (cpuVal && cpuVal.textContent !== 'n/a') cpuVal.textContent = 'n/a';
+                    if (memVal && memVal.textContent !== 'n/a') memVal.textContent = 'n/a';
+                });
         }
 
         window.addEventListener('resize', function () {
-            draw(cpuCanvas, cpuCtx, fpsData);
+            draw(cpuCanvas, cpuCtx, cpuData);
             draw(memCanvas, memCtx, memData);
         });
         setInterval(tick, 1000);
-        setTimeout(tick, 100);
+        setTimeout(tick, 200);
     })();
 
     // ── Origin ────────────────────────────────────────────────────
