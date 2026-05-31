@@ -30,6 +30,63 @@
             });
     })();
 
+    // ── Access counter (localStorage) ────────────────────────────
+    (function visitCounter() {
+        var prevCount  = parseInt(localStorage.getItem('si_count') || '0');
+        var prevLast   = localStorage.getItem('si_last');
+        var first      = localStorage.getItem('si_first') || new Date().toISOString();
+        var now        = new Date();
+        var todayStr   = now.toISOString().slice(0, 10);
+        var todayCount = localStorage.getItem('si_today_date') === todayStr
+            ? parseInt(localStorage.getItem('si_today_count') || '0') + 1
+            : 1;
+        var count = prevCount + 1;
+
+        localStorage.setItem('si_count',       count);
+        localStorage.setItem('si_first',       first);
+        localStorage.setItem('si_last',        now.toISOString());
+        localStorage.setItem('si_today_date',  todayStr);
+        localStorage.setItem('si_today_count', todayCount);
+
+        el('v-total').textContent = count;
+        el('v-today').textContent = todayCount + ' visit' + (todayCount !== 1 ? 's' : '');
+        el('v-first').textContent = new Date(first).toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+        el('v-last').textContent  = prevLast
+            ? new Date(prevLast).toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
+            : '—';
+
+        var sessionStart = Date.now();
+        setInterval(function () {
+            var s = Math.floor((Date.now() - sessionStart) / 1000);
+            var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+            el('v-session').textContent = h > 0
+                ? h + 'h ' + m + 'm ' + sec + 's'
+                : m > 0 ? m + 'm ' + sec + 's' : sec + 's';
+        }, 1000);
+    })();
+
+    // ── Index.html probe ──────────────────────────────────────────
+    (function indexProbe() {
+        var t0 = performance.now();
+        fetch('/', { cache: 'no-store' })
+            .then(function (res) {
+                el('idx-status').textContent = res.status;
+                el('idx-ttfb').textContent   = Math.round(performance.now() - t0) + ' ms';
+                el('idx-ct').textContent     = (res.headers.get('content-type') || '—').split(';')[0].trim();
+                el('idx-lm').textContent     = res.headers.get('last-modified') || '—';
+                el('idx-cc').textContent     = res.headers.get('cache-control') || '—';
+                return res.text();
+            })
+            .then(function (body) {
+                el('idx-size').textContent =
+                    (body.length / 1024).toFixed(1) + ' KB (' + body.length.toLocaleString() + ' chars)';
+            })
+            .catch(function () {
+                el('idx-status').textContent = 'error';
+                el('idx-ttfb').textContent   = '—';
+            });
+    })();
+
     // ── Performance timing ────────────────────────────────────────
     window.addEventListener('load', function () {
         var nav = performance.getEntriesByType('navigation')[0];
