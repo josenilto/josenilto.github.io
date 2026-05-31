@@ -5,10 +5,16 @@
 name: 🐳 Docker Build & Push
 
 on:
-  push:
+  # Dispara automaticamente após o Pipeline PRD concluir com sucesso
+  workflow_run:
+    workflows: ["🚀 Pipeline PRD — Testes & Deploy"]
+    types: [completed]
     branches: ["prd", "master", "main"]
+  # Tags semver continuam disparando diretamente (ex: v1.2.3)
+  push:
     tags:
       - "v*"
+  # Trigger manual com opção de push
   workflow_dispatch:
     inputs:
       push_image:
@@ -21,8 +27,12 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  REGISTRY:    ghcr.io
+  IMAGE_NAME:  ${{ github.repository }}
+  # Em workflow_run, github.sha/ref_name apontam para o workflow file.
+  # GIT_SHA e GIT_BRANCH resolvem o commit real que disparou o pipeline.
+  GIT_SHA:     ${{ github.event.workflow_run.head_sha    || github.sha }}
+  GIT_BRANCH:  ${{ github.event.workflow_run.head_branch || github.ref_name }}
 
 # ══════════════════════════════════════════════════════════════════
 jobs:
@@ -32,6 +42,11 @@ jobs:
     name: 🏗️ Build & Push (multi-arch)
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Só executa se: pipeline-prd concluiu com sucesso OU trigger manual/tag
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' ||
+      github.event.workflow_run.conclusion == 'success'
 
     permissions:
       contents: read
@@ -44,6 +59,14 @@ jobs:
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.GIT_SHA }}
+
+      # ── SHA curto para tag (metadata-action usa github.sha do contexto,
+      #    não o git HEAD — calculamos manualmente para workflow_run) ──
+      - name: 🔖 SHA curto
+        id: sha
+        run: echo "short=${GIT_SHA:0:7}" >> $GITHUB_OUTPUT
 
       # ── Docker Buildx (suporte multi-arch) ─────────────────────
       - name: ⚙️ Configurar Docker Buildx
@@ -68,11 +91,11 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
+            type=raw,value=${{ env.GIT_BRANCH }}
+            type=raw,value=sha-${{ steps.sha.outputs.short }}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=sha,prefix=sha-,format=short
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/prd' || startsWith(github.ref, 'refs/tags/') }}
+            type=raw,value=latest,enable=${{ env.GIT_BRANCH == 'prd' || startsWith(github.ref, 'refs/tags/') }}
 
       # ── Build e push (amd64 + arm64) ───────────────────────────
       - name: 🐳 Build & Push
@@ -102,8 +125,8 @@ jobs:
           echo "| Imagem | \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Plataformas | \`linux/amd64, linux/arm64\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Digest | \`${{ steps.push.outputs.digest }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Branch/Tag | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Branch/Tag | \`${{ env.GIT_BRANCH }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ env.GIT_SHA }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -130,7 +153,7 @@ jobs:
 
       - name: 🧪 Testar container
         run: |
-          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.GIT_BRANCH }}"
           echo "Iniciando container: $IMAGE"
           docker run -d --name smoke-test -p 8080:80 "$IMAGE"
           sleep 5
@@ -190,7 +213,7 @@ jobs:
       - name: 🔒 Scan de vulnerabilidades (Trivy)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.GIT_BRANCH }}
           format: sarif
           output: trivy-results.sarif
           severity: CRITICAL,HIGH,MEDIUM
@@ -234,7 +257,7 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: cves
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.GIT_BRANCH }}
           vex-location: .docker/scout/vex/
           only-severities: critical,high,medium
           exit-code: true
