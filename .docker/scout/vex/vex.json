@@ -1,0 +1,27 @@
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/josenilto/josenilto.github.io/vex/2026-05-30",
+  "author": "Josenilto Luis da Silva <josenilto@outlook.com>",
+  "timestamp": "2026-05-30T00:00:00Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": {
+        "@id": "https://www.cve.org/CVERecord?id=CVE-2026-6732",
+        "name": "CVE-2026-6732"
+      },
+      "timestamp": "2026-05-30T00:00:00Z",
+      "products": [
+        {
+          "@id": "pkg:oci/josenilto.github.io",
+          "subcomponents": [
+            { "@id": "pkg:apk/alpine/libxml2@2.13.9-r0" }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libxml2 é dependência transitiva do nginx para parsing de configuração. A funcionalidade vulnerável não é exposta por rotas públicas do container. Sem fix disponível no Alpine 3.23 — revisão agendada para quando o upstream disponibilizar patch."
+    }
+  ]
+}

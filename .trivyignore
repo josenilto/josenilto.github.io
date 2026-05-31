@@ -1,6 +1,6 @@
 # CVEs aceitos como risco gerenciado — base: nginx:stable-alpine3.23
 # Revisitar mensalmente ou quando Alpine liberar pacotes corrigidos.
-# Ultima revisao: 2026-05-30
+# Ultima revisao: 2026-05-30 | VEX: .docker/scout/vex/vex.json (Docker Scout)
 
 # busybox 1.37.0-r30 — utilitario base do Alpine, nao removivel (6.5 M)
 CVE-2025-60876
