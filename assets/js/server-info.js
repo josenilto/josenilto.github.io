@@ -30,29 +30,22 @@
             });
     })();
 
-    // ── Access counter (localStorage) ────────────────────────────
+    // ── Access counter — leitura dos dados gravados pelo index.html ─
     (function visitCounter() {
-        var prevCount  = parseInt(localStorage.getItem('si_count') || '0');
-        var prevLast   = localStorage.getItem('si_last');
-        var first      = localStorage.getItem('si_first') || new Date().toISOString();
-        var now        = new Date();
-        var todayStr   = now.toISOString().slice(0, 10);
+        var count      = parseInt(localStorage.getItem('si_count') || '0');
+        var first      = localStorage.getItem('si_first');
+        var last       = localStorage.getItem('si_last');
+        var todayStr   = new Date().toISOString().slice(0, 10);
         var todayCount = localStorage.getItem('si_today_date') === todayStr
-            ? parseInt(localStorage.getItem('si_today_count') || '0') + 1
-            : 1;
-        var count = prevCount + 1;
+            ? parseInt(localStorage.getItem('si_today_count') || '0') : 0;
 
-        localStorage.setItem('si_count',       count);
-        localStorage.setItem('si_first',       first);
-        localStorage.setItem('si_last',        now.toISOString());
-        localStorage.setItem('si_today_date',  todayStr);
-        localStorage.setItem('si_today_count', todayCount);
-
-        el('v-total').textContent = count;
+        el('v-total').textContent = count || '—';
         el('v-today').textContent = todayCount + ' visit' + (todayCount !== 1 ? 's' : '');
-        el('v-first').textContent = new Date(first).toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
-        el('v-last').textContent  = prevLast
-            ? new Date(prevLast).toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
+        el('v-first').textContent = first
+            ? new Date(first).toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
+            : '—';
+        el('v-last').textContent  = last
+            ? new Date(last).toISOString().slice(0, 16).replace('T', ' ') + ' UTC'
             : '—';
 
         var sessionStart = Date.now();

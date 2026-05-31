@@ -79,6 +79,7 @@
 </head>
 
 <body>
+    <script>(function(){try{var n=parseInt(localStorage.getItem('si_count')||'0')+1,now=new Date().toISOString(),td=now.slice(0,10),tc=localStorage.getItem('si_today_date')===td?parseInt(localStorage.getItem('si_today_count')||'0')+1:1;if(!localStorage.getItem('si_first'))localStorage.setItem('si_first',now);localStorage.setItem('si_count',n);localStorage.setItem('si_last',now);localStorage.setItem('si_today_date',td);localStorage.setItem('si_today_count',tc);}catch(e){}})();</script>
 
     <header class="l-header" id="header">
         <nav class="nav bd-container">
