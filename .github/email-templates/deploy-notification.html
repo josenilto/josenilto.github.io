@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
+  <title>Deploy PRD — josenilto.github.io</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+    body { margin: 0; padding: 0; }
+    @media only screen and (max-width: 620px) {
+      .email-wrap  { padding: 16px 8px !important; }
+      .card        { border-radius: 0 !important; }
+      .pad-main    { padding: 24px 20px !important; }
+      .pad-header  { padding: 28px 20px !important; }
+      .pad-status  { padding: 14px 20px !important; }
+      .pad-footer  { padding: 18px 20px !important; }
+      .btn-primary { padding: 12px 24px !important; font-size: 13px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#eaeaea;font-family:'Poppins',Arial,Helvetica,sans-serif;">
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="email-wrap"
+  style="background-color:#eaeaea;padding:36px 16px;">
+  <tr>
+    <td align="center">
+
+      <!-- ═══════════════ CARD ═══════════════ -->
+      <table role="presentation" class="card" width="600" cellpadding="0" cellspacing="0"
+        style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;border:1px solid #d0d0d0;box-shadow:0 4px 20px rgba(0,0,0,0.10);">
+
+        <!-- ── HEADER ──────────────────────────────────── -->
+        <tr>
+          <td class="pad-header" style="background-color:#1e1e1e;padding:32px 44px;text-align:center;background-image:linear-gradient(135deg,#1e1e1e 0%,#2d2d2d 100%);">
+
+            <!-- Top badge row -->
+            <table role="presentation" cellpadding="0" cellspacing="0" align="center" style="margin-bottom:18px;">
+              <tr>
+                <!-- GitHub logo dot -->
+                <td style="padding-right:10px;vertical-align:middle;">
+                  <table role="presentation" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="width:28px;height:28px;background-color:#ffcb00;border-radius:50%;text-align:center;vertical-align:middle;">
+                        <span style="font-size:14px;line-height:28px;">⚙</span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <!-- Badge label -->
+                <td style="vertical-align:middle;">
+                  <span style="font-family:'Poppins',Arial,sans-serif;font-size:10px;font-weight:700;color:#ffcb00;letter-spacing:2px;text-transform:uppercase;">GitHub Actions Bot</span>
+                </td>
+              </tr>
+            </table>
+
+            <h1 style="font-family:'Poppins',Arial,sans-serif;color:#ffffff;margin:0 0 6px;font-size:22px;font-weight:700;line-height:1.3;letter-spacing:-0.3px;">
+              Pipeline de Deploy
+            </h1>
+            <p style="font-family:'Poppins',Arial,sans-serif;color:#888888;margin:0;font-size:12px;letter-spacing:0.5px;">
+              josenilto.github.io &nbsp;·&nbsp; PRD
+            </p>
+
+            <!-- Accent line -->
+            <table role="presentation" cellpadding="0" cellspacing="0" align="center" style="margin-top:18px;">
+              <tr>
+                <td style="width:40px;height:3px;background-color:#ffcb00;border-radius:2px;"></td>
+                <td style="width:8px;"></td>
+                <td style="width:12px;height:3px;background-color:#006400;border-radius:2px;"></td>
+                <td style="width:8px;"></td>
+                <td style="width:6px;height:3px;background-color:#444444;border-radius:2px;"></td>
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+
+        <!-- ── STATUS BANNER ───────────────────────────── -->
+        <tr>
+          <td class="pad-status" style="background-color:{{STATUS_BG}};padding:20px 44px;text-align:center;border-bottom:4px solid {{STATUS_BORDER}};">
+            <p style="margin:0;font-family:'Poppins',Arial,sans-serif;font-size:18px;font-weight:700;color:{{STATUS_TEXT}};letter-spacing:-0.2px;">
+              {{STATUS_ICON}}&nbsp;&nbsp;{{STATUS_LABEL}}
+            </p>
+          </td>
+        </tr>
+
+        <!-- ── BODY ────────────────────────────────────── -->
+        <tr>
+          <td class="pad-main" style="padding:36px 44px;background-color:#ffffff;">
+
+            <!-- ·· JOBS SECTION ·· -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+
+              <!-- Section heading -->
+              <tr>
+                <td style="padding-bottom:12px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="border-bottom:2px solid #ffcb00;padding-bottom:8px;">
+                        <span style="font-family:'Poppins',Arial,sans-serif;font-size:10px;font-weight:700;color:#393939;text-transform:uppercase;letter-spacing:1.5px;">
+                          Jobs do Pipeline
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Job 1 — link-check -->
+              <tr>
+                <td style="padding:0 0 8px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                    style="background-color:#f8f8f8;border-radius:8px;border-left:4px solid {{JOB1_BORDER}};overflow:hidden;">
+                    <tr>
+                      <td style="padding:12px 16px;">
+                        <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#393939;font-weight:500;">
+                          🔗&nbsp; Verificação de Links
+                        </span>
+                      </td>
+                      <td style="padding:12px 16px;text-align:right;white-space:nowrap;">
+                        <span style="display:inline-block;background-color:{{JOB1_BADGE_BG}};color:{{JOB1_BADGE_COLOR}};font-family:'Poppins',Arial,sans-serif;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;">
+                          {{JOB1_ICON}} {{JOB1_LABEL}}
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Job 2 — deploy -->
+              <tr>
+                <td>
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                    style="background-color:#f8f8f8;border-radius:8px;border-left:4px solid {{JOB2_BORDER}};overflow:hidden;">
+                    <tr>
+                      <td style="padding:12px 16px;">
+                        <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#393939;font-weight:500;">
+                          🚀&nbsp; Deploy GitHub Pages (PRD)
+                        </span>
+                      </td>
+                      <td style="padding:12px 16px;text-align:right;white-space:nowrap;">
+                        <span style="display:inline-block;background-color:{{JOB2_BADGE_BG}};color:{{JOB2_BADGE_COLOR}};font-family:'Poppins',Arial,sans-serif;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;">
+                          {{JOB2_ICON}} {{JOB2_LABEL}}
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+            </table>
+
+            <!-- ·· DETAILS SECTION ·· -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+
+              <!-- Section heading -->
+              <tr>
+                <td style="padding-bottom:12px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td style="border-bottom:2px solid #ffcb00;padding-bottom:8px;">
+                        <span style="font-family:'Poppins',Arial,sans-serif;font-size:10px;font-weight:700;color:#393939;text-transform:uppercase;letter-spacing:1.5px;">
+                          Detalhes
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Detail rows -->
+              <tr>
+                <td style="padding:9px 0;border-bottom:1px solid #f0f0f0;width:44%;">
+                  <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#888888;">🌿&nbsp; Branch</span>
+                </td>
+                <td style="padding:9px 0;border-bottom:1px solid #f0f0f0;text-align:right;">
+                  <span style="font-family:'Courier New',Courier,monospace;font-size:12px;background-color:#f5f5f5;color:#393939;padding:3px 10px;border-radius:4px;border-left:3px solid #ffcb00;">{{BRANCH}}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding:9px 0;border-bottom:1px solid #f0f0f0;">
+                  <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#888888;">📦&nbsp; Commit</span>
+                </td>
+                <td style="padding:9px 0;border-bottom:1px solid #f0f0f0;text-align:right;">
+                  <span style="font-family:'Courier New',Courier,monospace;font-size:12px;background-color:#f5f5f5;color:#393939;padding:3px 10px;border-radius:4px;border-left:3px solid #ffcb00;">{{SHORT_SHA}}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding:9px 0;border-bottom:1px solid #f0f0f0;">
+                  <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#888888;">👤&nbsp; Autor</span>
+                </td>
+                <td style="padding:9px 0;border-bottom:1px solid #f0f0f0;text-align:right;">
+                  <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#393939;font-weight:500;">{{ACTOR}}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding:9px 0;border-bottom:1px solid #f0f0f0;">
+                  <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#888888;">🕐&nbsp; Data/Hora</span>
+                </td>
+                <td style="padding:9px 0;border-bottom:1px solid #f0f0f0;text-align:right;">
+                  <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#393939;">{{TIMESTAMP}}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <td style="padding:9px 0;">
+                  <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#888888;">⚙️&nbsp; Run</span>
+                </td>
+                <td style="padding:9px 0;text-align:right;">
+                  <span style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#393939;">{{WORKFLOW_RUN}}</span>
+                </td>
+              </tr>
+
+            </table>
+
+            <!-- ·· CTA BUTTONS ·· -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:32px;">
+              <tr>
+                <td align="center" style="padding-bottom:14px;">
+                  <a href="https://josenilto.github.io" class="btn-primary"
+                    style="display:inline-block;background-color:#ffcb00;color:#1e1e1e;font-family:'Poppins',Arial,sans-serif;font-size:14px;font-weight:700;padding:14px 40px;border-radius:8px;text-decoration:none;letter-spacing:0.2px;">
+                    🌐&nbsp; Ver Site em Produção
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td align="center">
+                  <a href="{{WORKFLOW_URL}}"
+                    style="font-family:'Poppins',Arial,sans-serif;font-size:12px;color:#006400;text-decoration:none;font-weight:500;">
+                    Ver logs completos do workflow&nbsp;→
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+
+        <!-- ── DIVIDER ──────────────────────────────────── -->
+        <tr>
+          <td style="height:1px;background-color:#eeeeee;padding:0;font-size:0;line-height:0;">&nbsp;</td>
+        </tr>
+
+        <!-- ── FOOTER ───────────────────────────────────── -->
+        <tr>
+          <td class="pad-footer" style="background-color:#f7f7f7;padding:22px 44px;text-align:center;">
+
+            <!-- Name + role -->
+            <p style="font-family:'Poppins',Arial,sans-serif;font-size:13px;color:#393939;font-weight:600;margin:0 0 3px;">
+              Josenilto Luis da Silva
+            </p>
+            <p style="font-family:'Poppins',Arial,sans-serif;font-size:11px;color:#888888;margin:0 0 14px;">
+              SRE / DevOps Engineer
+            </p>
+
+            <!-- Social links -->
+            <table role="presentation" cellpadding="0" cellspacing="0" align="center" style="margin-bottom:14px;">
+              <tr>
+                <td style="padding:0 10px;">
+                  <a href="https://github.com/josenilto"
+                    style="font-family:'Poppins',Arial,sans-serif;font-size:11px;color:#006400;text-decoration:none;font-weight:500;">GitHub</a>
+                </td>
+                <td style="font-size:11px;color:#cccccc;">·</td>
+                <td style="padding:0 10px;">
+                  <a href="https://linkedin.com/in/josenilto"
+                    style="font-family:'Poppins',Arial,sans-serif;font-size:11px;color:#006400;text-decoration:none;font-weight:500;">LinkedIn</a>
+                </td>
+                <td style="font-size:11px;color:#cccccc;">·</td>
+                <td style="padding:0 10px;">
+                  <a href="https://josenilto.github.io"
+                    style="font-family:'Poppins',Arial,sans-serif;font-size:11px;color:#006400;text-decoration:none;font-weight:500;">Portfólio</a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="font-family:'Poppins',Arial,sans-serif;font-size:10px;color:#bbbbbb;margin:0;">
+              Mensagem gerada automaticamente pelo GitHub Actions Bot · Não responda este e-mail
+            </p>
+
+          </td>
+        </tr>
+
+      </table>
+      <!-- /CARD -->
+
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

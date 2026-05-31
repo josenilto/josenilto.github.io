@@ -172,3 +172,102 @@ jobs:
           echo "| 🌿 Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 👤 Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 3 — NOTIFICAÇÃO POR E-MAIL
+  #   • Envia e-mail HTML com visual do portfólio
+  #   • Roda sempre — notifica sucesso E falha
+  #   • Requer secrets: MAIL_SERVER, MAIL_PORT, MAIL_USERNAME,
+  #                     MAIL_PASSWORD, MAIL_TO
+  # ══════════════════════════════════════════════════════════════
+  notify-email:
+    name: 📧 Notificação por E-mail
+    runs-on: ubuntu-latest
+    needs: [link-check, deploy-prd]
+    if: always()
+    timeout-minutes: 5
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🎨 Gerar template HTML
+        id: gen_html
+        run: |
+          DEPLOY_RESULT="${{ needs.deploy-prd.result }}"
+          LINK_RESULT="${{ needs.link-check.result }}"
+
+          # ── Status geral (baseado no deploy) ──
+          if [ "$DEPLOY_RESULT" = "success" ]; then
+            STATUS_ICON="✅"; STATUS_BG="#e8f5e9"; STATUS_BORDER="#4caf50"
+            STATUS_TEXT="#1b5e20"; STATUS_LABEL="Deploy Concluído com Sucesso"
+          else
+            STATUS_ICON="❌"; STATUS_BG="#ffebee"; STATUS_BORDER="#ef5350"
+            STATUS_TEXT="#b71c1c"; STATUS_LABEL="Falha no Deploy — Ação Necessária"
+          fi
+
+          # ── Badge do job: Verificação de Links ──
+          case "$LINK_RESULT" in
+            success)   JOB1_ICON="✅"; JOB1_LABEL="Sucesso";   JOB1_BORDER="#4caf50"; JOB1_BADGE_BG="#e8f5e9"; JOB1_BADGE_COLOR="#2e7d32" ;;
+            failure)   JOB1_ICON="❌"; JOB1_LABEL="Falhou";    JOB1_BORDER="#ef5350"; JOB1_BADGE_BG="#ffebee"; JOB1_BADGE_COLOR="#c62828" ;;
+            skipped)   JOB1_ICON="⊘";  JOB1_LABEL="Pulado";    JOB1_BORDER="#bdbdbd"; JOB1_BADGE_BG="#f5f5f5"; JOB1_BADGE_COLOR="#757575" ;;
+            cancelled) JOB1_ICON="⊘";  JOB1_LABEL="Cancelado"; JOB1_BORDER="#ff9800"; JOB1_BADGE_BG="#fff3e0"; JOB1_BADGE_COLOR="#e65100" ;;
+            *)         JOB1_ICON="⊘";  JOB1_LABEL="—";         JOB1_BORDER="#bdbdbd"; JOB1_BADGE_BG="#f5f5f5"; JOB1_BADGE_COLOR="#9e9e9e" ;;
+          esac
+
+          # ── Badge do job: Deploy GitHub Pages ──
+          case "$DEPLOY_RESULT" in
+            success)   JOB2_ICON="✅"; JOB2_LABEL="Sucesso";   JOB2_BORDER="#4caf50"; JOB2_BADGE_BG="#e8f5e9"; JOB2_BADGE_COLOR="#2e7d32" ;;
+            failure)   JOB2_ICON="❌"; JOB2_LABEL="Falhou";    JOB2_BORDER="#ef5350"; JOB2_BADGE_BG="#ffebee"; JOB2_BADGE_COLOR="#c62828" ;;
+            skipped)   JOB2_ICON="⊘";  JOB2_LABEL="Pulado";    JOB2_BORDER="#bdbdbd"; JOB2_BADGE_BG="#f5f5f5"; JOB2_BADGE_COLOR="#757575" ;;
+            cancelled) JOB2_ICON="⊘";  JOB2_LABEL="Cancelado"; JOB2_BORDER="#ff9800"; JOB2_BADGE_BG="#fff3e0"; JOB2_BADGE_COLOR="#e65100" ;;
+            *)         JOB2_ICON="⊘";  JOB2_LABEL="—";         JOB2_BORDER="#bdbdbd"; JOB2_BADGE_BG="#f5f5f5"; JOB2_BADGE_COLOR="#9e9e9e" ;;
+          esac
+
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          TIMESTAMP=$(TZ='America/Sao_Paulo' date '+%d/%m/%Y às %H:%M (BRT)')
+          WORKFLOW_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          RUN_NUM="#${{ github.run_number }}"
+
+          sed \
+            -e "s|{{STATUS_ICON}}|${STATUS_ICON}|g" \
+            -e "s|{{STATUS_BG}}|${STATUS_BG}|g" \
+            -e "s|{{STATUS_BORDER}}|${STATUS_BORDER}|g" \
+            -e "s|{{STATUS_TEXT}}|${STATUS_TEXT}|g" \
+            -e "s|{{STATUS_LABEL}}|${STATUS_LABEL}|g" \
+            -e "s|{{JOB1_ICON}}|${JOB1_ICON}|g" \
+            -e "s|{{JOB1_LABEL}}|${JOB1_LABEL}|g" \
+            -e "s|{{JOB1_BORDER}}|${JOB1_BORDER}|g" \
+            -e "s|{{JOB1_BADGE_BG}}|${JOB1_BADGE_BG}|g" \
+            -e "s|{{JOB1_BADGE_COLOR}}|${JOB1_BADGE_COLOR}|g" \
+            -e "s|{{JOB2_ICON}}|${JOB2_ICON}|g" \
+            -e "s|{{JOB2_LABEL}}|${JOB2_LABEL}|g" \
+            -e "s|{{JOB2_BORDER}}|${JOB2_BORDER}|g" \
+            -e "s|{{JOB2_BADGE_BG}}|${JOB2_BADGE_BG}|g" \
+            -e "s|{{JOB2_BADGE_COLOR}}|${JOB2_BADGE_COLOR}|g" \
+            -e "s|{{BRANCH}}|${{ github.ref_name }}|g" \
+            -e "s|{{SHORT_SHA}}|${SHORT_SHA}|g" \
+            -e "s|{{ACTOR}}|${{ github.actor }}|g" \
+            -e "s|{{TIMESTAMP}}|${TIMESTAMP}|g" \
+            -e "s|{{WORKFLOW_RUN}}|${RUN_NUM}|g" \
+            -e "s|{{WORKFLOW_URL}}|${WORKFLOW_URL}|g" \
+            .github/email-templates/deploy-notification.html > /tmp/email-body.html
+
+          {
+            echo 'html_body<<EMAILEOF'
+            cat /tmp/email-body.html
+            echo 'EMAILEOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: 📬 Enviar e-mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "${{ needs.deploy-prd.result == 'success' && '✅' || '❌' }} Deploy PRD · ${{ github.ref_name }} · #${{ github.run_number }}"
+          to: ${{ secrets.MAIL_TO }}
+          from: "GitHub Actions Bot <${{ secrets.MAIL_USERNAME }}>"
+          html_body: ${{ steps.gen_html.outputs.html_body }}
+          convert_markdown: false
