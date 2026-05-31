@@ -142,9 +142,7 @@
             ? navigator.deviceMemory + ' GB'
             : 'n/a';
         el('cap-dpr').textContent   = (window.devicePixelRatio || 1).toFixed(1) + 'x';
-        el('cap-touch').textContent = navigator.maxTouchPoints > 0
-            ? navigator.maxTouchPoints + ' pts'
-            : 'none';
+        el('cap-tz').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone || '—';
         el('cap-online').textContent = navigator.onLine ? 'yes' : 'no';
         el('cap-sw').textContent     = 'serviceWorker' in navigator ? 'yes' : 'no';
         el('cap-ls').textContent     = (function () {
