@@ -3,43 +3,39 @@
   "@id": "https://github.com/josenilto/josenilto.github.io/vex/2026-05-30",
   "author": "Josenilto Luis da Silva <josenilto@outlook.com>",
   "timestamp": "2026-05-30T00:00:00Z",
-  "version": 2,
+  "version": 3,
   "statements": [
     {
-      "vulnerability": {
-        "@id": "https://www.cve.org/CVERecord?id=CVE-2025-60876",
-        "name": "CVE-2025-60876"
-      },
+      "vulnerability": { "@id": "https://www.cve.org/CVERecord?id=CVE-2025-60876", "name": "CVE-2025-60876" },
       "timestamp": "2026-05-30T00:00:00Z",
-      "products": [
-        {
-          "@id": "pkg:oci/josenilto.github.io",
-          "subcomponents": [
-            { "@id": "pkg:apk/alpine/busybox@1.37.0-r30" }
-          ]
-        }
-      ],
+      "products": [{ "@id": "pkg:oci/josenilto.github.io", "subcomponents": [{ "@id": "pkg:apk/alpine/busybox@1.37.0-r30" }] }],
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "busybox é utilitário base do Alpine sem shell exposto externamente. O container executa apenas nginx; nenhuma rota pública invoca binários busybox. Sem versão corrigida disponível no Alpine (affected range <=1.37.0-r30). Risco aceito e revisado em 2026-05-30."
+      "impact_statement": "busybox é utilitário base do Alpine sem shell exposto externamente. O container executa apenas nginx; nenhuma rota pública invoca binários busybox. Sem versão corrigida disponível no Alpine (affected range <=1.37.0-r30). Revisão: 2026-05-30."
     },
     {
-      "vulnerability": {
-        "@id": "https://www.cve.org/CVERecord?id=CVE-2026-6732",
-        "name": "CVE-2026-6732"
-      },
+      "vulnerability": { "@id": "https://www.cve.org/CVERecord?id=CVE-2026-6732", "name": "CVE-2026-6732" },
       "timestamp": "2026-05-30T00:00:00Z",
-      "products": [
-        {
-          "@id": "pkg:oci/josenilto.github.io",
-          "subcomponents": [
-            { "@id": "pkg:apk/alpine/libxml2@2.13.9-r0" }
-          ]
-        }
-      ],
+      "products": [{ "@id": "pkg:oci/josenilto.github.io", "subcomponents": [{ "@id": "pkg:apk/alpine/libxml2@2.13.9-r0" }] }],
       "status": "not_affected",
       "justification": "vulnerable_code_not_in_execute_path",
-      "impact_statement": "libxml2 é dependência transitiva do nginx para parsing de configuração. A funcionalidade vulnerável não é exposta por rotas públicas do container. Sem fix disponível no Alpine 3.23 — revisão agendada para quando o upstream disponibilizar patch."
+      "impact_statement": "libxml2 é dependência transitiva do nginx para parsing de configuração. A funcionalidade vulnerável não é exposta por rotas públicas. Sem fix no Alpine 3.23. Revisão: 2026-05-30."
+    },
+    {
+      "vulnerability": { "@id": "https://www.cve.org/CVERecord?id=CVE-2026-41989", "name": "CVE-2026-41989" },
+      "timestamp": "2026-05-30T00:00:00Z",
+      "products": [{ "@id": "pkg:oci/josenilto.github.io", "subcomponents": [{ "@id": "pkg:apk/alpine/libgcrypt" }] }],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "libgcrypt é dependência indireta do nginx sem uso de criptografia exposta ao público. Aguardando patch no Alpine 3.23. Revisão: 2026-05-30."
+    },
+    {
+      "vulnerability": { "@id": "https://www.cve.org/CVERecord?id=CVE-2026-27456", "name": "CVE-2026-27456" },
+      "timestamp": "2026-05-30T00:00:00Z",
+      "products": [{ "@id": "pkg:oci/josenilto.github.io", "subcomponents": [{ "@id": "pkg:apk/alpine/util-linux" }] }],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_in_execute_path",
+      "impact_statement": "util-linux é utilitário base do Alpine não invocado pelo nginx em runtime. Sem versão corrigida disponível no Alpine 3.23. Revisão: 2026-05-30."
     }
   ]
 }

@@ -18,7 +18,7 @@ on:
 
 concurrency:
   group: docker-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   REGISTRY: ghcr.io
@@ -31,6 +31,7 @@ jobs:
   build-and-push:
     name: 🏗️ Build & Push (multi-arch)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     permissions:
       contents: read
@@ -117,6 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-push
     if: success()
+    timeout-minutes: 10
 
     steps:
       - name: 🔐 Login no GHCR
@@ -143,10 +145,10 @@ jobs:
           echo "Página principal HTTP $STATUS"
           [ "$STATUS" = "200" ] || (echo "❌ Página principal falhou" && exit 1)
 
-          # React app
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/app/)
-          echo "React app HTTP $STATUS"
-          [ "$STATUS" = "200" ] || (echo "❌ React app falhou" && exit 1)
+          # Página 404 customizada
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/pagina-que-nao-existe)
+          echo "404 customizado HTTP $STATUS"
+          [ "$STATUS" = "404" ] || (echo "❌ Página 404 falhou" && exit 1)
 
           echo "✅ Todos os checks passaram!"
           docker rm -f smoke-test
@@ -160,7 +162,7 @@ jobs:
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
           echo "| \`/health\` | ✅ 200 OK |" >> $GITHUB_STEP_SUMMARY
           echo "| \`/\` (portfólio) | ✅ 200 OK |" >> $GITHUB_STEP_SUMMARY
-          echo "| \`/app/\` (React) | ✅ 200 OK |" >> $GITHUB_STEP_SUMMARY
+          echo "| \`/pagina-inexistente\` (404) | ✅ 404 OK |" >> $GITHUB_STEP_SUMMARY
 
   # ── JOB 3: Scan de vulnerabilidades (Trivy) ────────────────────
   security-scan:
@@ -168,6 +170,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-push
     if: success()
+    timeout-minutes: 15
 
     permissions:
       contents: read

@@ -9,6 +9,29 @@ services:
     ports:
       - "8080:80"
     restart: unless-stopped
+
+    # ── Hardening de segurança ────────────────────────────────────
+    # Sistema de arquivos somente leitura — nginx escreve apenas nos paths abaixo
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+      - /var/log/nginx
+
+    # Capacidades mínimas necessárias para nginx (porta 80 + drop de privilégios)
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - SETUID
+      - SETGID
+      - CHOWN
+
+    # Impede ganho de privilégios via setuid/setgid em binários
+    security_opt:
+      - no-new-privileges:true
+
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost/health"]
       interval: 30s
