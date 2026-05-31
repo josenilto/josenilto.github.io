@@ -250,3 +250,40 @@ jobs:
           echo "| VEX document | \`.docker/scout/vex/vex.json\` |" >> $GITHUB_STEP_SUMMARY
           echo "| CVEs aceitos | CVE-2025-60876 (busybox, sem fix upstream) |" >> $GITHUB_STEP_SUMMARY
           echo "| CVEs aceitos | CVE-2026-6732 (libxml2, sem fix upstream) |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 5 — LIMPEZA DO GHCR (manter últimas 5 versões)
+  #   • Roda após build bem-sucedido
+  #   • Nunca apaga: latest, prd, tags semver (ex: 1.2.3)
+  #   • Apaga versões sha-* excedentes (mais antigas que as 5 recentes)
+  # ══════════════════════════════════════════════════════════════
+  cleanup-registry:
+    name: 🧹 Limpar GHCR (manter 5 versões)
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: success()
+    timeout-minutes: 5
+
+    permissions:
+      packages: write
+
+    steps:
+      - name: 🧹 Remover versões antigas
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ github.event.repository.name }}
+          package-type: container
+          min-versions-to-keep: 5
+          ignore-versions: '^(latest|prd|\d+\.\d+)'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📋 Resumo da Limpeza
+        if: always()
+        run: |
+          echo "## 🧹 Limpeza do GHCR" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Pacote | \`${{ github.event.repository.name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Versões mantidas | últimas 5 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tags protegidas | \`latest\`, \`prd\`, semver (\`x.y.z\`) |" >> $GITHUB_STEP_SUMMARY
