@@ -38,8 +38,7 @@ concurrency:
 # ── Variáveis globais ───────────────────────────────────────────
 env:
   NODE_VERSION: '20'
-  DEPLOY_REPO: 'josenilto-dev/josenilto-dev.github.io'  # repositório destino
-  SITE_URL: 'https://josenilto-dev.github.io'           # URL pública
+  SITE_URL: 'https://josenilto.github.io/dev'
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'            # obrigatório jun/2026
 
 # ══════════════════════════════════════════════════════════════════
@@ -83,7 +82,7 @@ jobs:
           echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
           echo "| Node.js | \`${{ env.NODE_VERSION }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| Repositório destino | \`${{ env.DEPLOY_REPO }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| URL destino | \`${{ env.SITE_URL }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| Nível de auditoria | \`moderate\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📦 Pacotes instalados" >> $GITHUB_STEP_SUMMARY
@@ -263,7 +262,7 @@ jobs:
       url: ${{ env.SITE_URL }}
 
     permissions:
-      contents: read   # leitura do repo origem
+      contents: write
 
     steps:
       - name: Checkout
@@ -291,35 +290,22 @@ jobs:
           # ── React app compilada (subpasta /app/) ──
           cp -r dev/dist/.    _site-jdev/app/
 
-          echo "📂 Estrutura de publicação para josenilto-dev.github.io:"
+          echo "📂 Estrutura de publicação DEV:"
           find _site-jdev -maxdepth 3 -type f | head -30
 
-      - name: 🚀 Deploy para josenilto-dev/josenilto-dev.github.io
+      - name: 🚀 Deploy → /dev (gh-pages · mesmo repo)
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ secrets.DEV_DEPLOY_TOKEN }}
-          external_repository: ${{ env.DEPLOY_REPO }}
-          publish_dir: ./_site-jdev
-          publish_branch: gh-pages
-          commit_message: |
-            deploy(dev): ${{ github.sha }} from josenilto/${{ github.event.repository.name }}@${{ github.ref_name }} by @${{ github.actor }}
-          enable_jekyll: false
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
-        continue-on-error: true
+          github_token:    ${{ secrets.GITHUB_TOKEN }}
+          publish_dir:     ./_site-jdev
+          destination_dir: dev
+          keep_files:      true
+          enable_jekyll:   false
+          commit_message:  "deploy(dev): ${{ github.sha }} by @${{ github.actor }}"
+          user_name:  "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
 
-      - name: 🔑 Status do DEV_DEPLOY_TOKEN
-        run: |
-          if [ -z "$TOKEN" ]; then
-            echo "::warning::Secret DEV_DEPLOY_TOKEN não configurado — deploy externo pulado."
-            echo "Configure em: Settings → Secrets → Actions → DEV_DEPLOY_TOKEN"
-          else
-            echo "✅ DEV_DEPLOY_TOKEN presente"
-          fi
-        env:
-          TOKEN: ${{ secrets.DEV_DEPLOY_TOKEN }}
-
-      - name: 📋 Resumo do Deploy
+      - name: 📋 Resumo do Deploy DEV
         run: |
           echo "## 🛠️ Deploy DEV Concluído!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -327,9 +313,7 @@ jobs:
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
           echo "| 🌐 Site | [${{ env.SITE_URL }}](${{ env.SITE_URL }}) |" >> $GITHUB_STEP_SUMMARY
           echo "| 🗂️ App React | [${{ env.SITE_URL }}/app](${{ env.SITE_URL }}/app) |" >> $GITHUB_STEP_SUMMARY
-          echo "| 📦 Commit origem | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🌿 Branch origem | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| 📂 Repo destino | \`${{ env.DEPLOY_REPO }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🌿 Branch destino | \`gh-pages\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📦 Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌿 Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 👤 Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY

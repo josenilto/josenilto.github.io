@@ -130,9 +130,7 @@ jobs:
       url: https://josenilto.github.io
 
     permissions:
-      contents: read
-      pages:    write
-      id-token: write
+      contents: write
 
     steps:
       - name: 📥 Checkout
@@ -151,17 +149,17 @@ jobs:
           echo "📂 Estrutura de publicação:"
           find _site -maxdepth 2 -type f | sort
 
-      - name: ⚙️ Configurar GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: 📤 Upload para GitHub Pages
-        uses: actions/upload-pages-artifact@v3
+      - name: 🚀 Deploy → / (raiz · gh-pages)
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: _site/
-
-      - name: 🚀 Deploy para GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir:     ./_site
+          destination_dir: .
+          keep_files:      true
+          enable_jekyll:   false
+          commit_message:  "deploy(prd): ${{ github.sha }} by @${{ github.actor }}"
+          user_name:  "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
 
       - name: 📋 Resumo do Deploy
         run: |

@@ -32,8 +32,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DEPLOY_REPO: "josenilto-hmg/josenilto-hmg.github.io"
-  SITE_URL:    "https://josenilto-hmg.github.io"
+  SITE_URL: "https://josenilto.github.io/hmg"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 # ══════════════════════════════════════════════════════════════════
@@ -129,7 +128,7 @@ jobs:
       url: ${{ env.SITE_URL }}
 
     permissions:
-      contents: read
+      contents: write
 
     steps:
       - name: 📥 Checkout
@@ -146,29 +145,17 @@ jobs:
           echo "📂 Estrutura HMG:"
           find _site-hmg -maxdepth 2 -type f | sort
 
-      - name: 🚀 Deploy para josenilto-hmg/josenilto-hmg.github.io
+      - name: 🚀 Deploy → /hmg (gh-pages · mesmo repo)
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ secrets.HMG_DEPLOY_TOKEN }}
-          external_repository: ${{ env.DEPLOY_REPO }}
-          publish_branch: gh-pages
-          publish_dir: ./_site-hmg
-          commit_message: "deploy(hmg): ${{ github.sha }} by @${{ github.actor }}"
-          enable_jekyll: false
-          user_name: "github-actions[bot]"
+          github_token:    ${{ secrets.GITHUB_TOKEN }}
+          publish_dir:     ./_site-hmg
+          destination_dir: hmg
+          keep_files:      true
+          enable_jekyll:   false
+          commit_message:  "deploy(hmg): ${{ github.sha }} by @${{ github.actor }}"
+          user_name:  "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
-        continue-on-error: true
-
-      - name: 🔑 Status do HMG_DEPLOY_TOKEN
-        run: |
-          if [ -z "$TOKEN" ]; then
-            echo "::warning::Secret HMG_DEPLOY_TOKEN não configurado — deploy externo pulado."
-            echo "Configure em: Settings → Secrets → Actions → HMG_DEPLOY_TOKEN"
-          else
-            echo "✅ HMG_DEPLOY_TOKEN presente"
-          fi
-        env:
-          TOKEN: ${{ secrets.HMG_DEPLOY_TOKEN }}
 
       - name: 📋 Resumo do Deploy HMG
         if: always()
@@ -180,5 +167,4 @@ jobs:
           echo "| 📦 Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 🌿 Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 👤 Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🗂️ Repo destino | \`${{ env.DEPLOY_REPO }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
