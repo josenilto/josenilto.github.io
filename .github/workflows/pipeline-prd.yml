@@ -146,6 +146,7 @@ jobs:
           cp -r assets/  _site/assets/
           cp robots.txt  _site/
           cp sitemap.xml _site/
+          cp health      _site/
 
           echo "📂 Estrutura de publicação:"
           find _site -maxdepth 2 -type f | sort
