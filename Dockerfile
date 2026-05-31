@@ -19,7 +19,7 @@ RUN npm run build -- --base /app/
 # ══════════════════════════════════════════════════════════════════
 #  Stage 2 — Imagem final com Nginx Alpine (< 50 MB)
 # ══════════════════════════════════════════════════════════════════
-FROM nginx:1.27-alpine AS production
+FROM nginx:stable-alpine AS production
 
 LABEL org.opencontainers.image.title="josenilto.github.io" \
       org.opencontainers.image.description="Portfólio pessoal — site estático + React app" \
