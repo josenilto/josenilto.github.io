@@ -2,7 +2,10 @@
 # Revisitar mensalmente ou quando Alpine liberar pacotes corrigidos.
 # Ultima revisao: 2026-05-30
 
-# freetype 2.14.1-r0 — fix em 2.14.2, Alpine 3.23 ainda em 2.14.1 (6.5 M)
+# busybox 1.37.0-r30 — utilitario base do Alpine, nao removivel (6.5 M)
+CVE-2025-60876
+
+# freetype 2.14.1-r0 — fix em 2.14.2, Alpine 3.23 ainda em 2.14.1 (5.3 M)
 CVE-2026-23865
 
 # libxml2 2.13.9-r0 — sem patch disponivel no Alpine 3.23 (6.5 M)
