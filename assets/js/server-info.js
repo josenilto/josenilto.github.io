@@ -2,6 +2,98 @@
     function el(id) { return document.getElementById(id); }
     function ms(n)  { return isFinite(n) && n >= 0 ? Math.round(n) + ' ms' : '—'; }
 
+    // ── Real-time charts (FPS + JS Heap) ─────────────────────────
+    (function realtimeCharts() {
+        var MAX = 60;
+        var fpsData = new Array(MAX).fill(0);
+        var memData = new Array(MAX).fill(0);
+
+        var cpuCanvas = document.getElementById('cpu-chart');
+        var memCanvas = document.getElementById('mem-chart');
+        if (!cpuCanvas || !memCanvas) return;
+        var cpuCtx = cpuCanvas.getContext('2d');
+        var memCtx = memCanvas.getContext('2d');
+
+        // FPS: count rAF callbacks per second
+        var frameCount = 0;
+        (function countFrames() { frameCount++; requestAnimationFrame(countFrames); })();
+
+        function colors() {
+            var dark = document.body.classList.contains('dark-theme') ||
+                       window.matchMedia('(prefers-color-scheme: dark)').matches;
+            return dark
+                ? { line: '#00c853', fill0: 'rgba(0,200,80,0.18)', fill1: 'rgba(0,200,80,0.02)', grid: 'rgba(0,200,80,0.1)' }
+                : { line: '#006400', fill0: 'rgba(0,100,0,0.15)',  fill1: 'rgba(0,100,0,0.01)',  grid: 'rgba(0,100,0,0.08)' };
+        }
+
+        function draw(canvas, ctx, data) {
+            var dpr = window.devicePixelRatio || 1;
+            var w = canvas.offsetWidth, h = canvas.offsetHeight;
+            if (!w || !h) return;
+            canvas.width  = w * dpr;
+            canvas.height = h * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            var c = colors(), pad = 4, ih = h - pad * 2;
+
+            ctx.strokeStyle = c.grid; ctx.lineWidth = 0.5;
+            for (var g = 1; g <= 3; g++) {
+                ctx.beginPath();
+                ctx.moveTo(0, pad + ih * g / 4);
+                ctx.lineTo(w, pad + ih * g / 4);
+                ctx.stroke();
+            }
+
+            var step = w / (data.length - 1);
+            function pt(i) { return { x: i * step, y: pad + ih * (1 - data[i] / 100) }; }
+
+            var grad = ctx.createLinearGradient(0, pad, 0, h);
+            grad.addColorStop(0, c.fill0); grad.addColorStop(1, c.fill1);
+            ctx.beginPath();
+            var p = pt(0); ctx.moveTo(p.x, h); ctx.lineTo(p.x, p.y);
+            for (var i = 1; i < data.length; i++) { p = pt(i); ctx.lineTo(p.x, p.y); }
+            ctx.lineTo(p.x, h); ctx.fillStyle = grad; ctx.fill();
+
+            ctx.beginPath(); ctx.strokeStyle = c.line; ctx.lineWidth = 1.5;
+            ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+            p = pt(0); ctx.moveTo(p.x, p.y);
+            for (var i = 1; i < data.length; i++) { p = pt(i); ctx.lineTo(p.x, p.y); }
+            ctx.stroke();
+
+            ctx.beginPath(); ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = c.line; ctx.fill();
+        }
+
+        function tick() {
+            // FPS (max 100 na escala do grafico = 60fps em display)
+            var fps = frameCount; frameCount = 0;
+            var fpsPct = Math.min(100, Math.round(fps / 60 * 100));
+            fpsData.push(fpsPct); if (fpsData.length > MAX) fpsData.shift();
+            var cpuVal = el('cpu-val');
+            if (cpuVal) cpuVal.textContent = fps + ' fps';
+            draw(cpuCanvas, cpuCtx, fpsData);
+
+            // Memory (JS heap, Chrome/Edge only)
+            var mem = performance.memory;
+            var memPct = mem ? Math.round(mem.usedJSHeapSize / mem.jsHeapSizeLimit * 100) : 0;
+            memData.push(memPct); if (memData.length > MAX) memData.shift();
+            var memVal = el('mem-val');
+            if (memVal) {
+                memVal.textContent = mem
+                    ? (mem.usedJSHeapSize / 1048576).toFixed(1) + ' MB  ' + memPct + '%'
+                    : 'n/a';
+            }
+            draw(memCanvas, memCtx, memData);
+        }
+
+        window.addEventListener('resize', function () {
+            draw(cpuCanvas, cpuCtx, fpsData);
+            draw(memCanvas, memCtx, memData);
+        });
+        setInterval(tick, 1000);
+        setTimeout(tick, 100);
+    })();
+
     // ── Origin ────────────────────────────────────────────────────
     el('i-protocol').textContent = location.protocol.replace(':', '');
     el('i-host').textContent     = location.hostname;

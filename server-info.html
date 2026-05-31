@@ -268,6 +268,62 @@
 
         .sec-item i { color: var(--green); font-size: 0.6rem; }
 
+        /* ── Charts row ─────────────────────────────────────────── */
+        .charts-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 560px) {
+            .charts-row { grid-template-columns: 1fr; }
+        }
+
+        .chart-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border);
+            border-radius: 0.85rem;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .chart-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chart-title {
+            font-family: var(--mono);
+            font-size: 0.67rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .chart-value {
+            font-family: var(--mono);
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--green);
+            text-align: right;
+        }
+
+        .chart-canvas {
+            display: block;
+            width: 100%;
+            height: 80px;
+        }
+
         /* ── Capabilities grid ─────────────────────────────────── */
         .cap-grid {
             display: grid;
@@ -348,6 +404,24 @@
             <h1>server<span class="accent">-info</span></h1>
             <p class="page-sub">josenilto.github.io &nbsp;·&nbsp; production &nbsp;·&nbsp; nginx / alpine</p>
         </header>
+
+        <!-- Real-time charts -->
+        <div class="charts-row">
+            <div class="chart-panel">
+                <div class="chart-head">
+                    <span class="chart-title"><i class="fas fa-film" aria-hidden="true"></i> fps · render</span>
+                    <span class="chart-value" id="cpu-val">— fps</span>
+                </div>
+                <canvas id="cpu-chart" class="chart-canvas" aria-hidden="true"></canvas>
+            </div>
+            <div class="chart-panel">
+                <div class="chart-head">
+                    <span class="chart-title"><i class="fas fa-memory" aria-hidden="true"></i> memory · js heap</span>
+                    <span class="chart-value" id="mem-val">—</span>
+                </div>
+                <canvas id="mem-chart" class="chart-canvas" aria-hidden="true"></canvas>
+            </div>
+        </div>
 
         <div class="grid">
 
