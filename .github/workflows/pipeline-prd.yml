@@ -142,9 +142,10 @@ jobs:
         run: |
           mkdir -p _site
 
-          cp index.html  _site/
-          cp 404.html    _site/
+          cp *.html      _site/
           cp -r assets/  _site/assets/
+          cp robots.txt  _site/
+          cp sitemap.xml _site/
 
           echo "📂 Estrutura de publicação:"
           find _site -maxdepth 2 -type f | sort
