@@ -174,7 +174,121 @@ jobs:
           echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
 
   # ══════════════════════════════════════════════════════════════
-  # JOB 3 — NOTIFICAÇÃO POR E-MAIL
+  # JOB 3 — HEALTH CHECK PÓS-DEPLOY
+  #   • Aguarda propagação do GitHub Pages (60s)
+  #   • Testa /health até 5 vezes com 20s de intervalo
+  #   • Falha → aciona auto-rollback no job seguinte
+  # ══════════════════════════════════════════════════════════════
+  health-check:
+    name: 🏥 Health Check Pós-Deploy
+    runs-on: ubuntu-latest
+    needs: deploy-prd
+    if: needs.deploy-prd.result == 'success'
+    timeout-minutes: 6
+    outputs:
+      healthy: ${{ steps.check.outputs.healthy }}
+
+    steps:
+      - name: ⏳ Aguardar propagação do GitHub Pages
+        run: |
+          echo "⏳ Aguardando 60s para o GitHub Pages propagar o deploy..."
+          sleep 60
+
+      - name: 🔍 Verificar endpoint /health
+        id: check
+        run: |
+          URL="https://josenilto.github.io/health"
+          HEALTHY=false
+          for i in 1 2 3 4 5; do
+            echo "🔄 Tentativa ${i}/5 → ${URL}"
+            STATUS=$(curl -sf --max-time 10 -o /dev/null -w "%{http_code}" "$URL" 2>/dev/null || echo "000")
+            echo "   HTTP ${STATUS}"
+            if [ "$STATUS" = "200" ]; then
+              HEALTHY=true
+              echo "✅ Health check OK na tentativa ${i}!"
+              break
+            fi
+            [ "$i" -lt 5 ] && echo "   ⏳ Aguardando 20s..." && sleep 20
+          done
+          echo "healthy=${HEALTHY}" >> "$GITHUB_OUTPUT"
+          if [ "$HEALTHY" = "false" ]; then
+            echo "❌ Health check falhou após 5 tentativas — acionando rollback"
+            exit 1
+          fi
+
+      - name: 📋 Resumo
+        if: always()
+        run: |
+          echo "## 🏥 Health Check Pós-Deploy" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.check.outputs.healthy }}" = "true" ]; then
+            echo "✅ **Endpoint /health respondeu HTTP 200**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Endpoint /health não respondeu — rollback acionado**" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "| URL verificada | \`https://josenilto.github.io/health\` |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 4 — AUTO-ROLLBACK
+  #   • Ativado apenas quando health-check falha
+  #   • Reverte o último commit do branch gh-pages
+  #   • Restaura o site para o estado anterior ao deploy
+  # ══════════════════════════════════════════════════════════════
+  auto-rollback:
+    name: 🔄 Auto-Rollback
+    runs-on: ubuntu-latest
+    needs: [deploy-prd, health-check]
+    if: always() && needs.health-check.result == 'failure'
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      rolled_back:  ${{ steps.rollback.outputs.rolled_back }}
+      previous_sha: ${{ steps.rollback.outputs.previous_sha }}
+
+    steps:
+      - name: 📥 Checkout branch gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 5
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔄 Reverter último deploy
+        id: rollback
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          echo "📋 Últimos deploys no gh-pages:"
+          git log --oneline -5
+
+          PREV_SHA=$(git log --format="%H" | sed -n '2p')
+          PREV_SHORT="${PREV_SHA:0:7}"
+          echo "🎯 Revertendo para commit anterior: ${PREV_SHORT}"
+
+          git revert --no-edit HEAD
+          git push origin gh-pages
+
+          echo "rolled_back=true"          >> "$GITHUB_OUTPUT"
+          echo "previous_sha=${PREV_SHORT}" >> "$GITHUB_OUTPUT"
+          echo "✅ Rollback concluído — site restaurado para ${PREV_SHORT}"
+
+      - name: 📋 Resumo do Rollback
+        if: always()
+        run: |
+          echo "## 🔄 Auto-Rollback Executado" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ **Health check falhou — site revertido automaticamente.**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📦 Commit revertido | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🔙 Restaurado para  | \`${{ steps.rollback.outputs.previous_sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🕐 Data/Hora        | $(TZ='America/Sao_Paulo' date '+%d/%m/%Y às %H:%M (BRT)') |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 5 — NOTIFICAÇÃO POR E-MAIL
   #   • Envia e-mail HTML com visual do portfólio
   #   • Roda sempre — notifica sucesso E falha
   #   • Requer secrets: MAIL_SERVER, MAIL_PORT, MAIL_USERNAME,
@@ -183,7 +297,7 @@ jobs:
   notify-email:
     name: 📧 Notificação por E-mail
     runs-on: ubuntu-latest
-    needs: [link-check, deploy-prd]
+    needs: [link-check, deploy-prd, health-check, auto-rollback]
     if: always()
     timeout-minutes: 5
 
@@ -196,17 +310,30 @@ jobs:
         run: |
           DEPLOY_RESULT="${{ needs.deploy-prd.result }}"
           LINK_RESULT="${{ needs.link-check.result }}"
+          HEALTH_RESULT="${{ needs.health-check.result }}"
+          ROLLBACK_RESULT="${{ needs.auto-rollback.result }}"
 
-          # ── Status geral (baseado no deploy) ──
-          if [ "$DEPLOY_RESULT" = "success" ]; then
+          # ── Status geral ──────────────────────────────────────
+          if [ "$ROLLBACK_RESULT" = "success" ]; then
+            STATUS_ICON="🔄"; STATUS_BG="#fff3e0"; STATUS_BORDER="#ff9800"
+            STATUS_TEXT="#e65100"; STATUS_LABEL="Rollback Automático Executado"
+            SUBJECT_EMOJI="🔄"
+          elif [ "$DEPLOY_RESULT" = "success" ] && [ "$HEALTH_RESULT" = "success" ]; then
             STATUS_ICON="✅"; STATUS_BG="#e8f5e9"; STATUS_BORDER="#4caf50"
             STATUS_TEXT="#1b5e20"; STATUS_LABEL="Deploy Concluído com Sucesso"
+            SUBJECT_EMOJI="✅"
+          elif [ "$HEALTH_RESULT" = "failure" ]; then
+            STATUS_ICON="⚠️"; STATUS_BG="#fff3e0"; STATUS_BORDER="#ff9800"
+            STATUS_TEXT="#e65100"; STATUS_LABEL="Health Check Falhou — Rollback em Progresso"
+            SUBJECT_EMOJI="⚠️"
           else
             STATUS_ICON="❌"; STATUS_BG="#ffebee"; STATUS_BORDER="#ef5350"
             STATUS_TEXT="#b71c1c"; STATUS_LABEL="Falha no Deploy — Ação Necessária"
+            SUBJECT_EMOJI="❌"
           fi
+          echo "subject_emoji=${SUBJECT_EMOJI}" >> "$GITHUB_OUTPUT"
 
-          # ── Badge do job: Verificação de Links ──
+          # ── Badge: Verificação de Links ───────────────────────
           case "$LINK_RESULT" in
             success)   JOB1_ICON="✅"; JOB1_LABEL="Sucesso";   JOB1_BORDER="#4caf50"; JOB1_BADGE_BG="#e8f5e9"; JOB1_BADGE_COLOR="#2e7d32" ;;
             failure)   JOB1_ICON="❌"; JOB1_LABEL="Falhou";    JOB1_BORDER="#ef5350"; JOB1_BADGE_BG="#ffebee"; JOB1_BADGE_COLOR="#c62828" ;;
@@ -215,13 +342,21 @@ jobs:
             *)         JOB1_ICON="⊘";  JOB1_LABEL="—";         JOB1_BORDER="#bdbdbd"; JOB1_BADGE_BG="#f5f5f5"; JOB1_BADGE_COLOR="#9e9e9e" ;;
           esac
 
-          # ── Badge do job: Deploy GitHub Pages ──
+          # ── Badge: Deploy GitHub Pages ────────────────────────
           case "$DEPLOY_RESULT" in
             success)   JOB2_ICON="✅"; JOB2_LABEL="Sucesso";   JOB2_BORDER="#4caf50"; JOB2_BADGE_BG="#e8f5e9"; JOB2_BADGE_COLOR="#2e7d32" ;;
             failure)   JOB2_ICON="❌"; JOB2_LABEL="Falhou";    JOB2_BORDER="#ef5350"; JOB2_BADGE_BG="#ffebee"; JOB2_BADGE_COLOR="#c62828" ;;
             skipped)   JOB2_ICON="⊘";  JOB2_LABEL="Pulado";    JOB2_BORDER="#bdbdbd"; JOB2_BADGE_BG="#f5f5f5"; JOB2_BADGE_COLOR="#757575" ;;
             cancelled) JOB2_ICON="⊘";  JOB2_LABEL="Cancelado"; JOB2_BORDER="#ff9800"; JOB2_BADGE_BG="#fff3e0"; JOB2_BADGE_COLOR="#e65100" ;;
             *)         JOB2_ICON="⊘";  JOB2_LABEL="—";         JOB2_BORDER="#bdbdbd"; JOB2_BADGE_BG="#f5f5f5"; JOB2_BADGE_COLOR="#9e9e9e" ;;
+          esac
+
+          # ── Badge: Health Check ───────────────────────────────
+          case "$HEALTH_RESULT" in
+            success)   JOB3_ICON="✅"; JOB3_LABEL="Saudável";  JOB3_BORDER="#4caf50"; JOB3_BADGE_BG="#e8f5e9"; JOB3_BADGE_COLOR="#2e7d32" ;;
+            failure)   JOB3_ICON="❌"; JOB3_LABEL="Falhou";    JOB3_BORDER="#ef5350"; JOB3_BADGE_BG="#ffebee"; JOB3_BADGE_COLOR="#c62828" ;;
+            skipped)   JOB3_ICON="⊘";  JOB3_LABEL="Pulado";    JOB3_BORDER="#bdbdbd"; JOB3_BADGE_BG="#f5f5f5"; JOB3_BADGE_COLOR="#757575" ;;
+            *)         JOB3_ICON="⊘";  JOB3_LABEL="—";         JOB3_BORDER="#bdbdbd"; JOB3_BADGE_BG="#f5f5f5"; JOB3_BADGE_COLOR="#9e9e9e" ;;
           esac
 
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
@@ -245,6 +380,11 @@ jobs:
             -e "s|{{JOB2_BORDER}}|${JOB2_BORDER}|g" \
             -e "s|{{JOB2_BADGE_BG}}|${JOB2_BADGE_BG}|g" \
             -e "s|{{JOB2_BADGE_COLOR}}|${JOB2_BADGE_COLOR}|g" \
+            -e "s|{{JOB3_ICON}}|${JOB3_ICON}|g" \
+            -e "s|{{JOB3_LABEL}}|${JOB3_LABEL}|g" \
+            -e "s|{{JOB3_BORDER}}|${JOB3_BORDER}|g" \
+            -e "s|{{JOB3_BADGE_BG}}|${JOB3_BADGE_BG}|g" \
+            -e "s|{{JOB3_BADGE_COLOR}}|${JOB3_BADGE_COLOR}|g" \
             -e "s|{{BRANCH}}|${{ github.ref_name }}|g" \
             -e "s|{{SHORT_SHA}}|${SHORT_SHA}|g" \
             -e "s|{{ACTOR}}|${{ github.actor }}|g" \
@@ -266,7 +406,7 @@ jobs:
           server_port: ${{ secrets.MAIL_PORT }}
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "${{ needs.deploy-prd.result == 'success' && '✅' || '❌' }} Deploy PRD · ${{ github.ref_name }} · #${{ github.run_number }}"
+          subject: "${{ steps.gen_html.outputs.subject_emoji }} Deploy PRD · ${{ github.ref_name }} · #${{ github.run_number }}"
           to: ${{ secrets.MAIL_TO }}
           from: "GitHub Actions Bot <${{ secrets.MAIL_USERNAME }}>"
           html_body: ${{ steps.gen_html.outputs.html_body }}
