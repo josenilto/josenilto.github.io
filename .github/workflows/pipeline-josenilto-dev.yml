@@ -275,23 +275,27 @@ jobs:
           name: dist-josenilto-dev
           path: dev/dist/
 
+      - name: 🔄 Buscar branch prd para arquivos do portfólio
+        run: git fetch origin prd
+
       # ── Monta estrutura de publicação ───────────────────────
       # _site-jdev/            → raiz de josenilto-dev.github.io
-      # _site-jdev/index.html  → portfólio estático (site principal)
-      # _site-jdev/assets/     → CSS, JS, imagens do portfólio
+      # _site-jdev/index.html  → portfólio estático (fonte: prd)
+      # _site-jdev/assets/     → CSS, JS, imagens (fonte: prd)
       # _site-jdev/app/        → React app compilada (modo dev)
       - name: 📁 Preparar pasta de publicação
         run: |
           mkdir -p _site-jdev/app
 
-          # ── Site estático (portfólio principal) ──
-          cp index.html       _site-jdev/
-          cp 404.html         _site-jdev/
-          cp health           _site-jdev/
-          cp -r assets/       _site-jdev/assets/
+          # ── Portfólio: sempre do branch prd ──
+          for f in index.html 404.html health robots.txt; do
+            git show origin/prd:"$f" > "_site-jdev/$f"
+          done
+          git checkout origin/prd -- assets
+          cp -r assets/ _site-jdev/assets/
 
           # ── React app compilada (subpasta /app/) ──
-          cp -r dev/dist/.    _site-jdev/app/
+          cp -r dev/dist/. _site-jdev/app/
 
           echo "📂 Estrutura de publicação DEV:"
           find _site-jdev -maxdepth 3 -type f | head -30
