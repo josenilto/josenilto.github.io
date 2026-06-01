@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO -->
+    <meta name="description" content="Josenilto Luis da Silva — SRE/DevOps Engineer with 13+ years in IT. Expert in Cloud (Azure, AWS, GCP), Linux, Infrastructure & Solutions Architecture.">
+    <meta name="keywords" content="SRE, DevOps, Cloud, Azure, AWS, GCP, Linux, Infrastructure, Solutions Architect, Josenilto Luis da Silva">
+    <meta name="author" content="Josenilto Luis da Silva">
+    <meta name="robots" content="index, follow">
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+    <link rel="canonical" href="https://josenilto.github.io/">
+
+    <!-- Open Graph (LinkedIn, Facebook, WhatsApp) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://josenilto.github.io/">
+    <meta property="og:title" content="Josenilto Luis da Silva | SRE/DevOps Engineer">
+    <meta property="og:description" content="Josenilto Luis da Silva — SRE/DevOps Engineer with 13+ years in IT. Expert in Cloud (Azure, AWS, GCP), Linux, Infrastructure & Solutions Architecture.">
+    <meta property="og:image" content="https://josenilto.github.io/assets/img/profile-josenilto.webp">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://josenilto.github.io/">
+    <meta name="twitter:title" content="Josenilto Luis da Silva | SRE/DevOps Engineer">
+    <meta name="twitter:description" content="Josenilto Luis da Silva — SRE/DevOps Engineer with 13+ years in IT. Expert in Cloud (Azure, AWS, GCP), Linux, Infrastructure & Solutions Architecture.">
+    <meta name="twitter:image" content="https://josenilto.github.io/assets/img/profile-josenilto.webp">
+
+    <link href="./assets/img/favicon.png" rel="shortcut icon" type="image/x-icon" />
+    <link href="./assets/img/favicon.png" rel="icon" type="image/png" />
+    <title>Josenilto Luis da Silva | SRE/DevOps Engineer</title>
+
+    <!-- Preconnect para reduzir latência de DNS/TLS antes do CSS ser lido -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    <!-- Google Fonts com font-display=swap — carregado via <link> (não @import) para não bloquear renderização -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link href="./assets/css/styles.css" rel="stylesheet" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Josenilto Luis da Silva",
+      "url": "https://josenilto.github.io/",
+      "image": "https://josenilto.github.io/assets/img/profile-josenilto.webp",
+      "jobTitle": "SRE / DevOps Engineer",
+      "description": "SRE/DevOps Engineer with 13+ years in IT. Expert in Cloud (Azure, AWS, GCP), Linux, Infrastructure & Solutions Architecture.",
+      "knowsAbout": [
+        "Site Reliability Engineering",
+        "DevOps",
+        "Cloud Computing",
+        "Microsoft Azure",
+        "Amazon Web Services",
+        "Google Cloud Platform",
+        "Kubernetes",
+        "Linux",
+        "Infrastructure as Code",
+        "Solutions Architecture",
+        "Microservices"
+      ],
+      "sameAs": [
+        "https://github.com/josenilto",
+        "https://www.linkedin.com/in/josenilto"
+      ]
+    }
+    </script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+</head>
+
+<body>
+    <script>(function(){try{var n=parseInt(localStorage.getItem('si_count')||'0')+1,now=new Date().toISOString(),td=now.slice(0,10),tc=localStorage.getItem('si_today_date')===td?parseInt(localStorage.getItem('si_today_count')||'0')+1:1;if(!localStorage.getItem('si_first'))localStorage.setItem('si_first',now);localStorage.setItem('si_count',n);localStorage.setItem('si_last',now);localStorage.setItem('si_today_date',td);localStorage.setItem('si_today_count',tc);}catch(e){}})();</script>
+
+    <header class="l-header" id="header">
+        <nav class="nav bd-container">
+
+            <a href="#career" class="nav__logo">
+                <i class="fab fa-github-alt nav__logo-icon"></i>
+                <span class="nav__logo-text"><span class="nav__logo-bracket">&lt;</span>JLS<span class="nav__logo-bracket">/&gt;</span></span>
+            </a>
+
+            <div class="nav__menu" id="nav-menu" aria-label="Menu principal">
+                <ul class="nav__list">
+                    <li class="nav__item"><a href="#career" class="nav__link active-link">Career</a></li>
+                    <li class="nav__item"><a href="#story" class="nav__link">Story</a></li>
+                    <li class="nav__item"><a href="#skills" class="nav__link">Skills</a></li>
+                    <li class="nav__item"><a href="#engagement" class="nav__link">Consulting</a></li>
+                    <li class="nav__item"><a href="#jbos" class="nav__link">Jobs</a></li>
+                    <li class="nav__item"><a href="#contact" class="nav__link">Contact</a></li>
+                    <li><span class="change-theme" id="theme-button" role="button" tabindex="0" aria-label="Alternar tema claro/escuro">
+                        <svg class="theme-icon theme-icon--moon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z"/></svg>
+                        <svg class="theme-icon theme-icon--sun" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l1.414-1.414 2.122 2.122-1.414 1.414zM16.24 6.344l1.414-1.414 2.122 2.122-1.414 1.414zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z"/></svg>
+                    </span></li>
+                </ul>
+            </div>
+            <div class="nav__toggle" id="nav-toggle" role="button" tabindex="0" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-menu">
+                <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+            </div>
+        </nav>
+    </header>
+
+    <main class="l-main">
+
+        <!--========== CAREER ==========-->
+        <section class="about career section bd-container" id="career">
+            <canvas id="career-particles" aria-hidden="true"></canvas>
+            <div class="home__container bd-container bd-grid">
+                <div class="home__data">
+
+                    <div class="home__greeting" data-aos="fade-right" data-aos-duration="600" data-aos-delay="200">
+                        <span class="home__greeting-text" id="greeting-text"></span>
+                        <span class="home__greeting-sep">·</span>
+                        <span class="home__greeting-date" id="greeting-date"></span>
+                        <span class="home__greeting-sep">·</span>
+                        <span class="home__greeting-clock" id="greeting-clock"></span>
+                    </div>
+
+                    <h1 class="home__title" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500">Hey I'm
+                    </h1>
+
+                    <div class="text" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="700">
+                        <span>Josenilto</span> Luis da Silva
+                    </div>
+
+                    <div class="home__subtitle" data-aos="fade-right" data-aos-duration="1500" data-aos-delay="900">I'm
+                        a
+                        <strong><span class="typewriter-text"></span><label for=""> );</label></strong>
+                    </div>
+
+                    <p data-aos="flip-down" data-aos-duration="1500" data-aos-delay="1500">
+                        Designing and automating infrastructure for over <strong>13 years</strong> — delivering reliability and scalability across Azure, AWS, and GCP, from bare-metal to Kubernetes.
+                    </p>
+
+                    <div>
+                        <a href="https://github.com/josenilto" class="button" target="_blank" rel="noopener noreferrer" aria-label="Perfil no GitHub (abre em nova aba)" data-aos="fade-right"
+                            data-aos-duration="1500" data-aos-delay="1300"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/in/josenilto" class="button" target="_blank" rel="noopener noreferrer" aria-label="Perfil no LinkedIn (abre em nova aba)" data-aos="fade-right"
+                            data-aos-duration="1000" data-aos-delay="1000"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="https://josenilto.github.io/docs/CV_Josenilto_L_da_Silva_2024_V.1.2.pdf" class="button"
+                            target="_blank" rel="noopener noreferrer" aria-label="Baixar currículo em PDF (abre em nova aba)" data-aos="fade-right" data-aos-duration="500" data-aos-delay="700"><i
+                                class="fa-solid fa-file-pdf" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <div class="container" data-aos="fade-left">
+                    <img class="home__img" src="./assets/img/profile-josenilto.webp" alt="Foto de Perfil do Josenilto"
+                        width="297" height="300"
+                        data-aos="zoom-left" data-aos-duration="3000">
+                </div>
+            </div>
+        </section>
+
+        <!--========== STORY ==========-->
+        <section class="about story section bd-container" id="story">
+            <canvas id="story-hex" aria-hidden="true"></canvas>
+            <span class="section-subtitle">Story</span>
+            <h2 class="section-title">Cloud Solutions Architect & DevOps Engineer</h2>
+            <p class="about__description" data-aos="flip-down" data-aos-duration="1500" data-aos-delay="900">
+                        Specialist in infrastructure, cloud-native platforms and solutions architecture &mdash; from on-premises data centers to multi-cloud environments.</p>
+            <div class="services__container  bd-grid">
+                <div class="about__data">
+                    <div class="story__stack" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="1000">
+                        <div class="story__tag-group">
+                            <span class="story__tag-label"><i class="fas fa-desktop"></i> OS &amp; Platforms</span>
+                            <div class="story__tags">
+                                <span class="story__tag">Linux</span>
+                                <span class="story__tag">Solaris</span>
+                                <span class="story__tag">Windows</span>
+                                <span class="story__tag">Cloud</span>
+                                <span class="story__tag">On-Premises</span>
+                            </div>
+                        </div>
+                        <div class="story__tag-group">
+                            <span class="story__tag-label"><i class="fas fa-cloud"></i> Cloud Providers</span>
+                            <div class="story__tags">
+                                <span class="story__tag">Azure</span>
+                                <span class="story__tag">AWS</span>
+                                <span class="story__tag">GCP</span>
+                                <span class="story__tag">OCI</span>
+                                <span class="story__tag">IBM Cloud</span>
+                            </div>
+                        </div>
+                        <div class="story__tag-group">
+                            <span class="story__tag-label"><i class="fas fa-drafting-compass"></i> Architecture</span>
+                            <div class="story__tags">
+                                <span class="story__tag">Microservices</span>
+                                <span class="story__tag">Solutions Architect</span>
+                            </div>
+                        </div>
+                        <div class="story__tag-group">
+                            <span class="story__tag-label"><i class="fas fa-certificate"></i> Certifications</span>
+                            <div class="story__tags">
+                                <span class="story__tag">SFPC&reg;</span>
+                                <span class="story__tag">DEPC&reg;</span>
+                                <span class="story__tag">LLL</span>
+                                <span class="story__tag">KIKF&trade;</span>
+                                <span class="story__tag">LGPDF&trade;</span>
+                                <span class="story__tag">ICSI</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="story__img-wrapper" data-aos="fade-right" data-aos-duration="800" data-aos-delay="700">
+                    <div class="story__img-frame">
+                        <img src="./assets/img/computador.webp" alt="DevOps infinity loop diagram" class="story__img"
+                            width="380" height="275" loading="lazy">
+                        <div class="story__img-badge">
+                            <span class="story__img-badge-years">13+</span>
+                            <span class="story__img-badge-label">years of<br>experience</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--========== SKILLS ==========-->
+        <section class="about skills section bd-container" id="skills">
+            <canvas id="skills-canvas" aria-hidden="true"></canvas>
+            <div class="home__container bd-container">
+                <span class="section-subtitle">Benefits</span>
+                <h2 class="section-title">Why work with me?</h2>
+
+                <div class="services__container  bd-grid">
+                    <div class="services__content">
+                        <span class="services__icon-wrapper">
+                            <i class="fas fa-sync-alt services__icon"></i>
+                        </span>
+                        <h3 class="services__title">Agile Methodologies</h3>
+                        <p class="services__description">I use agile methodologies to develop my projects in harmony, save resources, acquire agility and efficiency.</p>
+                    </div>
+
+                    <div class="services__content">
+                        <span class="services__icon-wrapper">
+                            <i class="fas fa-users services__icon"></i>
+                        </span>
+                        <h3 class="services__title">Soft Skills</h3>
+                        <p class="services__description">I am always developing my skills and competences related to human behavior to make the work environment a pleasant place.</p>
+                    </div>
+
+                    <div class="services__content">
+                        <span class="services__icon-wrapper">
+                            <i class="fas fa-language services__icon"></i>
+                        </span>
+                        <h3 class="services__title">Languages</h3>
+                        <p class="services__description">Actively developing English fluency and proficiency through an ongoing course. Mother tongue: Portuguese.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--========== ENGAGEMENT ==========-->
+        <section class="engagement section bd-container" id="engagement">
+            <canvas id="engagement-canvas" aria-hidden="true"></canvas>
+            <span class="section-subtitle">Consulting</span>
+            <h2 class="section-title">How We Can Work Together</h2>
+
+            <div class="engagement__container bd-grid">
+
+                <div class="engagement__card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                    <div class="engagement__icon-wrapper">
+                        <i class="fas fa-laptop engagement__icon"></i>
+                    </div>
+                    <h3 class="engagement__title">Virtual</h3>
+                    <p class="engagement__description">Remote SRE/DevOps consulting and infrastructure support — anywhere in the world, fully asynchronous or synchronous.</p>
+                    <a href="#contact" class="engagement__btn">Read More</a>
+                </div>
+
+                <div class="engagement__card engagement__card--featured" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+                    <div class="engagement__icon-wrapper">
+                        <i class="fas fa-user engagement__icon"></i>
+                    </div>
+                    <h3 class="engagement__title">Hybrid</h3>
+                    <p class="engagement__description">A blend of remote and on-site collaboration — ideal for projects requiring both flexibility and hands-on presence.</p>
+                    <a href="#contact" class="engagement__btn engagement__btn--dark">Read More</a>
+                </div>
+
+                <div class="engagement__card" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">
+                    <div class="engagement__icon-wrapper">
+                        <i class="fas fa-user-group engagement__icon"></i>
+                    </div>
+                    <h3 class="engagement__title">In Person</h3>
+                    <p class="engagement__description">On-site architecture sessions, workshops, and strategic planning — direct collaboration at your location.</p>
+                    <a href="#contact" class="engagement__btn">Read More</a>
+                </div>
+
+
+            </div>
+        </section>
+
+        <!--========== JBOS ==========-->
+        <section class="jbos section bd-container" id="jbos">
+            <canvas id="jbos-canvas" aria-hidden="true"></canvas>
+            <div class="bd-container">
+                <span class="section-subtitle">Open source repos &mdash; click to explore on GitHub</span>
+                <h2 class="section-title">Tutorials &amp; Projects</h2>
+
+                <div class="menu__container bd-grid">
+
+                    <div class="menu__content">
+                        <h4 class="menu__category"><i class="fas fa-chart-line"></i> Monitoring</h4>
+                        <div class="menu__tags">
+                            <a href="https://github.com/josenilto/dev.zabbix" target="_blank" rel="noopener noreferrer" class="menu__name">Zabbix</a>
+                            <a href="https://github.com/josenilto/dev.grafana" target="_blank" rel="noopener noreferrer" class="menu__name">Grafana</a>
+                            <a href="https://github.com/josenilto/dev.telegraf" target="_blank" rel="noopener noreferrer" class="menu__name">Telegraf</a>
+                            <a href="https://github.com/josenilto/dev.prometheus" target="_blank" rel="noopener noreferrer" class="menu__name">Prometheus</a>
+                        </div>
+                    </div>
+
+                    <div class="menu__content">
+                        <h4 class="menu__category"><i class="fas fa-server"></i> Web &amp; App Servers</h4>
+                        <div class="menu__tags">
+                            <a href="https://github.com/josenilto/dev.nginx" target="_blank" rel="noopener noreferrer" class="menu__name">Nginx</a>
+                            <a href="https://github.com/josenilto/dev.jboss" target="_blank" rel="noopener noreferrer" class="menu__name">JBoss</a>
+                            <a href="https://github.com/josenilto/dev.apache" target="_blank" rel="noopener noreferrer" class="menu__name">Apache</a>
+                            <a href="https://github.com/josenilto/dev.httpd" target="_blank" rel="noopener noreferrer" class="menu__name">Httpd</a>
+                            <a href="https://github.com/josenilto/dev.webmin" target="_blank" rel="noopener noreferrer" class="menu__name">Webmin</a>
+                        </div>
+                    </div>
+
+                    <div class="menu__content">
+                        <h4 class="menu__category"><i class="fas fa-database"></i> Databases</h4>
+                        <div class="menu__tags">
+                            <a href="https://github.com/josenilto/dev.mysql" target="_blank" rel="noopener noreferrer" class="menu__name">MySQL</a>
+                            <a href="https://github.com/josenilto/dev.influxdb" target="_blank" rel="noopener noreferrer" class="menu__name">InfluxDB</a>
+                            <a href="https://github.com/josenilto/dev.mongodb" target="_blank" rel="noopener noreferrer" class="menu__name">MongoDB</a>
+                            <a href="https://github.com/josenilto/dev.mysql" target="_blank" rel="noopener noreferrer" class="menu__name">SQL Server</a>
+                            <a href="https://github.com/josenilto/dev.postgres" target="_blank" rel="noopener noreferrer" class="menu__name">PostgreSQL</a>
+                        </div>
+                    </div>
+
+                    <div class="menu__content">
+                        <h4 class="menu__category"><i class="fas fa-shield-alt"></i> Network &amp; Security</h4>
+                        <div class="menu__tags">
+                            <a href="#" class="menu__name">SSH</a>
+                            <a href="#" class="menu__name">DNS</a>
+                            <a href="#" class="menu__name">LDAP</a>
+                            <a href="https://github.com/josenilto/dev.proxysquid" target="_blank" rel="noopener noreferrer" class="menu__name">Squid</a>
+                            <a href="https://github.com/josenilto/dev.firewall" target="_blank" rel="noopener noreferrer" class="menu__name">Firewall</a>
+                        </div>
+                    </div>
+
+                    <div class="menu__content">
+                        <h4 class="menu__category"><i class="fas fa-scale-balanced"></i> Load Balance &amp; Proxy</h4>
+                        <div class="menu__tags">
+                            <a href="https://github.com/josenilto/dev.haproxy" target="_blank" rel="noopener noreferrer" class="menu__name">HAProxy</a>
+                            <a href="https://github.com/josenilto/dev.pfsense" target="_blank" rel="noopener noreferrer" class="menu__name">pfSense</a>
+                        </div>
+                    </div>
+
+                    <div class="menu__content">
+                        <h4 class="menu__category"><i class="fas fa-code-branch"></i> DevOps &amp; IaC</h4>
+                        <div class="menu__tags">
+                            <a href="https://github.com/josenilto/dev.docker" target="_blank" rel="noopener noreferrer" class="menu__name">Docker</a>
+                            <a href="https://github.com/josenilto/dev.ansible" target="_blank" rel="noopener noreferrer" class="menu__name">Ansible</a>
+                            <a href="https://github.com/josenilto/dev.jenkins" target="_blank" rel="noopener noreferrer" class="menu__name">Jenkins</a>
+                            <a href="https://github.com/josenilto/dev.vagrant" target="_blank" rel="noopener noreferrer" class="menu__name">Vagrant</a>
+                            <a href="https://github.com/josenilto/dev.terraform" target="_blank" rel="noopener noreferrer" class="menu__name">Terraform</a>
+                            <a href="https://github.com/josenilto/dev.kubernetes" target="_blank" rel="noopener noreferrer" class="menu__name">Kubernetes</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!--========== CONTACT ==========-->
+        <section class="contact section bd-container" id="contact">
+            <canvas id="contact-matrix" aria-hidden="true"></canvas>
+            <div class="bd-container contact__wrapper">
+                <div class="contact__data">
+                    <span class="section-subtitle">let's connect</span>
+                    <h2 class="section-title">Get in Touch</h2>
+                    <p class="contact__description">Have a cloud or infrastructure challenge? I'm open to SRE/DevOps consulting, freelance projects, and full-time opportunities. Pick a channel and let's talk.</p>
+                </div>
+
+                <div class="contact__cards">
+                    <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade."
+                        target="_blank" rel="noopener noreferrer" class="contact__card contact__card--whatsapp">
+                        <i class="fab fa-whatsapp contact__card-icon"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/josenilto"
+                        target="_blank" rel="noopener noreferrer" class="contact__card contact__card--linkedin">
+                        <i class="fab fa-linkedin-in contact__card-icon"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="https://github.com/josenilto"
+                        target="_blank" rel="noopener noreferrer" class="contact__card contact__card--github">
+                        <i class="fab fa-github contact__card-icon"></i>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!--========== SCROLL TOP ==========-->
+    <a href="#career" class="scrolltop" id="scroll-top" aria-label="Voltar ao topo">
+        <svg class="scrolltop__icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m6.293 13.293 1.414 1.414L12 10.414l4.293 4.293 1.414-1.414L12 7.586z"/></svg>
+    </a>
+
+    <!--========== FOOTER ==========-->
+    <footer class="footer">
+        <div class="footer__inner bd-container">
+
+            <div class="footer__container bd-grid">
+
+                <!-- Brand -->
+                <div class="footer__content footer__content--brand">
+                    <span class="footer__logo">Josenilto L da Silva</span>
+                    <span class="footer__description">Cloud Solutions Architect &amp; DevOps Engineer</span>
+                    <p class="footer__brand-text">13+ years designing and automating resilient infrastructure across Azure, AWS and GCP — from bare-metal to Kubernetes.</p>
+                    <div class="footer__available">
+                        <span class="footer__available-dot"></span>
+                        Available for consulting &amp; freelance
+                    </div>
+                    <div class="footer__stack">
+                        <span>Azure</span><span>AWS</span><span>GCP</span><span>Kubernetes</span><span>Terraform</span>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="footer__content">
+                    <span class="footer__logo">Navigation</span>
+                    <ul class="footer__nav">
+                        <li><a href="#career" class="footer__link"><i class="fas fa-chevron-right"></i> Career</a></li>
+                        <li><a href="#story" class="footer__link"><i class="fas fa-chevron-right"></i> Story</a></li>
+                        <li><a href="#skills" class="footer__link"><i class="fas fa-chevron-right"></i> Skills</a></li>
+                        <li><a href="#engagement" class="footer__link"><i class="fas fa-chevron-right"></i> Consulting</a></li>
+                        <li><a href="#jbos" class="footer__link"><i class="fas fa-chevron-right"></i> Jobs</a></li>
+                        <li><a href="#contact" class="footer__link"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="footer__content">
+                    <span class="footer__logo">Get in Touch</span>
+                    <ul class="footer__info">
+                        <li><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, Brazil</li>
+                        <li><i class="fas fa-globe"></i> Open to remote worldwide</li>
+                    </ul>
+                    <div class="footer__socials">
+                        <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade."
+                            target="_blank" rel="noopener noreferrer" class="footer__social footer__social--whatsapp" title="WhatsApp" aria-label="Contato pelo WhatsApp (abre em nova aba)">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--linkedin" title="LinkedIn" aria-label="Perfil no LinkedIn (abre em nova aba)">
+                            <i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                        <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--github" title="GitHub" aria-label="Perfil no GitHub (abre em nova aba)">
+                            <i class="fab fa-github-alt" aria-hidden="true"></i></a>
+                        <a href="https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--youtube" title="YouTube" aria-label="Canal no YouTube (abre em nova aba)">
+                            <i class="fab fa-youtube" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--instagram" title="Instagram" aria-label="Perfil no Instagram (abre em nova aba)">
+                            <i class="fab fa-instagram" aria-hidden="true"></i></a>
+                        <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--telegram" title="Telegram" aria-label="Contato pelo Telegram (abre em nova aba)">
+                            <i class="fab fa-telegram-plane" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copy">&#169; 2026 Josenilto L da Silva. All rights reserved.</p>
+                <p class="footer__copy footer__copy--right">Crafted with <i class="fas fa-heart footer__heart"></i> passion &amp; powered by <i class="fas fa-terminal footer__terminal"></i> terminal</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <script src="./assets/js/scrollreveal.js"></script>
+    <script src="./assets/js/main.js"></script>
+
+
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/canvas-animations.js" defer></script>
+
+</body>
+
+</html>
