@@ -1,43 +1,317 @@
-commit acf38fdf53075432d79bfcf7243e34bf5cd582e2
-Author: Josenilto Luis <josenilto@outlook.com>
-Date:   Sun May 31 22:09:33 2026 -0300
+# ══════════════════════════════════════════════════════════════════
+#  Pipeline HMG — Testes & Deploy para josenilto-hmg.github.io
+#  Dispara em: push/PR para hmg  |  manual (dispatch)
+#
+#  PRÉ-REQUISITOS (uma só vez, manual no GitHub):
+#    1. Criar repositório: josenilto-hmg/josenilto-hmg.github.io (público)
+#    2. Ativar GitHub Pages no novo repo:
+#         Settings → Pages → Source → "Deploy from a branch"
+#         Branch: gh-pages  |  Folder: / (root)
+#    3. Criar PAT com permissão de escrita no repo destino
+#    4. Adicionar secret neste repo:
+#         Settings → Secrets → Actions → HMG_DEPLOY_TOKEN = <PAT>
+#
+#  URL de resultado: https://josenilto-hmg.github.io
+# ══════════════════════════════════════════════════════════════════
+name: 🧪 Pipeline HMG — Testes & Deploy
 
-    fix: pipelines hmg/dev buscam portfolio do prd via git show
-    
-    - HMG: fetch-depth:0 + git show origin/prd para todos os artefatos
-    - DEV: git fetch origin prd + git show para index.html/404/health/assets
-    - Resolve 404 em josenilto.github.io/dev e /hmg
-    
-    Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+on:
+  push:
+    branches: ["hmg"]
+  pull_request:
+    branches: ["hmg"]
+  workflow_dispatch:
+    inputs:
+      skip_link_check:
+        description: "Pular verificação de links? (true/false)"
+        required: false
+        default: "false"
 
-diff --git a/.github/workflows/pipeline-hmg.yml b/.github/workflows/pipeline-hmg.yml
-index 61e8d92..0247497 100644
---- a/.github/workflows/pipeline-hmg.yml
-+++ b/.github/workflows/pipeline-hmg.yml
-@@ -133,15 +133,22 @@ jobs:
-     steps:
-       - name: 📥 Checkout
-         uses: actions/checkout@v4
-+        with:
-+          fetch-depth: 0
- 
-       - name: 📁 Preparar pasta de publicação HMG
-         run: |
-           mkdir -p _site-hmg
--          cp *.html     _site-hmg/
-+
-+          # Arquivos do portfólio sempre do branch prd (fonte da verdade)
-+          for f in index.html 404.html server-info.html robots.txt sitemap.xml health; do
-+            git show origin/prd:"$f" > "_site-hmg/$f" 2>/dev/null \
-+              || { [ -f "$f" ] && cp "$f" "_site-hmg/$f"; } \
-+              || echo "⚠️  $f não encontrado"
-+          done
-+          git checkout origin/prd -- assets
-           cp -r assets/ _site-hmg/assets/
--          cp robots.txt _site-hmg/
--          cp sitemap.xml _site-hmg/
--          cp health     _site-hmg/
-+
-           echo "📂 Estrutura HMG:"
-           find _site-hmg -maxdepth 2 -type f | sort
- 
+concurrency:
+  group: pipeline-hmg-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SITE_URL: "https://josenilto.github.io/hmg"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+# ══════════════════════════════════════════════════════════════════
+# JOB 1 — VERIFICAÇÃO DE LINKS
+# ══════════════════════════════════════════════════════════════════
+jobs:
+  link-check:
+    name: 🔗 Verificação de Links
+    runs-on: ubuntu-latest
+    if: github.event.inputs.skip_link_check != 'true'
+    timeout-minutes: 10
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: 📦 Instalar linkinator
+        run: npm install -g linkinator
+
+      - name: 🔗 Links locais
+        id: local
+        run: |
+          linkinator ./index.html \
+            --skip "^https?://" \
+            --timeout 10000 \
+            --verbosity error \
+            --format json \
+            --output link-local.json 2>/dev/null || true
+
+          node -e "
+            const fs = require('fs');
+            try {
+              const data = fs.readFileSync('./link-local.json', 'utf8');
+              const lines = data.trim().split('\n').filter(Boolean);
+              const broken = [];
+              lines.forEach(line => {
+                try {
+                  const obj = JSON.parse(line);
+                  if (obj.links) obj.links.forEach(l => { if (l.state === 'BROKEN') broken.push(l); });
+                  else if (obj.state === 'BROKEN') broken.push(obj);
+                } catch(e) {}
+              });
+              if (broken.length > 0) {
+                console.error('❌ Links locais quebrados:');
+                broken.forEach(l => console.error('  •', l.url || l.href, '-', l.status || l.statusCode));
+                process.exit(1);
+              }
+              console.log('✅ Todos os links locais estão OK!');
+            } catch(e) {
+              console.log('⚠️  Relatório não gerado, pulando verificação.');
+            }
+          "
+
+      - name: 🌐 Links externos (aviso)
+        run: |
+          linkinator ./index.html \
+            --recurse \
+            --skip "api\.whatsapp\.com|josenilto\.slack\.com|web\.telegram\.org|unpkg\.com|cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com" \
+            --timeout 15000 \
+            --retry-errors \
+            --verbosity error \
+            || echo "⚠️ Alguns links externos podem estar temporariamente indisponíveis"
+        continue-on-error: true
+
+      - name: 📄 Resumo de links
+        if: always()
+        run: |
+          echo "## 🔗 Verificação de Links — HMG" >> $GITHUB_STEP_SUMMARY
+          echo "| Verificação | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Links locais  | ${{ steps.local.outcome == 'success' && '✅ OK' || '❌ Falhou' }} |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 2 — DEPLOY PARA josenilto-hmg.github.io
+  # ══════════════════════════════════════════════════════════════
+  deploy-hmg:
+    name: 🌐 Deploy → josenilto-hmg.github.io
+    runs-on: ubuntu-latest
+    needs: link-check
+    if: |
+      always() &&
+      (needs.link-check.result == 'success' || needs.link-check.result == 'skipped') &&
+      (github.ref == 'refs/heads/hmg' || github.event_name == 'workflow_dispatch')
+    timeout-minutes: 10
+
+    environment:
+      name: hmg
+      url: ${{ env.SITE_URL }}
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📁 Preparar pasta de publicação HMG
+        run: |
+          mkdir -p _site-hmg
+
+          # Arquivos do portfólio sempre do branch prd (fonte da verdade)
+          for f in index.html 404.html server-info.html robots.txt sitemap.xml health; do
+            git show origin/prd:"$f" > "_site-hmg/$f" 2>/dev/null \
+              || { [ -f "$f" ] && cp "$f" "_site-hmg/$f"; } \
+              || echo "⚠️  $f não encontrado"
+          done
+          git checkout origin/prd -- assets
+          cp -r assets/ _site-hmg/assets/
+
+          echo "📂 Estrutura HMG:"
+          find _site-hmg -maxdepth 2 -type f | sort
+
+      - name: 🚀 Deploy → /hmg (gh-pages · mesmo repo)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token:    ${{ secrets.GITHUB_TOKEN }}
+          publish_dir:     ./_site-hmg
+          destination_dir: hmg
+          keep_files:      true
+          enable_jekyll:   false
+          commit_message:  "deploy(hmg): ${{ github.sha }} by @${{ github.actor }}"
+          user_name:  "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+
+      - name: 📋 Resumo do Deploy HMG
+        if: always()
+        run: |
+          echo "## 🧪 Deploy HMG" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌐 URL | [${{ env.SITE_URL }}](${{ env.SITE_URL }}) |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📦 Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🌿 Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 👤 Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 3 — HEALTH CHECK PÓS-DEPLOY (HMG)
+  # ══════════════════════════════════════════════════════════════
+  health-check:
+    name: 🏥 Health Check Pós-Deploy
+    runs-on: ubuntu-latest
+    needs: deploy-hmg
+    if: needs.deploy-hmg.result == 'success'
+    timeout-minutes: 6
+
+    steps:
+      - name: ⏳ Aguardar propagação do GitHub Pages
+        run: sleep 60
+
+      - name: 🔍 Verificar endpoint /health
+        id: check
+        run: |
+          URL="${{ env.SITE_URL }}/health"
+          for i in 1 2 3 4 5; do
+            echo "🔄 Tentativa ${i}/5 → ${URL}"
+            STATUS=$(curl -sf --max-time 10 -o /dev/null -w "%{http_code}" "$URL" 2>/dev/null || echo "000")
+            echo "   HTTP ${STATUS}"
+            if [ "$STATUS" = "200" ]; then echo "✅ OK!"; exit 0; fi
+            [ "$i" -lt 5 ] && sleep 20
+          done
+          echo "❌ Health check falhou"; exit 1
+
+      - name: 📋 Resumo
+        if: always()
+        run: |
+          echo "## 🏥 Health Check — HMG" >> $GITHUB_STEP_SUMMARY
+          echo "| URL | \`${{ env.SITE_URL }}/health\` |" >> $GITHUB_STEP_SUMMARY
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 4 — NOTIFICAÇÃO POR E-MAIL (HMG)
+  # ══════════════════════════════════════════════════════════════
+  notify-email:
+    name: 📧 Notificação por E-mail
+    runs-on: ubuntu-latest
+    needs: [link-check, deploy-hmg, health-check]
+    if: always()
+    timeout-minutes: 5
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🎨 Gerar template HTML
+        id: gen_html
+        run: |
+          DEPLOY_RESULT="${{ needs.deploy-hmg.result }}"
+          LINK_RESULT="${{ needs.link-check.result }}"
+          HEALTH_RESULT="${{ needs.health-check.result }}"
+
+          if [ "$DEPLOY_RESULT" = "success" ] && [ "$HEALTH_RESULT" = "success" ]; then
+            STATUS_ICON="✅"; STATUS_BG="#e8f5e9"; STATUS_BORDER="#4caf50"
+            STATUS_TEXT="#1b5e20"; STATUS_LABEL="Deploy HMG Concluído com Sucesso"; SUBJECT_EMOJI="✅"
+          elif [ "$HEALTH_RESULT" = "failure" ]; then
+            STATUS_ICON="⚠️"; STATUS_BG="#fff3e0"; STATUS_BORDER="#ff9800"
+            STATUS_TEXT="#e65100"; STATUS_LABEL="Health Check Falhou — Verificar HMG"; SUBJECT_EMOJI="⚠️"
+          else
+            STATUS_ICON="❌"; STATUS_BG="#ffebee"; STATUS_BORDER="#ef5350"
+            STATUS_TEXT="#b71c1c"; STATUS_LABEL="Falha no Deploy HMG"; SUBJECT_EMOJI="❌"
+          fi
+          echo "subject_emoji=${SUBJECT_EMOJI}" >> "$GITHUB_OUTPUT"
+
+          case "$LINK_RESULT" in
+            success)   JOB1_ICON="✅"; JOB1_LABEL="Sucesso";   JOB1_BORDER="#4caf50"; JOB1_BADGE_BG="#e8f5e9"; JOB1_BADGE_COLOR="#2e7d32" ;;
+            failure)   JOB1_ICON="❌"; JOB1_LABEL="Falhou";    JOB1_BORDER="#ef5350"; JOB1_BADGE_BG="#ffebee"; JOB1_BADGE_COLOR="#c62828" ;;
+            skipped)   JOB1_ICON="⊘";  JOB1_LABEL="Pulado";    JOB1_BORDER="#bdbdbd"; JOB1_BADGE_BG="#f5f5f5"; JOB1_BADGE_COLOR="#757575" ;;
+            *)         JOB1_ICON="⊘";  JOB1_LABEL="—";         JOB1_BORDER="#bdbdbd"; JOB1_BADGE_BG="#f5f5f5"; JOB1_BADGE_COLOR="#9e9e9e" ;;
+          esac
+          case "$DEPLOY_RESULT" in
+            success)   JOB2_ICON="✅"; JOB2_LABEL="Sucesso";   JOB2_BORDER="#4caf50"; JOB2_BADGE_BG="#e8f5e9"; JOB2_BADGE_COLOR="#2e7d32" ;;
+            failure)   JOB2_ICON="❌"; JOB2_LABEL="Falhou";    JOB2_BORDER="#ef5350"; JOB2_BADGE_BG="#ffebee"; JOB2_BADGE_COLOR="#c62828" ;;
+            skipped)   JOB2_ICON="⊘";  JOB2_LABEL="Pulado";    JOB2_BORDER="#bdbdbd"; JOB2_BADGE_BG="#f5f5f5"; JOB2_BADGE_COLOR="#757575" ;;
+            *)         JOB2_ICON="⊘";  JOB2_LABEL="—";         JOB2_BORDER="#bdbdbd"; JOB2_BADGE_BG="#f5f5f5"; JOB2_BADGE_COLOR="#9e9e9e" ;;
+          esac
+          case "$HEALTH_RESULT" in
+            success)   JOB3_ICON="✅"; JOB3_LABEL="Saudável";  JOB3_BORDER="#4caf50"; JOB3_BADGE_BG="#e8f5e9"; JOB3_BADGE_COLOR="#2e7d32" ;;
+            failure)   JOB3_ICON="❌"; JOB3_LABEL="Falhou";    JOB3_BORDER="#ef5350"; JOB3_BADGE_BG="#ffebee"; JOB3_BADGE_COLOR="#c62828" ;;
+            skipped)   JOB3_ICON="⊘";  JOB3_LABEL="Pulado";    JOB3_BORDER="#bdbdbd"; JOB3_BADGE_BG="#f5f5f5"; JOB3_BADGE_COLOR="#757575" ;;
+            *)         JOB3_ICON="⊘";  JOB3_LABEL="—";         JOB3_BORDER="#bdbdbd"; JOB3_BADGE_BG="#f5f5f5"; JOB3_BADGE_COLOR="#9e9e9e" ;;
+          esac
+
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          TIMESTAMP=$(TZ='America/Sao_Paulo' date '+%d/%m/%Y às %H:%M (BRT)')
+          WORKFLOW_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          sed \
+            -e "s|{{PIPELINE_TITLE}}|Pipeline HMG|g" \
+            -e "s|{{ENV_LABEL}}|josenilto.github.io/hmg · HMG|g" \
+            -e "s|{{ENV_URL}}|${{ env.SITE_URL }}|g" \
+            -e "s|{{ENV_BTN_LABEL}}|Ver Site HMG|g" \
+            -e "s|{{JOB1_NAME}}|🔗\&nbsp; Verificação de Links|g" \
+            -e "s|{{JOB2_NAME}}|🚀\&nbsp; Deploy HMG|g" \
+            -e "s|{{JOB3_NAME}}|🏥\&nbsp; Health Check Pós-Deploy|g" \
+            -e "s|{{STATUS_ICON}}|${STATUS_ICON}|g" \
+            -e "s|{{STATUS_BG}}|${STATUS_BG}|g" \
+            -e "s|{{STATUS_BORDER}}|${STATUS_BORDER}|g" \
+            -e "s|{{STATUS_TEXT}}|${STATUS_TEXT}|g" \
+            -e "s|{{STATUS_LABEL}}|${STATUS_LABEL}|g" \
+            -e "s|{{JOB1_ICON}}|${JOB1_ICON}|g" \
+            -e "s|{{JOB1_LABEL}}|${JOB1_LABEL}|g" \
+            -e "s|{{JOB1_BORDER}}|${JOB1_BORDER}|g" \
+            -e "s|{{JOB1_BADGE_BG}}|${JOB1_BADGE_BG}|g" \
+            -e "s|{{JOB1_BADGE_COLOR}}|${JOB1_BADGE_COLOR}|g" \
+            -e "s|{{JOB2_ICON}}|${JOB2_ICON}|g" \
+            -e "s|{{JOB2_LABEL}}|${JOB2_LABEL}|g" \
+            -e "s|{{JOB2_BORDER}}|${JOB2_BORDER}|g" \
+            -e "s|{{JOB2_BADGE_BG}}|${JOB2_BADGE_BG}|g" \
+            -e "s|{{JOB2_BADGE_COLOR}}|${JOB2_BADGE_COLOR}|g" \
+            -e "s|{{JOB3_ICON}}|${JOB3_ICON}|g" \
+            -e "s|{{JOB3_LABEL}}|${JOB3_LABEL}|g" \
+            -e "s|{{JOB3_BORDER}}|${JOB3_BORDER}|g" \
+            -e "s|{{JOB3_BADGE_BG}}|${JOB3_BADGE_BG}|g" \
+            -e "s|{{JOB3_BADGE_COLOR}}|${JOB3_BADGE_COLOR}|g" \
+            -e "s|{{BRANCH}}|${{ github.ref_name }}|g" \
+            -e "s|{{SHORT_SHA}}|${SHORT_SHA}|g" \
+            -e "s|{{ACTOR}}|${{ github.actor }}|g" \
+            -e "s|{{TIMESTAMP}}|${TIMESTAMP}|g" \
+            -e "s|{{WORKFLOW_RUN}}|#${{ github.run_number }}|g" \
+            -e "s|{{WORKFLOW_URL}}|${WORKFLOW_URL}|g" \
+            .github/email-templates/deploy-notification.html > /tmp/email-body.html
+
+          { echo 'html_body<<EMAILEOF'; cat /tmp/email-body.html; echo 'EMAILEOF'; } >> "$GITHUB_OUTPUT"
+
+      - name: 📬 Enviar e-mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "${{ steps.gen_html.outputs.subject_emoji }} Deploy HMG · ${{ github.ref_name }} · #${{ github.run_number }}"
+          to: ${{ secrets.MAIL_TO }}
+          from: "GitHub Actions Bot <${{ secrets.MAIL_USERNAME }}>"
+          html_body: ${{ steps.gen_html.outputs.html_body }}
+          convert_markdown: false
