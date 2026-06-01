@@ -1,0 +1,43 @@
+commit acf38fdf53075432d79bfcf7243e34bf5cd582e2
+Author: Josenilto Luis <josenilto@outlook.com>
+Date:   Sun May 31 22:09:33 2026 -0300
+
+    fix: pipelines hmg/dev buscam portfolio do prd via git show
+    
+    - HMG: fetch-depth:0 + git show origin/prd para todos os artefatos
+    - DEV: git fetch origin prd + git show para index.html/404/health/assets
+    - Resolve 404 em josenilto.github.io/dev e /hmg
+    
+    Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+
+diff --git a/.github/workflows/pipeline-hmg.yml b/.github/workflows/pipeline-hmg.yml
+index 61e8d92..0247497 100644
+--- a/.github/workflows/pipeline-hmg.yml
++++ b/.github/workflows/pipeline-hmg.yml
+@@ -133,15 +133,22 @@ jobs:
+     steps:
+       - name: 📥 Checkout
+         uses: actions/checkout@v4
++        with:
++          fetch-depth: 0
+ 
+       - name: 📁 Preparar pasta de publicação HMG
+         run: |
+           mkdir -p _site-hmg
+-          cp *.html     _site-hmg/
++
++          # Arquivos do portfólio sempre do branch prd (fonte da verdade)
++          for f in index.html 404.html server-info.html robots.txt sitemap.xml health; do
++            git show origin/prd:"$f" > "_site-hmg/$f" 2>/dev/null \
++              || { [ -f "$f" ] && cp "$f" "_site-hmg/$f"; } \
++              || echo "⚠️  $f não encontrado"
++          done
++          git checkout origin/prd -- assets
+           cp -r assets/ _site-hmg/assets/
+-          cp robots.txt _site-hmg/
+-          cp sitemap.xml _site-hmg/
+-          cp health     _site-hmg/
++
+           echo "📂 Estrutura HMG:"
+           find _site-hmg -maxdepth 2 -type f | sort
+ 
