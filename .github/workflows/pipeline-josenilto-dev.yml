@@ -66,7 +66,7 @@ jobs:
           cache-dependency-path: dev/package-lock.json
 
       - name: 📦 Instalar dependências
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: 🔒 Auditoria de segurança (moderate+ — aviso em DEV)
         run: npm audit --audit-level=moderate
@@ -118,7 +118,7 @@ jobs:
           cache-dependency-path: dev/package-lock.json
 
       - name: 📦 Instalar dependências
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: 🧹 Lint (ESLint)
         run: npm run lint
