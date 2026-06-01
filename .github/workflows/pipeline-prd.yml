@@ -365,6 +365,13 @@ jobs:
           RUN_NUM="#${{ github.run_number }}"
 
           sed \
+            -e "s|{{PIPELINE_TITLE}}|Pipeline PRD|g" \
+            -e "s|{{ENV_LABEL}}|josenilto.github.io · PRD|g" \
+            -e "s|{{ENV_URL}}|https://josenilto.github.io|g" \
+            -e "s|{{ENV_BTN_LABEL}}|Ver Site em Produção|g" \
+            -e "s|{{JOB1_NAME}}|🔗\&nbsp; Verificação de Links|g" \
+            -e "s|{{JOB2_NAME}}|🚀\&nbsp; Deploy GitHub Pages|g" \
+            -e "s|{{JOB3_NAME}}|🏥\&nbsp; Health Check Pós-Deploy|g" \
             -e "s|{{STATUS_ICON}}|${STATUS_ICON}|g" \
             -e "s|{{STATUS_BG}}|${STATUS_BG}|g" \
             -e "s|{{STATUS_BORDER}}|${STATUS_BORDER}|g" \
