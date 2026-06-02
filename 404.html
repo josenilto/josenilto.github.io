@@ -436,16 +436,6 @@
 
     </div>
 
-    <script>
-      (function () {
-        var p = window.location.pathname;
-        var btn = document.querySelector('a.btn');
-        if (!btn) return;
-        if (p.indexOf('/hmg') === 0)      btn.href = '/hmg/';
-        else if (p.indexOf('/dev') === 0) btn.href = '/dev/';
-        // else stays '/' for PRD
-      })();
-    </script>
     <script src="./assets/js/404-canvas.js" defer></script>
 
 </body>

@@ -398,9 +398,9 @@ function resizeCanvasToSection(canvas, sectionId) {
     draw();
 })();
 
-// jbos-canvas: floating CLI commands
+// jobs-canvas: floating CLI commands
 (function () {
-    const canvas = document.getElementById('jbos-canvas');
+    const canvas = document.getElementById('jobs-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
@@ -425,7 +425,7 @@ function resizeCanvasToSection(canvas, sectionId) {
     let items = [];
 
     function resize() {
-        resizeCanvasToSection(canvas, 'jbos');
+        resizeCanvasToSection(canvas, 'jobs');
         init();
     }
 

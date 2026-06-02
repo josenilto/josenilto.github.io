@@ -79,8 +79,6 @@
 </head>
 
 <body>
-    <script>(function(){try{var n=parseInt(localStorage.getItem('si_count')||'0')+1,now=new Date().toISOString(),td=now.slice(0,10),tc=localStorage.getItem('si_today_date')===td?parseInt(localStorage.getItem('si_today_count')||'0')+1:1;if(!localStorage.getItem('si_first'))localStorage.setItem('si_first',now);localStorage.setItem('si_count',n);localStorage.setItem('si_last',now);localStorage.setItem('si_today_date',td);localStorage.setItem('si_today_count',tc);}catch(e){}})();</script>
-
     <header class="l-header" id="header">
         <nav class="nav bd-container">
 
@@ -95,7 +93,7 @@
                     <li class="nav__item"><a href="#story" class="nav__link">Story</a></li>
                     <li class="nav__item"><a href="#skills" class="nav__link">Skills</a></li>
                     <li class="nav__item"><a href="#engagement" class="nav__link">Consulting</a></li>
-                    <li class="nav__item"><a href="#jbos" class="nav__link">Jobs</a></li>
+                    <li class="nav__item"><a href="#jobs" class="nav__link">Jobs</a></li>
                     <li class="nav__item"><a href="#contact" class="nav__link">Contact</a></li>
                     <li><span class="change-theme" id="theme-button" role="button" tabindex="0" aria-label="Alternar tema claro/escuro">
                         <svg class="theme-icon theme-icon--moon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z"/></svg>
@@ -298,8 +296,8 @@
         </section>
 
         <!--========== JBOS ==========-->
-        <section class="jbos section bd-container" id="jbos">
-            <canvas id="jbos-canvas" aria-hidden="true"></canvas>
+        <section class="jobs section bd-container" id="jobs">
+            <canvas id="jobs-canvas" aria-hidden="true"></canvas>
             <div class="bd-container">
                 <span class="section-subtitle">Open source repos &mdash; click to explore on GitHub</span>
                 <h2 class="section-title">Tutorials &amp; Projects</h2>
@@ -333,7 +331,7 @@
                             <a href="https://github.com/josenilto/dev.mysql" target="_blank" rel="noopener noreferrer" class="menu__name">MySQL</a>
                             <a href="https://github.com/josenilto/dev.influxdb" target="_blank" rel="noopener noreferrer" class="menu__name">InfluxDB</a>
                             <a href="https://github.com/josenilto/dev.mongodb" target="_blank" rel="noopener noreferrer" class="menu__name">MongoDB</a>
-                            <a href="https://github.com/josenilto/dev.mysql" target="_blank" rel="noopener noreferrer" class="menu__name">SQL Server</a>
+                            <a href="#" class="menu__name">SQL Server</a>
                             <a href="https://github.com/josenilto/dev.postgres" target="_blank" rel="noopener noreferrer" class="menu__name">PostgreSQL</a>
                         </div>
                     </div>
@@ -437,7 +435,7 @@
                         <li><a href="#story" class="footer__link"><i class="fas fa-chevron-right"></i> Story</a></li>
                         <li><a href="#skills" class="footer__link"><i class="fas fa-chevron-right"></i> Skills</a></li>
                         <li><a href="#engagement" class="footer__link"><i class="fas fa-chevron-right"></i> Consulting</a></li>
-                        <li><a href="#jbos" class="footer__link"><i class="fas fa-chevron-right"></i> Jobs</a></li>
+                        <li><a href="#jobs" class="footer__link"><i class="fas fa-chevron-right"></i> Jobs</a></li>
                         <li><a href="#contact" class="footer__link"><i class="fas fa-chevron-right"></i> Contact</a></li>
                     </ul>
                 </div>

@@ -1,3 +1,20 @@
+// Contador de visitas via localStorage (movido do inline do index.html)
+(function () {
+  try {
+    var n = parseInt(localStorage.getItem('si_count') || '0') + 1;
+    var now = new Date().toISOString();
+    var td = now.slice(0, 10);
+    var tc = localStorage.getItem('si_today_date') === td
+      ? parseInt(localStorage.getItem('si_today_count') || '0') + 1
+      : 1;
+    if (!localStorage.getItem('si_first')) localStorage.setItem('si_first', now);
+    localStorage.setItem('si_count', n);
+    localStorage.setItem('si_last', now);
+    localStorage.setItem('si_today_date', td);
+    localStorage.setItem('si_today_count', tc);
+  } catch (e) {}
+})();
+
 // Função para mostrar/ocultar o menu de navegação
 const showMenu = (toggleId, navId) => {
   const toggle = document.getElementById(toggleId);
