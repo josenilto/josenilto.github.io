@@ -1,0 +1,139 @@
+# ══════════════════════════════════════════════════════════════════
+#  GitFlow — Promoção DEV → HMG
+#
+#  Fluxo:
+#    dev  ──PR──▶  hmg  ──PR──▶  prd
+#
+#  Disparo: manual (Actions → "Promover DEV → HMG" → Run workflow)
+#  Efeito:  cria PR de dev para hmg com checklist de validação
+# ══════════════════════════════════════════════════════════════════
+name: 🔀 Promover DEV → HMG
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: "Título do PR (ex: feat: nova seção de projetos)"
+        required: true
+        default: "chore: promover dev → hmg"
+      notas:
+        description: "Notas de release / o que foi feito nesta versão"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    name: 🔀 Criar PR dev → hmg
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Verificar se há diferença entre dev e hmg
+        id: diff
+        run: |
+          git fetch origin dev hmg
+          AHEAD=$(git rev-list --count origin/hmg..origin/dev)
+          echo "commits_ahead=${AHEAD}" >> "$GITHUB_OUTPUT"
+          echo "ℹ️ dev está ${AHEAD} commits à frente de hmg"
+          if [ "$AHEAD" -eq 0 ]; then
+            echo "has_diff=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_diff=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: ⚠️ Interromper se não há novidade
+        if: steps.diff.outputs.has_diff == 'false'
+        run: |
+          echo "::warning::dev e hmg estão sincronizados — nada a promover."
+          exit 0
+
+      - name: 🔀 Criar PR dev → hmg
+        if: steps.diff.outputs.has_diff == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NOTAS="${{ github.event.inputs.notas }}"
+          SHORT_DEV=$(git rev-parse --short origin/dev)
+          SHORT_HMG=$(git rev-parse --short origin/hmg)
+          ACTOR="${{ github.actor }}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          AHEAD="${{ steps.diff.outputs.commits_ahead }}"
+
+          BODY=$(cat <<PREOF
+          ## 🧪 Promoção DEV → HMG
+
+          | Campo | Valor |
+          |---|---|
+          | 🌿 Origem | \`dev\` (\`${SHORT_DEV}\`) |
+          | 🎯 Destino | \`hmg\` (\`${SHORT_HMG}\`) |
+          | 📦 Commits incluídos | ${AHEAD} |
+          | 👤 Promovido por | @${ACTOR} |
+          | ⚙️ Workflow | [Ver execução](${RUN_URL}) |
+
+          ${NOTAS:+### 📝 Notas de release
+          ${NOTAS}}
+
+          ---
+
+          ## ✅ Checklist de revisão (HMG)
+
+          ### Funcional
+          - [ ] Build passou sem erros no pipeline DEV
+          - [ ] UI/UX validada no ambiente DEV (`https://josenilto.github.io/dev/`)
+          - [ ] Responsividade verificada (mobile, tablet, desktop)
+          - [ ] Sem erros no console do browser
+
+          ### Qualidade
+          - [ ] Sem regressões em funcionalidades existentes
+          - [ ] Links e navegação funcionando corretamente
+          - [ ] Performance aceitável (imagens otimizadas, sem bloqueios)
+
+          ### Segurança
+          - [ ] Sem dados sensíveis expostos no código
+          - [ ] Dependências sem vulnerabilidades críticas (`npm audit`)
+
+          ---
+
+          > Após aprovação e merge, o pipeline HMG realizará o deploy automático em `https://josenilto.github.io/hmg/`.
+          > Para promover ao PRD após validação no HMG, execute o workflow **Promover HMG → PRD**.
+          PREOF
+          )
+
+          # Verifica se já existe um PR aberto
+          EXISTING=$(gh pr list --base hmg --head dev --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+
+          if [ -n "$EXISTING" ]; then
+            echo "::notice::PR #${EXISTING} já existe. Atualizando título..."
+            gh pr edit "$EXISTING" \
+              --title "${{ github.event.inputs.title }}" \
+              --body "$BODY"
+            echo "✅ PR #${EXISTING} atualizado: $(gh pr view $EXISTING --json url --jq .url)"
+          else
+            URL=$(gh pr create \
+              --base hmg \
+              --head dev \
+              --title "${{ github.event.inputs.title }}" \
+              --body "$BODY" \
+              --label "promotion,hmg-validation")
+            echo "✅ PR criado: ${URL}"
+          fi
+
+      - name: 📋 Resumo
+        if: always()
+        run: |
+          echo "## 🔀 Promoção DEV → HMG" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commits à frente | \`${{ steps.diff.outputs.commits_ahead }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Ação | Criar/atualizar PR \`dev → hmg\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| PRs abertos | [Ver PRs](/${{ github.repository }}/pulls?q=base%3Ahmg+head%3Adev) |" >> $GITHUB_STEP_SUMMARY
