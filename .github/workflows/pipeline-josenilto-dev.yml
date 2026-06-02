@@ -53,7 +53,7 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - name: 📦 Instalar dependências
-        run: npm ci --legacy-peer-deps
+        run: npm ci --legacy-peer-deps --no-audit
 
       - name: 🔒 Auditoria de segurança (moderate+ — aviso em DEV)
         run: npm audit --audit-level=moderate
@@ -100,7 +100,7 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - name: 📦 Instalar dependências
-        run: npm ci --legacy-peer-deps
+        run: npm ci --legacy-peer-deps --no-audit
 
       - name: 🧹 Lint (ESLint)
         run: npm run lint
@@ -385,6 +385,7 @@ jobs:
 
       - name: 📬 Enviar e-mail
         uses: dawidd6/action-send-mail@v3
+        continue-on-error: true
         with:
           server_address: ${{ secrets.MAIL_SERVER }}
           server_port: ${{ secrets.MAIL_PORT }}
