@@ -1,3 +1,13 @@
+// Ajusta o href do botão "Back to Home" conforme o sub-path (movido do inline do 404.html)
+(function () {
+    var p = window.location.pathname;
+    var btn = document.querySelector('a.btn');
+    if (!btn) return;
+    if (p.indexOf('/hmg') === 0)      btn.href = '/hmg/';
+    else if (p.indexOf('/dev') === 0) btn.href = '/dev/';
+    // else stays '/' para PRD
+})();
+
 (function () {
     const canvas = document.getElementById('bg-canvas');
     if (!canvas) return;
