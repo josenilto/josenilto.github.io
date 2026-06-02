@@ -1,7 +1,12 @@
 # ══════════════════════════════════════════════════════════════════
-#  Pipeline PRD — Verificação de links e Deploy para GitHub Pages
-#  Projeto: portfólio estático (HTML/CSS/JS) — sem build Node/React
+#  Pipeline PRD — Adaptativo: React (Lovable) ou Site Estático
 #  Dispara em: push/PR para prd|master|main  |  manual (dispatch)
+#
+#  Detecção automática de tipo de projeto:
+#    package.json com vite → React (Lovable) → vite build --base /
+#    sem package.json      → Estático         → copia arquivos locais
+#
+#  URL: https://josenilto.github.io/
 # ══════════════════════════════════════════════════════════════════
 name: 🚀 Pipeline PRD — Testes & Deploy
 
@@ -17,37 +22,110 @@ on:
         required: false
         default: "false"
 
-# Impede deploys simultâneos — cancela o anterior se novo push chegar em PR
 concurrency:
   group: pipeline-prd-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+env:
+  NODE_VERSION: "22"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 # ══════════════════════════════════════════════════════════════════
-# JOB 1 — VERIFICAÇÃO DE LINKS
-#   • Verifica links locais do index.html (assets, CSS, JS)
-#   • Links locais quebrados → bloqueiam o deploy
-#   • Links externos         → aviso apenas (continue-on-error)
+# JOB 1 — DETECTAR TIPO DE PROJETO
 # ══════════════════════════════════════════════════════════════════
 jobs:
+  detect:
+    name: 🔍 Detectar tipo de projeto
+    runs-on: ubuntu-latest
+    outputs:
+      type: ${{ steps.probe.outputs.type }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔍 Verificar tipo (React/Vite ou Estático)
+        id: probe
+        run: |
+          if [ -f "package.json" ] && grep -q '"vite"' package.json 2>/dev/null; then
+            echo "type=react" >> "$GITHUB_OUTPUT"
+            echo "🟦 Projeto React/Vite detectado — build com Vite"
+          else
+            echo "type=static" >> "$GITHUB_OUTPUT"
+            echo "🟩 Projeto estático detectado — publica arquivos locais"
+          fi
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 2a — BUILD REACT (Lovable/Vite)
+  # ══════════════════════════════════════════════════════════════
+  build-react:
+    name: 🔨 Build React (base /)
+    runs-on: ubuntu-latest
+    needs: detect
+    if: needs.detect.outputs.type == 'react'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: 📦 Instalar dependências
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔒 Auditoria de segurança
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: 🧹 Lint (ESLint)
+        run: npm run lint
+
+      - name: 🏗️ Build produção (base /)
+        run: npm run build -- --base /
+
+      - name: 📊 Tamanho do build
+        run: |
+          echo "## 🏗️ Build React — PRD" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Modo | \`production\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Base path | \`/\` (raiz) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tamanho | $(du -sh dist/ | cut -f1) |" >> $GITHUB_STEP_SUMMARY
+
+      - name: 📤 Upload artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-prd
+          path: dist/
+          retention-days: 1
+
+  # ══════════════════════════════════════════════════════════════
+  # JOB 2b — VERIFICAÇÃO DE LINKS (Estático)
+  # ══════════════════════════════════════════════════════════════
   link-check:
     name: 🔗 Verificação de Links
     runs-on: ubuntu-latest
-    if: github.event.inputs.skip_link_check != 'true'
+    needs: detect
+    if: needs.detect.outputs.type == 'static' && github.event.inputs.skip_link_check != 'true'
     timeout-minutes: 10
 
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js 22
+      - name: ⚙️ Setup Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: 📦 Instalar linkinator
         run: npm install -g linkinator
 
-      # ── Links locais — falha se quebrado ──────────────────────
       - name: 🔗 Links locais
         id: local
         run: |
@@ -82,7 +160,6 @@ jobs:
             }
           "
 
-      # ── Links externos — aviso apenas ────────────────────────
       - name: 🌐 Links externos (aviso)
         id: external
         run: |
@@ -98,26 +175,26 @@ jobs:
       - name: 📄 Resumo de links
         if: always()
         run: |
-          echo "## 🔗 Verificação de Links" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔗 Verificação de Links — PRD (estático)" >> $GITHUB_STEP_SUMMARY
           echo "| Verificação | Status |" >> $GITHUB_STEP_SUMMARY
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
           echo "| Links locais | ${{ steps.local.outcome == 'success' && '✅ OK' || '❌ Falhou' }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Links externos | ${{ steps.external.outcome == 'success' && '✅ OK' || '⚠️ Avisos' }} |" >> $GITHUB_STEP_SUMMARY
 
   # ══════════════════════════════════════════════════════════════
-  # JOB 2 — DEPLOY PARA GITHUB PAGES (PRD)
-  #   • Só roda em push/dispatch para prd|master|main
-  #   • Publica: index.html + 404.html + assets/
+  # JOB 3 — DEPLOY PARA GITHUB PAGES (PRD)
   # ══════════════════════════════════════════════════════════════
   deploy-prd:
     name: 🌐 Deploy GitHub Pages (PRD)
     runs-on: ubuntu-latest
-    needs: link-check
+    needs: [detect, build-react, link-check]
     timeout-minutes: 10
     if: |
       always() &&
-      (needs.link-check.result == 'success' || needs.link-check.result == 'skipped') &&
+      (
+        (needs.detect.outputs.type == 'react'  && needs.build-react.result == 'success') ||
+        (needs.detect.outputs.type == 'static' && (needs.link-check.result == 'success' || needs.link-check.result == 'skipped'))
+      ) &&
       (
         github.ref == 'refs/heads/prd'    ||
         github.ref == 'refs/heads/master' ||
@@ -136,24 +213,39 @@ jobs:
       - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      - name: 📁 Preparar pasta de publicação
+      # ── Caminho React ──────────────────────────────────────────
+      - name: 📥 Download artefato React
+        if: needs.detect.outputs.type == 'react'
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-prd
+          path: dist/
+
+      - name: 📁 Preparar publicação React
+        if: needs.detect.outputs.type == 'react'
+        run: |
+          echo "📂 Build React a publicar na raiz:"
+          find dist/ -maxdepth 2 -type f | head -20
+
+      # ── Caminho Estático ───────────────────────────────────────
+      - name: 📁 Preparar publicação Estática
+        if: needs.detect.outputs.type == 'static'
         run: |
           mkdir -p _site
-
           cp *.html      _site/
           cp -r assets/  _site/assets/
           cp robots.txt  _site/
           cp sitemap.xml _site/
           cp health      _site/
-
           echo "📂 Estrutura de publicação:"
           find _site -maxdepth 2 -type f | sort
 
+      # ── Deploy unificado ───────────────────────────────────────
       - name: 🚀 Deploy → / (raiz · gh-pages)
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir:     ./_site
+          publish_dir:     ${{ needs.detect.outputs.type == 'react' && './dist' || './_site' }}
           destination_dir: .
           keep_files:      true
           enable_jekyll:   false
@@ -163,26 +255,24 @@ jobs:
 
       - name: 📋 Resumo do Deploy
         run: |
-          echo "## 🚀 Deploy PRD Concluído!" >> $GITHUB_STEP_SUMMARY
+          echo "## 🚀 Deploy PRD Concluído! (${{ needs.detect.outputs.type }})" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
           echo "| 🌐 URL | [https://josenilto.github.io](https://josenilto.github.io) |" >> $GITHUB_STEP_SUMMARY
           echo "| 📦 Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 🌿 Branch | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🏗️ Tipo | \`${{ needs.detect.outputs.type }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 👤 Autor | \`${{ github.actor }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| 🕐 Data | $(date -u '+%d/%m/%Y %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
 
   # ══════════════════════════════════════════════════════════════
-  # JOB 3 — HEALTH CHECK PÓS-DEPLOY
-  #   • Aguarda propagação do GitHub Pages (60s)
-  #   • Testa /health até 5 vezes com 20s de intervalo
-  #   • Falha → aciona auto-rollback no job seguinte
+  # JOB 4 — HEALTH CHECK PÓS-DEPLOY
   # ══════════════════════════════════════════════════════════════
   health-check:
     name: 🏥 Health Check Pós-Deploy
     runs-on: ubuntu-latest
-    needs: deploy-prd
+    needs: [detect, deploy-prd]
     if: needs.deploy-prd.result == 'success'
     timeout-minutes: 6
     outputs:
@@ -190,14 +280,18 @@ jobs:
 
     steps:
       - name: ⏳ Aguardar propagação do GitHub Pages
-        run: |
-          echo "⏳ Aguardando 60s para o GitHub Pages propagar o deploy..."
-          sleep 60
+        run: sleep 60
 
-      - name: 🔍 Verificar endpoint /health
+      - name: 🔍 Verificar endpoint
         id: check
         run: |
-          URL="https://josenilto.github.io/health"
+          TYPE="${{ needs.detect.outputs.type }}"
+          if [ "$TYPE" = "static" ]; then
+            URL="https://josenilto.github.io/health"
+          else
+            URL="https://josenilto.github.io/"
+          fi
+
           HEALTHY=false
           for i in 1 2 3 4 5; do
             echo "🔄 Tentativa ${i}/5 → ${URL}"
@@ -220,19 +314,14 @@ jobs:
         if: always()
         run: |
           echo "## 🏥 Health Check Pós-Deploy" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           if [ "${{ steps.check.outputs.healthy }}" = "true" ]; then
-            echo "✅ **Endpoint /health respondeu HTTP 200**" >> $GITHUB_STEP_SUMMARY
+            echo "✅ **Endpoint respondeu HTTP 200**" >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ **Endpoint /health não respondeu — rollback acionado**" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **Endpoint não respondeu — rollback acionado**" >> $GITHUB_STEP_SUMMARY
           fi
-          echo "| URL verificada | \`https://josenilto.github.io/health\` |" >> $GITHUB_STEP_SUMMARY
 
   # ══════════════════════════════════════════════════════════════
-  # JOB 4 — AUTO-ROLLBACK
-  #   • Ativado apenas quando health-check falha
-  #   • Reverte o último commit do branch gh-pages
-  #   • Restaura o site para o estado anterior ao deploy
+  # JOB 5 — AUTO-ROLLBACK
   # ══════════════════════════════════════════════════════════════
   auto-rollback:
     name: 🔄 Auto-Rollback
@@ -259,17 +348,13 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
           echo "📋 Últimos deploys no gh-pages:"
           git log --oneline -5
-
           PREV_SHA=$(git log --format="%H" | sed -n '2p')
           PREV_SHORT="${PREV_SHA:0:7}"
-          echo "🎯 Revertendo para commit anterior: ${PREV_SHORT}"
-
+          echo "🎯 Revertendo para: ${PREV_SHORT}"
           git revert --no-edit HEAD
           git push origin gh-pages
-
           echo "rolled_back=true"          >> "$GITHUB_OUTPUT"
           echo "previous_sha=${PREV_SHORT}" >> "$GITHUB_OUTPUT"
           echo "✅ Rollback concluído — site restaurado para ${PREV_SHORT}"
@@ -278,9 +363,7 @@ jobs:
         if: always()
         run: |
           echo "## 🔄 Auto-Rollback Executado" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "⚠️ **Health check falhou — site revertido automaticamente.**" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
           echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
           echo "| 📦 Commit revertido | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
@@ -288,16 +371,12 @@ jobs:
           echo "| 🕐 Data/Hora        | $(TZ='America/Sao_Paulo' date '+%d/%m/%Y às %H:%M (BRT)') |" >> $GITHUB_STEP_SUMMARY
 
   # ══════════════════════════════════════════════════════════════
-  # JOB 5 — NOTIFICAÇÃO POR E-MAIL
-  #   • Envia e-mail HTML com visual do portfólio
-  #   • Roda sempre — notifica sucesso E falha
-  #   • Requer secrets: MAIL_SERVER, MAIL_PORT, MAIL_USERNAME,
-  #                     MAIL_PASSWORD, MAIL_TO
+  # JOB 6 — NOTIFICAÇÃO POR E-MAIL
   # ══════════════════════════════════════════════════════════════
   notify-email:
     name: 📧 Notificação por E-mail
     runs-on: ubuntu-latest
-    needs: [link-check, deploy-prd, health-check, auto-rollback]
+    needs: [detect, link-check, build-react, deploy-prd, health-check, auto-rollback]
     if: always()
     timeout-minutes: 5
 
@@ -309,40 +388,33 @@ jobs:
         id: gen_html
         run: |
           DEPLOY_RESULT="${{ needs.deploy-prd.result }}"
-          LINK_RESULT="${{ needs.link-check.result }}"
           HEALTH_RESULT="${{ needs.health-check.result }}"
           ROLLBACK_RESULT="${{ needs.auto-rollback.result }}"
+          TYPE="${{ needs.detect.outputs.type }}"
+          BUILD_RESULT="${{ needs.build-react.result == 'skipped' && needs.link-check.result || needs.build-react.result }}"
 
-          # ── Status geral ──────────────────────────────────────
           if [ "$ROLLBACK_RESULT" = "success" ]; then
             STATUS_ICON="🔄"; STATUS_BG="#fff3e0"; STATUS_BORDER="#ff9800"
-            STATUS_TEXT="#e65100"; STATUS_LABEL="Rollback Automático Executado"
-            SUBJECT_EMOJI="🔄"
+            STATUS_TEXT="#e65100"; STATUS_LABEL="Rollback Automático Executado"; SUBJECT_EMOJI="🔄"
           elif [ "$DEPLOY_RESULT" = "success" ] && [ "$HEALTH_RESULT" = "success" ]; then
             STATUS_ICON="✅"; STATUS_BG="#e8f5e9"; STATUS_BORDER="#4caf50"
-            STATUS_TEXT="#1b5e20"; STATUS_LABEL="Deploy Concluído com Sucesso"
-            SUBJECT_EMOJI="✅"
+            STATUS_TEXT="#1b5e20"; STATUS_LABEL="Deploy PRD Concluído com Sucesso (${TYPE})"; SUBJECT_EMOJI="✅"
           elif [ "$HEALTH_RESULT" = "failure" ]; then
             STATUS_ICON="⚠️"; STATUS_BG="#fff3e0"; STATUS_BORDER="#ff9800"
-            STATUS_TEXT="#e65100"; STATUS_LABEL="Health Check Falhou — Rollback em Progresso"
-            SUBJECT_EMOJI="⚠️"
+            STATUS_TEXT="#e65100"; STATUS_LABEL="Health Check Falhou — Rollback em Progresso"; SUBJECT_EMOJI="⚠️"
           else
             STATUS_ICON="❌"; STATUS_BG="#ffebee"; STATUS_BORDER="#ef5350"
-            STATUS_TEXT="#b71c1c"; STATUS_LABEL="Falha no Deploy — Ação Necessária"
-            SUBJECT_EMOJI="❌"
+            STATUS_TEXT="#b71c1c"; STATUS_LABEL="Falha no Deploy PRD — Ação Necessária"; SUBJECT_EMOJI="❌"
           fi
           echo "subject_emoji=${SUBJECT_EMOJI}" >> "$GITHUB_OUTPUT"
 
-          # ── Badge: Verificação de Links ───────────────────────
-          case "$LINK_RESULT" in
+          case "$BUILD_RESULT" in
             success)   JOB1_ICON="✅"; JOB1_LABEL="Sucesso";   JOB1_BORDER="#4caf50"; JOB1_BADGE_BG="#e8f5e9"; JOB1_BADGE_COLOR="#2e7d32" ;;
             failure)   JOB1_ICON="❌"; JOB1_LABEL="Falhou";    JOB1_BORDER="#ef5350"; JOB1_BADGE_BG="#ffebee"; JOB1_BADGE_COLOR="#c62828" ;;
             skipped)   JOB1_ICON="⊘";  JOB1_LABEL="Pulado";    JOB1_BORDER="#bdbdbd"; JOB1_BADGE_BG="#f5f5f5"; JOB1_BADGE_COLOR="#757575" ;;
             cancelled) JOB1_ICON="⊘";  JOB1_LABEL="Cancelado"; JOB1_BORDER="#ff9800"; JOB1_BADGE_BG="#fff3e0"; JOB1_BADGE_COLOR="#e65100" ;;
             *)         JOB1_ICON="⊘";  JOB1_LABEL="—";         JOB1_BORDER="#bdbdbd"; JOB1_BADGE_BG="#f5f5f5"; JOB1_BADGE_COLOR="#9e9e9e" ;;
           esac
-
-          # ── Badge: Deploy GitHub Pages ────────────────────────
           case "$DEPLOY_RESULT" in
             success)   JOB2_ICON="✅"; JOB2_LABEL="Sucesso";   JOB2_BORDER="#4caf50"; JOB2_BADGE_BG="#e8f5e9"; JOB2_BADGE_COLOR="#2e7d32" ;;
             failure)   JOB2_ICON="❌"; JOB2_LABEL="Falhou";    JOB2_BORDER="#ef5350"; JOB2_BADGE_BG="#ffebee"; JOB2_BADGE_COLOR="#c62828" ;;
@@ -350,8 +422,6 @@ jobs:
             cancelled) JOB2_ICON="⊘";  JOB2_LABEL="Cancelado"; JOB2_BORDER="#ff9800"; JOB2_BADGE_BG="#fff3e0"; JOB2_BADGE_COLOR="#e65100" ;;
             *)         JOB2_ICON="⊘";  JOB2_LABEL="—";         JOB2_BORDER="#bdbdbd"; JOB2_BADGE_BG="#f5f5f5"; JOB2_BADGE_COLOR="#9e9e9e" ;;
           esac
-
-          # ── Badge: Health Check ───────────────────────────────
           case "$HEALTH_RESULT" in
             success)   JOB3_ICON="✅"; JOB3_LABEL="Saudável";  JOB3_BORDER="#4caf50"; JOB3_BADGE_BG="#e8f5e9"; JOB3_BADGE_COLOR="#2e7d32" ;;
             failure)   JOB3_ICON="❌"; JOB3_LABEL="Falhou";    JOB3_BORDER="#ef5350"; JOB3_BADGE_BG="#ffebee"; JOB3_BADGE_COLOR="#c62828" ;;
@@ -365,11 +435,11 @@ jobs:
           RUN_NUM="#${{ github.run_number }}"
 
           sed \
-            -e "s|{{PIPELINE_TITLE}}|Pipeline PRD|g" \
+            -e "s|{{PIPELINE_TITLE}}|Pipeline PRD (${TYPE})|g" \
             -e "s|{{ENV_LABEL}}|josenilto.github.io · PRD|g" \
             -e "s|{{ENV_URL}}|https://josenilto.github.io|g" \
             -e "s|{{ENV_BTN_LABEL}}|Ver Site em Produção|g" \
-            -e "s|{{JOB1_NAME}}|🔗\&nbsp; Verificação de Links|g" \
+            -e "s|{{JOB1_NAME}}|🔨\&nbsp; Build / Link Check|g" \
             -e "s|{{JOB2_NAME}}|🚀\&nbsp; Deploy GitHub Pages|g" \
             -e "s|{{JOB3_NAME}}|🏥\&nbsp; Health Check Pós-Deploy|g" \
             -e "s|{{STATUS_ICON}}|${STATUS_ICON}|g" \
@@ -400,11 +470,7 @@ jobs:
             -e "s|{{WORKFLOW_URL}}|${WORKFLOW_URL}|g" \
             .github/email-templates/deploy-notification.html > /tmp/email-body.html
 
-          {
-            echo 'html_body<<EMAILEOF'
-            cat /tmp/email-body.html
-            echo 'EMAILEOF'
-          } >> "$GITHUB_OUTPUT"
+          { echo 'html_body<<EMAILEOF'; cat /tmp/email-body.html; echo 'EMAILEOF'; } >> "$GITHUB_OUTPUT"
 
       - name: 📬 Enviar e-mail
         uses: dawidd6/action-send-mail@v3

@@ -1,0 +1,175 @@
+# ══════════════════════════════════════════════════════════════════
+#  GitFlow — Promoção HMG → PRD
+#
+#  Fluxo:
+#    dev  ──PR──▶  hmg  ──PR──▶  prd
+#
+#  Disparo: manual (Actions → "Promover HMG → PRD" → Run workflow)
+#  PRÉ-REQUISITO: hmg já foi validado e está estável
+#  Efeito:  cria PR de hmg para prd com checklist de aprovação final
+# ══════════════════════════════════════════════════════════════════
+name: 🚀 Promover HMG → PRD
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: "Título do PR (ex: release: v2.0 - Lovable portfolio)"
+        required: true
+        default: "release: promover hmg → prd"
+      version:
+        description: "Versão desta release (ex: v2.0.0)"
+        required: false
+        default: ""
+      notas:
+        description: "Notas de release / changelog"
+        required: false
+        default: ""
+      confirmar:
+        description: "Digite CONFIRMAR para prosseguir"
+        required: true
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    name: 🚀 Criar PR hmg → prd
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 🛡️ Validar confirmação
+        run: |
+          if [ "${{ github.event.inputs.confirmar }}" != "CONFIRMAR" ]; then
+            echo "::error::Você precisa digitar CONFIRMAR para promover ao PRD."
+            exit 1
+          fi
+          echo "✅ Confirmação recebida — prosseguindo com a promoção para PRD."
+
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 Verificar se há diferença entre hmg e prd
+        id: diff
+        run: |
+          git fetch origin hmg prd
+          AHEAD=$(git rev-list --count origin/prd..origin/hmg)
+          echo "commits_ahead=${AHEAD}" >> "$GITHUB_OUTPUT"
+          echo "ℹ️ hmg está ${AHEAD} commits à frente de prd"
+          if [ "$AHEAD" -eq 0 ]; then
+            echo "has_diff=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_diff=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: ⚠️ Interromper se não há novidade
+        if: steps.diff.outputs.has_diff == 'false'
+        run: |
+          echo "::warning::hmg e prd estão sincronizados — nada a promover."
+          exit 0
+
+      - name: 🚀 Criar PR hmg → prd
+        if: steps.diff.outputs.has_diff == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NOTAS="${{ github.event.inputs.notas }}"
+          VERSION="${{ github.event.inputs.version }}"
+          SHORT_HMG=$(git rev-parse --short origin/hmg)
+          SHORT_PRD=$(git rev-parse --short origin/prd)
+          ACTOR="${{ github.actor }}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          AHEAD="${{ steps.diff.outputs.commits_ahead }}"
+
+          BODY=$(cat <<PREOF
+          ## 🚀 Promoção HMG → PRD
+
+          > ⚠️ **Este PR implanta em PRODUÇÃO.** Revise com atenção antes de aprovar.
+
+          | Campo | Valor |
+          |---|---|
+          | 🌿 Origem | \`hmg\` (\`${SHORT_HMG}\`) |
+          | 🎯 Destino | \`prd\` (\`${SHORT_PRD}\`) |
+          | 📦 Commits incluídos | ${AHEAD} |
+          | 🏷️ Versão | ${VERSION:-"—"} |
+          | 👤 Promovido por | @${ACTOR} |
+          | ⚙️ Workflow | [Ver execução](${RUN_URL}) |
+          | 🧪 Validado em HMG | [https://josenilto.github.io/hmg/](https://josenilto.github.io/hmg/) |
+
+          ${NOTAS:+### 📝 Changelog
+          ${NOTAS}}
+
+          ---
+
+          ## ✅ Checklist de aprovação PRD (OBRIGATÓRIO)
+
+          ### Pré-requisitos
+          - [ ] Pipeline HMG passou com sucesso (build + deploy + health check)
+          - [ ] Validação funcional completa em HMG (`https://josenilto.github.io/hmg/`)
+          - [ ] Aprovado pelo responsável técnico
+
+          ### Funcional
+          - [ ] Todas as seções do portfólio funcionando (Career, Story, Skills, Consulting, Jobs, Contact)
+          - [ ] Formulário de contato / links sociais operacionais
+          - [ ] Sem erros 404 em recursos (CSS, JS, imagens)
+          - [ ] Animações e interações sem problemas
+
+          ### Performance & SEO
+          - [ ] Lighthouse score ≥ 90 (Performance, Accessibility, SEO)
+          - [ ] Meta tags corretas (OG, Twitter Card, canonical)
+          - [ ] sitemap.xml atualizado
+          - [ ] robots.txt correto
+
+          ### Segurança
+          - [ ] Headers HTTP de segurança presentes (CSP, HSTS, X-Frame-Options)
+          - [ ] Sem segredos ou dados sensíveis expostos
+          - [ ] Trivy scan sem CVEs críticos/altos
+
+          ### Rollback
+          - [ ] Estratégia de rollback definida (auto-rollback via health check ativo)
+          - [ ] Responsável disponível para monitorar pós-deploy
+
+          ---
+
+          > Após merge, o pipeline PRD fará o deploy automático em `https://josenilto.github.io/`
+          > com health check e auto-rollback em caso de falha.
+          PREOF
+          )
+
+          # Verifica se já existe um PR aberto
+          EXISTING=$(gh pr list --base prd --head hmg --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+
+          if [ -n "$EXISTING" ]; then
+            echo "::notice::PR #${EXISTING} já existe. Atualizando..."
+            gh pr edit "$EXISTING" \
+              --title "${{ github.event.inputs.title }}" \
+              --body "$BODY"
+            echo "✅ PR #${EXISTING} atualizado: $(gh pr view $EXISTING --json url --jq .url)"
+          else
+            URL=$(gh pr create \
+              --base prd \
+              --head hmg \
+              --title "${{ github.event.inputs.title }}" \
+              --body "$BODY" \
+              --label "promotion,prd-release")
+            echo "✅ PR criado: ${URL}"
+          fi
+
+          ${VERSION:+git tag "$VERSION" origin/hmg && git push origin "$VERSION" 2>/dev/null || echo "Tag já existe ou sem permissão de tag"}
+
+      - name: 📋 Resumo
+        if: always()
+        run: |
+          echo "## 🚀 Promoção HMG → PRD" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | --- |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commits à frente | \`${{ steps.diff.outputs.commits_ahead }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Ação | Criar/atualizar PR \`hmg → prd\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| PRs abertos | [Ver PRs](/${{ github.repository }}/pulls?q=base%3Aprd+head%3Ahmg) |" >> $GITHUB_STEP_SUMMARY
+          echo "| ⚠️ Atenção | Aprovação obrigatória antes do merge! |" >> $GITHUB_STEP_SUMMARY
