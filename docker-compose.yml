@@ -32,9 +32,12 @@ services:
     security_opt:
       - no-new-privileges:true
 
+    # service_started: nginx inicia assim que o container api sobe,
+    # sem esperar o healthcheck passar. Requests /api/* retornam 502
+    # enquanto a api inicializa, sem bloquear o nginx.
     depends_on:
       api:
-        condition: service_healthy
+        condition: service_started
 
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost/health"]
@@ -55,9 +58,8 @@ services:
       - internal
 
     volumes:
-      # Bind mount para path fixo no host — persiste entre deploys, rebuilds
-      # e mesmo que o ambiente Docker seja recriado do zero.
-      # DATA_DIR pode ser definido no .env (padrão: ./data ao lado do compose)
+      # Bind mount para path fixo no host — persiste entre deploys.
+      # Docker cria ./data como root; o entrypoint.sh corrige o chown.
       - ${DATA_DIR:-./data}:/data
 
     environment:
@@ -67,20 +69,19 @@ services:
 
     cap_drop:
       - ALL
+    cap_add:
+      - CHOWN      # necessário para chown /data no entrypoint
 
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges:false   # entrypoint precisa de chown (root → node)
 
-    read_only: true
-    tmpfs:
-      - /tmp
-
+    # api NÃO é read_only: precisa escrever no banco SQLite em /data
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
-      interval: 30s
+      interval: 15s
       timeout: 5s
-      retries: 3
-      start_period: 10s
+      retries: 5
+      start_period: 15s
 
 # ── Rede interna (nginx ↔ api sem expor porta da api) ─────────────
 networks:

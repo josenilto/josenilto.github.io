@@ -19,25 +19,28 @@ FROM node:22-alpine AS production
 LABEL org.opencontainers.image.title="portfolio-api" \
       org.opencontainers.image.description="API REST + SQLite para o portfólio josenilto.github.io"
 
-RUN apk upgrade --no-cache
+# su-exec: troca de usuário sem shell extra (like gosu, mas Alpine-nativo)
+RUN apk upgrade --no-cache && apk add --no-cache su-exec
 
 WORKDIR /app
 
 COPY --from=builder /app/node_modules ./node_modules
-COPY api/server.js ./
+COPY api/server.js      ./server.js
+COPY api/entrypoint.sh  ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
-# Diretório de dados — sobrescrito pelo volume no compose
-RUN mkdir -p /data && chown node:node /data
+# /data criado no build; bind mount do compose substitui em runtime.
+# O entrypoint.sh (root) corrige chown antes de exec su-exec node.
+RUN mkdir -p /data
 
 ENV PORT=3000 \
     DB_PATH=/data/portfolio.db \
     NODE_ENV=production
 
-USER node
-
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=15s --timeout=5s --start-period=15s --retries=5 \
   CMD wget -qO- http://localhost:3000/api/health || exit 1
 
-CMD ["node", "server.js"]
+# Inicia como root para poder corrigir permissoes em /data
+ENTRYPOINT ["./entrypoint.sh"]

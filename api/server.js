@@ -14,13 +14,28 @@
 import express        from 'express';
 import Database       from 'better-sqlite3';
 import { createHash } from 'crypto';
-import { mkdirSync }  from 'fs';
+import { mkdirSync, statSync }  from 'fs';
 
 const PORT    = Number(process.env.PORT    ?? 3000);
 const DB_PATH = process.env.DB_PATH        ?? '/data/portfolio.db';
 const API_KEY = process.env.API_SECRET_KEY ?? '';
+const DATA_DIR = DB_PATH.substring(0, DB_PATH.lastIndexOf('/')) || '/data';
 
-mkdirSync('/data', { recursive: true });
+// ── Diagnóstico de inicialização ────────────────────────────────
+console.log('[api] iniciando portfolio-api...');
+console.log(`[api] DB_PATH  : ${DB_PATH}`);
+console.log(`[api] DATA_DIR : ${DATA_DIR}`);
+console.log(`[api] NODE_ENV : ${process.env.NODE_ENV}`);
+console.log(`[api] PORT     : ${PORT}`);
+
+try {
+  const st = statSync(DATA_DIR);
+  console.log(`[api] /data stat: uid=${st.uid} gid=${st.gid} mode=${st.mode.toString(8)}`);
+} catch (e) {
+  console.log(`[api] /data ainda nao existe: ${e.message}`);
+}
+
+mkdirSync(DATA_DIR, { recursive: true });
 
 // ── Banco de dados ───────────────────────────────────────────────
 const db = new Database(DB_PATH);
@@ -158,8 +173,38 @@ app.get('/api/health', (_req, res) => {
   }
 });
 
+// ── 404 catch-all (rota não encontrada) ─────────────────────────
+app.use((req, res) => {
+  const available = [
+    'GET  /api/health',
+    'POST /api/visit',
+    'GET  /api/stats',
+    'POST /api/metrics',
+    'GET  /api/metrics',
+    'POST /api/deployments',
+    'GET  /api/deployments',
+  ];
+  res.status(404).json({
+    error: 'endpoint nao encontrado',
+    method: req.method,
+    path: req.path,
+    endpoints: available,
+  });
+});
+
+// ── Error handler ────────────────────────────────────────────────
+app.use((err, _req, res, _next) => {
+  console.error('[api] erro interno:', err);
+  res.status(500).json({ error: 'erro interno', detail: err.message });
+});
+
 // ── Start ───────────────────────────────────────────────────────
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`[portfolio-api] ouvindo na porta ${PORT}`);
-  console.log(`[portfolio-api] banco: ${DB_PATH}`);
+  console.log(`[api] pronto na porta ${PORT}`);
+  console.log(`[api] banco: ${DB_PATH}`);
+  console.log(`[api] endpoints disponiveis:`);
+  console.log(`[api]   GET  http://localhost:${PORT}/api/health`);
+  console.log(`[api]   GET  http://localhost:${PORT}/api/stats`);
+  console.log(`[api]   GET  http://localhost:${PORT}/api/metrics`);
+  console.log(`[api]   GET  http://localhost:${PORT}/api/deployments`);
 });
