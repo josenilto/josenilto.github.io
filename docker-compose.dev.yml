@@ -1,0 +1,37 @@
+services:
+  portfolio-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: josenilto/portfolio-dev:local
+    container_name: portfolio-dev
+    ports:
+      - "8081:80"        # prd usa 8080 — dev usa 8081 para rodar em paralelo
+    restart: unless-stopped
+
+    # ── Hardening ────────────────────────────────────────────────
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+      - /var/log/nginx
+
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - SETUID
+      - SETGID
+      - CHOWN
+
+    security_opt:
+      - no-new-privileges:true
+
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
