@@ -1,4 +1,6 @@
 services:
+
+  # ── Site estático (Nginx) ──────────────────────────────────────
   portfolio:
     build:
       context: .
@@ -9,9 +11,9 @@ services:
     ports:
       - "8080:80"
     restart: unless-stopped
+    networks:
+      - internal
 
-    # ── Hardening de segurança ────────────────────────────────────
-    # Sistema de arquivos somente leitura — nginx escreve apenas nos paths abaixo
     read_only: true
     tmpfs:
       - /tmp
@@ -19,7 +21,6 @@ services:
       - /var/run
       - /var/log/nginx
 
-    # Capacidades mínimas necessárias para nginx (porta 80 + drop de privilégios)
     cap_drop:
       - ALL
     cap_add:
@@ -28,13 +29,64 @@ services:
       - SETGID
       - CHOWN
 
-    # Impede ganho de privilégios via setuid/setgid em binários
     security_opt:
       - no-new-privileges:true
+
+    depends_on:
+      api:
+        condition: service_healthy
 
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost/health"]
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 10s
+
+  # ── API REST + SQLite ──────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: josenilto/portfolio-api:local
+    container_name: portfolio-api
+    restart: unless-stopped
+    networks:
+      - internal
+
+    volumes:
+      - sqlite_data:/data   # banco persistido entre reinicializações
+
+    environment:
+      PORT: 3000
+      DB_PATH: /data/portfolio.db
+      # Defina API_SECRET_KEY no .env ou como variável de ambiente
+      # para proteger os endpoints POST /metrics e POST /deployments
+      API_SECRET_KEY: ${API_SECRET_KEY:-}
+
+    cap_drop:
+      - ALL
+
+    security_opt:
+      - no-new-privileges:true
+
+    read_only: true
+    tmpfs:
+      - /tmp
+
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+# ── Volumes ────────────────────────────────────────────────────────
+volumes:
+  sqlite_data:
+    driver: local
+
+# ── Rede interna (nginx ↔ api sem expor porta da api) ─────────────
+networks:
+  internal:
+    driver: bridge

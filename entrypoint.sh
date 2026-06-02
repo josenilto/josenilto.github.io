@@ -34,13 +34,26 @@ metrics_loop() {
             cpu_pct=0
         fi
 
-        # ── Escreve JSON em tmpfs ─────────────────────────────────
+        mem_used_mb=$(( mem_used  / 1024 ))
+        mem_total_mb=$(( mem_total / 1024 ))
+        ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+        # ── Escreve JSON em tmpfs (compatibilidade: server-info.html) ─
         printf '{"cpu":%d,"mem_pct":%d,"mem_used_mb":%d,"mem_total_mb":%d,"ts":"%s"}\n' \
-            "$cpu_pct" "$mem_pct" \
-            "$(( mem_used  / 1024 ))" \
-            "$(( mem_total / 1024 ))" \
-            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            "$cpu_pct" "$mem_pct" "$mem_used_mb" "$mem_total_mb" "$ts" \
             > /tmp/metrics.json
+
+        # ── Persiste no SQLite via API (best-effort, falha silenciosa) ─
+        # Só envia se a API estiver disponível (evita erro no startup)
+        API_URL="${API_METRICS_URL:-http://api:3000/api/metrics}"
+        KEY_HDR=""
+        [ -n "${API_SECRET_KEY:-}" ] && KEY_HDR="-H X-Api-Key:${API_SECRET_KEY}"
+        wget -qO- \
+            --post-data "{\"cpu\":${cpu_pct},\"mem_pct\":${mem_pct},\"mem_used_mb\":${mem_used_mb},\"mem_total_mb\":${mem_total_mb}}" \
+            --header "Content-Type:application/json" \
+            ${KEY_HDR:+$KEY_HDR} \
+            --timeout=2 \
+            "$API_URL" > /dev/null 2>&1 || true
 
         sleep 4
     done
