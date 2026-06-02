@@ -1176,6 +1176,12 @@ img {
   max-width: 520px;
 }
 
+@keyframes contact-pulse {
+  0%   { box-shadow: 0 2px 10px rgba(0,0,0,.08), 0 0 0 0   rgba(6,156,84,.45); }
+  65%  { box-shadow: 0 2px 10px rgba(0,0,0,.08), 0 0 0 12px rgba(6,156,84,0);   }
+  100% { box-shadow: 0 2px 10px rgba(0,0,0,.08), 0 0 0 0   rgba(6,156,84,0);   }
+}
+
 .contact__card {
   display: flex;
   flex-direction: column;
@@ -1185,17 +1191,22 @@ img {
   padding: 2.25rem 1rem;
   border-radius: 0.75rem;
   background-color: var(--container-color);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   color: var(--title-color);
   font-weight: var(--font-semi-bold);
   font-size: var(--small-font-size);
   border-bottom: 2px solid transparent;
-  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s, color 0.3s, border-bottom-color 0.3s;
+  transition: transform 0.3s, background-color 0.3s, color 0.3s, border-bottom-color 0.3s;
+  animation: contact-pulse 2.4s ease-out infinite;
 }
+
+.contact__card:nth-child(1) { animation-delay: 0s;    }
+.contact__card:nth-child(2) { animation-delay: 0.65s; }
+.contact__card:nth-child(3) { animation-delay: 1.3s;  }
 
 .contact__card:hover {
   transform: translateY(-6px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  animation-play-state: paused;
 }
 
 .contact__card-icon {
