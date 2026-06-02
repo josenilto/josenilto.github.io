@@ -27,6 +27,10 @@ _site/
 *.sln
 *.sw?
 
+# --- SQLite (dados do host — nunca commitar) ---
+data/
+backups/
+
 # --- Secrets ---
 .env
 .env.*

@@ -55,13 +55,14 @@ services:
       - internal
 
     volumes:
-      - sqlite_data:/data   # banco persistido entre reinicializações
+      # Bind mount para path fixo no host — persiste entre deploys, rebuilds
+      # e mesmo que o ambiente Docker seja recriado do zero.
+      # DATA_DIR pode ser definido no .env (padrão: ./data ao lado do compose)
+      - ${DATA_DIR:-./data}:/data
 
     environment:
       PORT: 3000
       DB_PATH: /data/portfolio.db
-      # Defina API_SECRET_KEY no .env ou como variável de ambiente
-      # para proteger os endpoints POST /metrics e POST /deployments
       API_SECRET_KEY: ${API_SECRET_KEY:-}
 
     cap_drop:
@@ -80,11 +81,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-
-# ── Volumes ────────────────────────────────────────────────────────
-volumes:
-  sqlite_data:
-    driver: local
 
 # ── Rede interna (nginx ↔ api sem expor porta da api) ─────────────
 networks:
