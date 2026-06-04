@@ -98,7 +98,7 @@ jobs:
           echo "| Tamanho | $(du -sh dist/ | cut -f1) |" >> $GITHUB_STEP_SUMMARY
 
       - name: 📤 Upload artefato
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist-prd
           path: dist/
