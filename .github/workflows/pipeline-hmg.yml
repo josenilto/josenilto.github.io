@@ -197,7 +197,7 @@ jobs:
     timeout-minutes: 10
 
     environment:
-      name: hmg
+      name: hml   # ambiente de deploy (aba Deployments): dev · hml · prd
       url: ${{ env.SITE_URL }}
 
     permissions:
