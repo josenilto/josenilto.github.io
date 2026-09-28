@@ -1,15 +1,24 @@
-/*===== FONT DISPLAY OVERRIDE =====*/
-/* Font Awesome served from CDN does not declare font-display;
-   this block forces swap so text remains visible while icons load. */
+/*===== FONTES (auto-hospedadas: sem conexão extra com Google Fonts) =====*/
 @font-face {
-  font-family: "Font Awesome 6 Free";
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: local("Font Awesome 6 Free");
+  src: url("../fonts/poppins-latin-400-normal.woff2") format("woff2");
 }
 @font-face {
-  font-family: "Font Awesome 6 Brands";
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
   font-display: swap;
-  src: local("Font Awesome 6 Brands");
+  src: url("../fonts/poppins-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/poppins-latin-600-normal.woff2") format("woff2");
 }
 
 /*===== VARIABLES CSS =====*/
@@ -1087,6 +1096,7 @@ img {
 
 .story__img {
   width: 100%;
+  height: auto;
   display: block;
   margin: 0;
   transition: transform 0.5s;
