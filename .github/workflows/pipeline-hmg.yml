@@ -401,6 +401,7 @@ jobs:
           { echo 'html_body<<EMAILEOF'; cat /tmp/email-body.html; echo 'EMAILEOF'; } >> "$GITHUB_OUTPUT"
 
       - name: 📬 Enviar e-mail
+        id: send_mail
         uses: dawidd6/action-send-mail@v3
         continue-on-error: true
         with:
@@ -410,6 +411,20 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "${{ steps.gen_html.outputs.subject_emoji }} Deploy HMG · ${{ github.ref_name }} · #${{ github.run_number }}"
           to: ${{ secrets.MAIL_TO }}
-          from: "GitHub Actions Bot <${{ secrets.MAIL_USERNAME }}>"
+          from: "GitHub Actions Bot <${{ secrets.MAIL_FROM || secrets.MAIL_USERNAME }}>"
           html_body: ${{ steps.gen_html.outputs.html_body }}
           convert_markdown: false
+
+      # O envio usa continue-on-error (e-mail não deve derrubar o deploy),
+      # então a falha é sinalizada aqui como aviso + resumo do job.
+      - name: ⚠️ Falha no envio do e-mail
+        if: steps.send_mail.outcome == 'failure'
+        run: |
+          echo "::warning title=E-mail não enviado::Falha no SMTP — verifique os secrets MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM e MAIL_TO."
+          {
+            echo "## ⚠️ Notificação por e-mail não enviada"
+            echo ""
+            echo "O servidor SMTP recusou o envio (veja o log do passo **📬 Enviar e-mail**)."
+            echo "Contas Outlook.com/Hotmail não aceitam mais login SMTP por senha;"
+            echo "use Gmail com senha de app ou um provedor SMTP (ex.: Brevo). Veja o readme."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -217,6 +217,34 @@ ghcr.io/josenilto/josenilto.github.io:prd
 
 ---
 
+## 📧 Notificação de deploy por e-mail
+
+Os pipelines DEV, HMG e PRD enviam um e-mail ao final de cada execução
+(job **📧 Notificação por E-mail**). Configure em
+*Settings → Secrets and variables → Actions → New repository secret*:
+
+| Secret | Gmail (recomendado) | Brevo (alternativa) |
+|---|---|---|
+| `MAIL_SERVER` | `smtp.gmail.com` | `smtp-relay.brevo.com` |
+| `MAIL_PORT` | `465` | `587` |
+| `MAIL_USERNAME` | seu endereço Gmail | login SMTP do Brevo |
+| `MAIL_PASSWORD` | senha de app (16 caracteres) | chave SMTP do Brevo |
+| `MAIL_FROM` | *(opcional — usa `MAIL_USERNAME`)* | remetente verificado no Brevo |
+| `MAIL_TO` | destinatário das notificações | destinatário das notificações |
+
+> ⚠️ **Outlook.com / Hotmail não servem como remetente:** a Microsoft
+> desativou o login SMTP por senha nessas contas (erro `535 5.7.3
+> Authentication unsuccessful`). Elas continuam funcionando normalmente como
+> **destinatário** (`MAIL_TO`).
+
+Senha de app do Gmail: ative a verificação em duas etapas e gere a senha em
+<https://myaccount.google.com/apppasswords>.
+
+Se o envio falhar, o deploy **não** é interrompido, mas o job mostra o aviso
+**⚠️ Falha no envio do e-mail** e um resumo com o motivo.
+
+---
+
 <div align="center">
 
 **Obrigado pela visita!** 🙏
