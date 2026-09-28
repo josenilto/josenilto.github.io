@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -8,35 +8,44 @@
     <!-- SEO -->
     <meta name="description" content="Josenilto Luis da Silva — SRE/DevOps Engineer with 13+ years in IT. Expert in Cloud (Azure, AWS, GCP), Linux, Infrastructure & Solutions Architecture.">
     <meta name="keywords" content="SRE, DevOps, Cloud, Azure, AWS, GCP, Linux, Infrastructure, Solutions Architect, Josenilto Luis da Silva">
+    <meta name="theme-color" content="#006400">
     <meta name="author" content="Josenilto Luis da Silva">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="sitemap" type="application/xml" href="/sitemap.xml">
     <link rel="canonical" href="https://josenilto.github.io/">
 
     <!-- Open Graph (LinkedIn, Facebook, WhatsApp) -->
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="profile">
+    <meta property="og:site_name" content="Josenilto Luis da Silva">
+    <meta property="profile:first_name" content="Josenilto">
+    <meta property="profile:last_name" content="Luis da Silva">
     <meta property="og:url" content="https://josenilto.github.io/">
     <meta property="og:title" content="Josenilto Luis da Silva | SRE/DevOps Engineer">
     <meta property="og:description" content="Josenilto Luis da Silva — SRE/DevOps Engineer with 13+ years in IT. Expert in Cloud (Azure, AWS, GCP), Linux, Infrastructure & Solutions Architecture.">
     <meta property="og:image" content="https://josenilto.github.io/assets/img/profile-josenilto.webp">
+    <meta property="og:image:type" content="image/webp">
+    <meta property="og:image:alt" content="Josenilto Luis da Silva — SRE/DevOps Engineer">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:card" content="summary">
     <meta name="twitter:url" content="https://josenilto.github.io/">
     <meta name="twitter:title" content="Josenilto Luis da Silva | SRE/DevOps Engineer">
     <meta name="twitter:description" content="Josenilto Luis da Silva — SRE/DevOps Engineer with 13+ years in IT. Expert in Cloud (Azure, AWS, GCP), Linux, Infrastructure & Solutions Architecture.">
     <meta name="twitter:image" content="https://josenilto.github.io/assets/img/profile-josenilto.webp">
+    <meta name="twitter:image:alt" content="Josenilto Luis da Silva — SRE/DevOps Engineer">
 
     <link href="./assets/img/favicon.png" rel="shortcut icon" type="image/x-icon" />
     <link href="./assets/img/favicon.png" rel="icon" type="image/png" />
+    <link href="./assets/img/favicon.png" rel="apple-touch-icon" />
     <title>Josenilto Luis da Silva | SRE/DevOps Engineer</title>
 
     <!-- Preconnect para reduzir latência de DNS/TLS antes do CSS ser lido -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="preconnect" href="https://unpkg.com">
+    <!-- Imagem do topo (LCP) baixada com prioridade máxima -->
+    <link rel="preload" as="image" href="./assets/img/profile-josenilto.webp" type="image/webp" fetchpriority="high">
     <!-- Google Fonts com font-display=swap — carregado via <link> (não @import) para não bloquear renderização -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -46,7 +55,18 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
+      "@graph": [
+      {
+      "@type": "WebSite",
+      "@id": "https://josenilto.github.io/#website",
+      "url": "https://josenilto.github.io/",
+      "name": "Josenilto Luis da Silva | SRE/DevOps Engineer",
+      "inLanguage": "en",
+      "publisher": { "@id": "https://josenilto.github.io/#person" }
+      },
+      {
       "@type": "Person",
+      "@id": "https://josenilto.github.io/#person",
       "name": "Josenilto Luis da Silva",
       "url": "https://josenilto.github.io/",
       "image": "https://josenilto.github.io/assets/img/profile-josenilto.webp",
@@ -67,14 +87,18 @@
       ],
       "sameAs": [
         "https://github.com/josenilto",
-        "https://www.linkedin.com/in/josenilto"
+        "https://www.linkedin.com/in/josenilto",
+        "https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q",
+        "https://www.instagram.com/josenilto"
+      ]
+      }
       ]
     }
     </script>
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="./assets/vendor/aos/aos.css">
 
 </head>
 
@@ -123,7 +147,7 @@
                         <span class="home__greeting-clock" id="greeting-clock"></span>
                     </div>
 
-                    <h1 class="home__title" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500">Hey I'm
+                    <h1 class="home__title" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500">Hey I'm<span class="sr-only"> Josenilto Luis da Silva, SRE/DevOps Engineer</span>
                     </h1>
 
                     <div class="text" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="700">
@@ -149,10 +173,9 @@
                                 class="fa-solid fa-file-pdf" aria-hidden="true"></i></a>
                     </div>
                 </div>
-                <div class="container" data-aos="fade-left">
-                    <img class="home__img" src="./assets/img/profile-josenilto.webp" alt="Foto de Perfil do Josenilto"
-                        width="297" height="300"
-                        data-aos="zoom-left" data-aos-duration="3000">
+                <div class="container">
+                    <img class="home__img" src="./assets/img/profile-josenilto.webp" alt="Josenilto Luis da Silva, SRE/DevOps Engineer"
+                        width="297" height="300" fetchpriority="high" decoding="async">
                 </div>
             </div>
         </section>
@@ -474,13 +497,9 @@
         </div>
     </footer>
 
-    <script src="./assets/js/scrollreveal.js"></script>
-    <script src="./assets/js/main.js"></script>
-
-
-
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/main.js" defer></script>
+    <script src="./assets/vendor/aos/aos.js" defer></script>
+    <script src="./assets/js/script.js" defer></script>
     <script src="./assets/js/canvas-animations.js" defer></script>
 
 </body>

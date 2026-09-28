@@ -3,6 +3,35 @@ function isDark() {
     return document.body.classList.contains('dark-theme');
 }
 
+// Pausa cada animação quando o canvas sai da viewport (ou a aba fica oculta),
+// evitando 6 loops de requestAnimationFrame rodando o tempo todo.
+const canvasVisible = new WeakMap();
+const pendingDraw   = new WeakMap();
+const canvasObserver = 'IntersectionObserver' in window
+    ? new IntersectionObserver((entries) => {
+        for (const e of entries) {
+            canvasVisible.set(e.target, e.isIntersecting);
+            const fn = pendingDraw.get(e.target);
+            if (e.isIntersecting && fn) {
+                pendingDraw.delete(e.target);
+                requestAnimationFrame(fn);
+            }
+        }
+    })
+    : null;
+
+function nextFrame(canvas, draw) {
+    if (canvasObserver && !canvasVisible.has(canvas)) {
+        canvasVisible.set(canvas, true);
+        canvasObserver.observe(canvas);
+    }
+    if (canvasVisible.get(canvas) === false) {
+        pendingDraw.set(canvas, draw);
+        return;
+    }
+    requestAnimationFrame(draw);
+}
+
 function resizeCanvasToSection(canvas, sectionId) {
     const s = document.getElementById(sectionId);
     if (!s) return;
@@ -114,7 +143,7 @@ function resizeCanvasToSection(canvas, sectionId) {
             ctx.fill();
         }
 
-        requestAnimationFrame(draw);
+        nextFrame(canvas, draw);
     }
     draw();
 })();
@@ -210,7 +239,7 @@ function resizeCanvasToSection(canvas, sectionId) {
                 }
             }
         }
-        requestAnimationFrame(draw);
+        nextFrame(canvas, draw);
     }
     draw();
 })();
@@ -275,7 +304,7 @@ function resizeCanvasToSection(canvas, sectionId) {
                 }
             }
         }
-        requestAnimationFrame(draw);
+        nextFrame(canvas, draw);
     }
     draw();
 })();
@@ -316,7 +345,7 @@ function resizeCanvasToSection(canvas, sectionId) {
     window.addEventListener('resize', resize);
 
     function draw() {
-        requestAnimationFrame(draw);
+        nextFrame(canvas, draw);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const [r, g, b] = isDark() ? [0, 200, 80] : [0, 120, 0];
 
@@ -374,7 +403,7 @@ function resizeCanvasToSection(canvas, sectionId) {
     window.addEventListener('resize', resize);
 
     function draw() {
-        requestAnimationFrame(draw);
+        nextFrame(canvas, draw);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const [r, g, b] = isDark() ? [0, 200, 80] : [0, 120, 0];
         ctx.font = "10px 'Courier New', monospace";
@@ -444,7 +473,7 @@ function resizeCanvasToSection(canvas, sectionId) {
     window.addEventListener('resize', resize);
 
     function draw() {
-        requestAnimationFrame(draw);
+        nextFrame(canvas, draw);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const [r, g, b] = isDark() ? [0, 200, 80] : [0, 120, 0];
         ctx.font = "10px 'Courier New', monospace";
