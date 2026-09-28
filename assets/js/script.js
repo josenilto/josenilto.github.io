@@ -1,4 +1,4 @@
-AOS.init({ offset: 0 });
+if (window.AOS) AOS.init({ offset: 0 });
 
 // Typewriter Effect
 
