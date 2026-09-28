@@ -40,15 +40,15 @@
     <link href="./assets/img/favicon.png" rel="apple-touch-icon" />
     <title>Josenilto Luis da Silva | SRE/DevOps Engineer</title>
 
-    <!-- Preconnect para reduzir latência de DNS/TLS antes do CSS ser lido -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <!-- Imagem do topo (LCP) baixada com prioridade máxima -->
+    <!-- Recursos críticos auto-hospedados (sem conexões com terceiros):
+         imagem do topo (LCP) e fontes usadas acima da dobra são pré-carregadas -->
     <link rel="preload" as="image" href="./assets/img/profile-josenilto.webp" type="image/webp" fetchpriority="high">
-    <!-- Google Fonts com font-display=swap — carregado via <link> (não @import) para não bloquear renderização -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preload" as="font" href="./assets/fonts/poppins-latin-400-normal.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="./assets/fonts/poppins-latin-600-normal.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="./assets/vendor/fontawesome/webfonts/fa-brands-400.woff2" type="font/woff2" crossorigin>
 
+    <link href="./assets/vendor/fontawesome/fontawesome.css" rel="stylesheet">
+    <link href="./assets/vendor/aos/aos.css" rel="stylesheet">
     <link href="./assets/css/styles.css" rel="stylesheet" />
 
     <!-- JSON-LD Structured Data -->
@@ -97,8 +97,6 @@
     </script>
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="./assets/vendor/aos/aos.css">
 
 </head>
 
@@ -328,7 +326,7 @@
                 <div class="menu__container bd-grid">
 
                     <div class="menu__content">
-                        <h4 class="menu__category"><i class="fas fa-chart-line"></i> Monitoring</h4>
+                        <h3 class="menu__category"><i class="fas fa-chart-line"></i> Monitoring</h3>
                         <div class="menu__tags">
                             <a href="https://github.com/josenilto/dev.zabbix" target="_blank" rel="noopener noreferrer" class="menu__name">Zabbix</a>
                             <a href="https://github.com/josenilto/dev.grafana" target="_blank" rel="noopener noreferrer" class="menu__name">Grafana</a>
@@ -338,7 +336,7 @@
                     </div>
 
                     <div class="menu__content">
-                        <h4 class="menu__category"><i class="fas fa-server"></i> Web &amp; App Servers</h4>
+                        <h3 class="menu__category"><i class="fas fa-server"></i> Web &amp; App Servers</h3>
                         <div class="menu__tags">
                             <a href="https://github.com/josenilto/dev.nginx" target="_blank" rel="noopener noreferrer" class="menu__name">Nginx</a>
                             <a href="https://github.com/josenilto/dev.jboss" target="_blank" rel="noopener noreferrer" class="menu__name">JBoss</a>
@@ -349,7 +347,7 @@
                     </div>
 
                     <div class="menu__content">
-                        <h4 class="menu__category"><i class="fas fa-database"></i> Databases</h4>
+                        <h3 class="menu__category"><i class="fas fa-database"></i> Databases</h3>
                         <div class="menu__tags">
                             <a href="https://github.com/josenilto/dev.mysql" target="_blank" rel="noopener noreferrer" class="menu__name">MySQL</a>
                             <a href="https://github.com/josenilto/dev.influxdb" target="_blank" rel="noopener noreferrer" class="menu__name">InfluxDB</a>
@@ -360,7 +358,7 @@
                     </div>
 
                     <div class="menu__content">
-                        <h4 class="menu__category"><i class="fas fa-shield-alt"></i> Network &amp; Security</h4>
+                        <h3 class="menu__category"><i class="fas fa-shield-alt"></i> Network &amp; Security</h3>
                         <div class="menu__tags">
                             <a href="#" class="menu__name">SSH</a>
                             <a href="#" class="menu__name">DNS</a>
@@ -371,7 +369,7 @@
                     </div>
 
                     <div class="menu__content">
-                        <h4 class="menu__category"><i class="fas fa-scale-balanced"></i> Load Balance &amp; Proxy</h4>
+                        <h3 class="menu__category"><i class="fas fa-scale-balanced"></i> Load Balance &amp; Proxy</h3>
                         <div class="menu__tags">
                             <a href="https://github.com/josenilto/dev.haproxy" target="_blank" rel="noopener noreferrer" class="menu__name">HAProxy</a>
                             <a href="https://github.com/josenilto/dev.pfsense" target="_blank" rel="noopener noreferrer" class="menu__name">pfSense</a>
@@ -379,7 +377,7 @@
                     </div>
 
                     <div class="menu__content">
-                        <h4 class="menu__category"><i class="fas fa-code-branch"></i> DevOps &amp; IaC</h4>
+                        <h3 class="menu__category"><i class="fas fa-code-branch"></i> DevOps &amp; IaC</h3>
                         <div class="menu__tags">
                             <a href="https://github.com/josenilto/dev.docker" target="_blank" rel="noopener noreferrer" class="menu__name">Docker</a>
                             <a href="https://github.com/josenilto/dev.ansible" target="_blank" rel="noopener noreferrer" class="menu__name">Ansible</a>

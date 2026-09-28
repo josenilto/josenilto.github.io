@@ -3,8 +3,13 @@ function isDark() {
     return document.body.classList.contains('dark-theme');
 }
 
-// Pausa cada animação quando o canvas sai da viewport (ou a aba fica oculta),
-// evitando 6 loops de requestAnimationFrame rodando o tempo todo.
+// Agendador das animações de canvas:
+// - só desenha canvases visíveis na viewport (IntersectionObserver);
+// - começa após o carregamento, quando o navegador estiver ocioso,
+//   para não disputar a thread principal com a renderização inicial;
+// - não anima nada com prefers-reduced-motion (acessibilidade / economia).
+const reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const canvasVisible = new WeakMap();
 const pendingDraw   = new WeakMap();
 const canvasObserver = 'IntersectionObserver' in window
@@ -20,10 +25,26 @@ const canvasObserver = 'IntersectionObserver' in window
     })
     : null;
 
+function whenIdle(fn) {
+    const run = () => ('requestIdleCallback' in window)
+        ? requestIdleCallback(fn, { timeout: 2000 })
+        : setTimeout(fn, 200);
+    if (document.readyState === 'complete') run();
+    else window.addEventListener('load', run, { once: true });
+}
+
 function nextFrame(canvas, draw) {
-    if (canvasObserver && !canvasVisible.has(canvas)) {
-        canvasVisible.set(canvas, true);
-        canvasObserver.observe(canvas);
+    if (reduceMotion) return;
+    if (!canvasObserver) {
+        requestAnimationFrame(draw);
+        return;
+    }
+    if (!canvasVisible.has(canvas)) {
+        // 1º quadro: aguarda ociosidade + visibilidade antes de desenhar
+        canvasVisible.set(canvas, false);
+        pendingDraw.set(canvas, draw);
+        whenIdle(() => canvasObserver.observe(canvas));
+        return;
     }
     if (canvasVisible.get(canvas) === false) {
         pendingDraw.set(canvas, draw);
@@ -145,7 +166,7 @@ function resizeCanvasToSection(canvas, sectionId) {
 
         nextFrame(canvas, draw);
     }
-    draw();
+    nextFrame(canvas, draw);
 })();
 
 // greeting/clock: real-time greeting, date, and clock display
@@ -241,7 +262,7 @@ function resizeCanvasToSection(canvas, sectionId) {
         }
         nextFrame(canvas, draw);
     }
-    draw();
+    nextFrame(canvas, draw);
 })();
 
 // career-particles: particle system with connecting lines
@@ -306,7 +327,7 @@ function resizeCanvasToSection(canvas, sectionId) {
         }
         nextFrame(canvas, draw);
     }
-    draw();
+    nextFrame(canvas, draw);
 })();
 
 // skills-canvas: falling keyword rain
@@ -363,7 +384,7 @@ function resizeCanvasToSection(canvas, sectionId) {
             ctx.fillText(c.w, c.x - ctx.measureText(c.w).width / 2, c.y);
         }
     }
-    draw();
+    nextFrame(canvas, draw);
 })();
 
 // engagement-canvas: horizontal data streams
@@ -424,7 +445,7 @@ function resizeCanvasToSection(canvas, sectionId) {
             ctx.fillText(s.txt, s.x, s.y);
         }
     }
-    draw();
+    nextFrame(canvas, draw);
 })();
 
 // jobs-canvas: floating CLI commands
@@ -491,5 +512,5 @@ function resizeCanvasToSection(canvas, sectionId) {
             ctx.fillText(c.txt, c.x, c.y);
         }
     }
-    draw();
+    nextFrame(canvas, draw);
 })();
