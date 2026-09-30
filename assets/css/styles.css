@@ -199,6 +199,7 @@ img {
 
 /*========== NAV ==========*/
 .nav {
+  position: relative;
   max-width: 1024px;
   height: var(--header-height);
   display: flex;
@@ -1821,9 +1822,19 @@ img {
     display: none;
   }
 
+  /* Fica fora do fluxo do nav__list — nunca quebra linha junto com os
+     itens do menu, não importa quantos existam. Ancorado à .nav
+     (position: relative), que aqui já não tem o nav__menu fixed no
+     caminho (isso só vale para mobile). */
   .change-theme {
-    position: initial;
-    margin-left: var(--mb-2);
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .nav__menu {
+    padding-right: 2.25rem;
   }
 
   .home__container {
