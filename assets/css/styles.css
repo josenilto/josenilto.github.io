@@ -851,6 +851,13 @@ img {
 }
 
 /*========== EXPERIENCE ==========*/
+.experience__intro {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--text-color);
+}
+
 .experience__container {
   row-gap: 1.25rem;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -872,13 +879,24 @@ img {
 }
 
 .experience__sector {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: var(--smaller-font-size);
   font-weight: var(--font-semi-bold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--first-color-alt);
   margin-bottom: 0.4rem;
+}
+
+.experience__sector i {
+  font-size: 0.85em;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.experience__card:hover .experience__sector i {
+  transform: rotate(-8deg) scale(1.15);
 }
 
 .experience__role {
@@ -903,29 +921,97 @@ img {
 }
 
 .education__list {
+  position: relative;
   display: grid;
   gap: 1rem;
   max-width: 640px;
   margin: var(--mb-4) auto 0;
+  padding-left: 1.5rem;
+}
+
+/* Trilho vertical ligando os marcos acadêmicos, como uma linha do tempo */
+.education__list::before {
+  content: '';
+  position: absolute;
+  left: 0.3rem;
+  top: 0.9rem;
+  bottom: 0.9rem;
+  width: 2px;
+  background: linear-gradient(var(--first-color-alt), rgba(0, 100, 0, 0.05));
+  opacity: 0.35;
 }
 
 .education__item {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
+  gap: 1rem;
   text-align: left;
   background-color: var(--container-color);
   border-radius: 0.5rem;
-  padding: 0.9rem 1.25rem;
+  padding: 0.9rem 6rem 0.9rem 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Marco na linha do tempo, alinhado ao trilho de .education__list::before */
+.education__item::before {
+  content: '';
+  position: absolute;
+  left: -1.2rem;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background-color: var(--first-color-alt);
+  box-shadow: 0 0 0 3px var(--body-color);
+}
+
+.education__item:has(.education__status--progress)::before {
+  background-color: #b45309;
+}
+
+.education__item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .education__info {
   display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.education__icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: rgba(0, 100, 0, 0.08);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+}
+
+.education__icon {
+  font-size: 0.95rem;
+  color: var(--first-color-alt);
+  line-height: 1;
+}
+
+.education__item:hover .education__icon-wrapper {
+  transform: rotate(-8deg) scale(1.1);
+  background-color: rgba(0, 100, 0, 0.14);
+}
+
+.education__info-text {
+  display: flex;
   flex-direction: column;
   gap: 0.15rem;
+  min-width: 0;
 }
 
 .education__degree {
@@ -939,6 +1025,10 @@ img {
 }
 
 .education__status {
+  position: absolute;
+  top: 50%;
+  right: 1.25rem;
+  transform: translateY(-50%);
   font-size: var(--smaller-font-size);
   font-weight: var(--font-semi-bold);
   padding: 0.2rem 0.6rem;
@@ -1824,6 +1914,17 @@ img {
   }
   .menu__count {
     display: none;
+  }
+
+  /* Espaço reservado pro badge fica apertado demais — volta a empilhar */
+  .education__item {
+    flex-wrap: wrap;
+    padding: 0.9rem 1.25rem;
+  }
+  .education__status {
+    position: static;
+    transform: none;
+    margin-left: calc(2.25rem + 0.9rem);
   }
 }
 
