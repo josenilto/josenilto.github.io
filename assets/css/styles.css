@@ -1812,7 +1812,7 @@ img {
     row-gap: 0.5rem;
   }
   .nav__item {
-    margin-left: var(--mb-3);
+    margin-left: 1rem;
     margin-bottom: 0;
   }
   .nav__link {
@@ -1874,7 +1874,7 @@ img {
   }
 
   .nav__item {
-    margin-left: var(--mb-5);
+    margin-left: 1.5rem;
   }
   .nav__link {
     font-size: var(--normal-font-size);
