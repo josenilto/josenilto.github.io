@@ -1833,8 +1833,19 @@ img {
     transform: translateY(-50%);
   }
 
+  /* Contact (CTA) segue o mesmo tratamento: fica ancorado, não é só
+     "mais um item" que pode ser vítima de quebra de linha quando o
+     menu ganhar itens novos no futuro. */
+  .nav__item:has(.nav__link--cta) {
+    position: absolute;
+    right: 2.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0;
+  }
+
   .nav__menu {
-    padding-right: 2.25rem;
+    padding-right: 9rem;
   }
 
   .home__container {
