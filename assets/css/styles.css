@@ -457,6 +457,26 @@ img {
   margin-bottom: var(--mb-4);
 }
 
+.home__subtitle strong {
+  color: var(--first-color-alt);
+}
+
+.typewriter-text::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 0.9em;
+  margin-left: 2px;
+  background: var(--first-color-alt);
+  vertical-align: -0.1em;
+  animation: typewriter-cursor 0.9s step-end infinite;
+}
+
+@keyframes typewriter-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .home__img {
   position: relative;
   z-index: 1;
@@ -473,9 +493,67 @@ img {
     0 0 0 8px rgba(0, 100, 0, 0.1),
     0 20px 40px rgba(0, 0, 0, 0.2);
   justify-self: center;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s;
+}
+
+.container:hover .home__img {
+  transform: scale(1.03);
+  box-shadow:
+    0 0 0 8px rgba(0, 100, 0, 0.16),
+    0 24px 48px rgba(0, 0, 0, 0.25);
 }
 
 /* removed invalid selector and property: #far fa-calendar-alt { size: 7x; } */
+
+.career__scroll-cue {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--text-color-light);
+  z-index: 1;
+  animation: career-scroll-cue-bounce 2s ease-in-out infinite;
+}
+
+.career__scroll-cue:hover {
+  color: var(--first-color-alt);
+}
+
+.career__scroll-cue-label {
+  font-size: var(--smaller-font-size);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.career__scroll-cue svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: currentColor;
+}
+
+@keyframes career-scroll-cue-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(6px); }
+}
+
+@media screen and (max-width: 576px) {
+  .career__scroll-cue {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .career__scroll-cue {
+    animation: none;
+  }
+  .typewriter-text::after {
+    animation: none;
+  }
+}
 
 /*========== BUTTONS ==========*/
 .button {
@@ -1769,13 +1847,14 @@ img {
     color: #000;
   }
 
-  /* Esconder elementos não relevantes para impressão */
+  /* Esconder elementos não relevantes para impressão
+     (a animação AOS em si é neutralizada mais abaixo, sem esconder o conteúdo) */
   canvas,
   .scrolltop,
   .nav__toggle,
   .change-theme,
   .nav__close,
-  [data-aos],
+  .career__scroll-cue,
   .theme-icon,
   .footer__copy {
     display: none !important;
@@ -1964,6 +2043,10 @@ img {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+
+  .typewriter-text::after {
+    animation: none !important;
   }
 }
 
