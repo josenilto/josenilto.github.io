@@ -577,6 +577,11 @@ img {
 
 .story__tag-label i {
   font-size: 0.78rem;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.story__tag-group:hover .story__tag-label i {
+  transform: rotate(-8deg) scale(1.15);
 }
 
 .story__tags {
@@ -595,13 +600,42 @@ img {
   border-radius: 2rem;
   padding: 0.2rem 0.7rem;
   color: var(--title-color);
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
 }
 
 .story__tag:hover {
   background-color: var(--first-color-alt);
   color: #fff;
   border-color: var(--first-color-alt);
+  transform: translateY(-2px);
+}
+
+/* Revelação em cascata: as tags aparecem em sequência quando o grupo entra na
+   viewport (mesmo gatilho do AOS no card pai) — funciona em toque, não só hover */
+.story__tag-group[data-aos] .story__tags .story__tag {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease, background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.story__tag-group[data-aos].aos-animate .story__tags .story__tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.story__tags .story__tag:nth-child(1) { transition-delay: 0.05s; }
+.story__tags .story__tag:nth-child(2) { transition-delay: 0.10s; }
+.story__tags .story__tag:nth-child(3) { transition-delay: 0.15s; }
+.story__tags .story__tag:nth-child(4) { transition-delay: 0.20s; }
+.story__tags .story__tag:nth-child(5) { transition-delay: 0.25s; }
+.story__tags .story__tag:nth-child(6) { transition-delay: 0.30s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .story__tag-group[data-aos] .story__tags .story__tag {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 /* Story grid — 2 colunas com imagem e tags lado a lado */
@@ -1925,7 +1959,8 @@ img {
   }
 
   /* Remover animações e transformações AOS */
-  [data-aos] {
+  [data-aos],
+  .story__tag-group[data-aos] .story__tags .story__tag {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
