@@ -921,13 +921,28 @@ img {
 }
 
 .education__list {
+  position: relative;
   display: grid;
   gap: 1rem;
   max-width: 640px;
   margin: var(--mb-4) auto 0;
+  padding-left: 1.5rem;
+}
+
+/* Trilho vertical ligando os marcos acadêmicos, como uma linha do tempo */
+.education__list::before {
+  content: '';
+  position: absolute;
+  left: 0.3rem;
+  top: 0.9rem;
+  bottom: 0.9rem;
+  width: 2px;
+  background: linear-gradient(var(--first-color-alt), rgba(0, 100, 0, 0.05));
+  opacity: 0.35;
 }
 
 .education__item {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -939,6 +954,24 @@ img {
   padding: 0.9rem 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Marco na linha do tempo, alinhado ao trilho de .education__list::before */
+.education__item::before {
+  content: '';
+  position: absolute;
+  left: -1.2rem;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background-color: var(--first-color-alt);
+  box-shadow: 0 0 0 3px var(--body-color);
+}
+
+.education__item:has(.education__status--progress)::before {
+  background-color: #b45309;
 }
 
 .education__item:hover {
