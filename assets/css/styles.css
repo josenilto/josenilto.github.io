@@ -851,6 +851,13 @@ img {
 }
 
 /*========== EXPERIENCE ==========*/
+.experience__intro {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--text-color);
+}
+
 .experience__container {
   row-gap: 1.25rem;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -872,13 +879,24 @@ img {
 }
 
 .experience__sector {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: var(--smaller-font-size);
   font-weight: var(--font-semi-bold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--first-color-alt);
   margin-bottom: 0.4rem;
+}
+
+.experience__sector i {
+  font-size: 0.85em;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.experience__card:hover .experience__sector i {
+  transform: rotate(-8deg) scale(1.15);
 }
 
 .experience__role {
@@ -920,9 +938,33 @@ img {
   border-radius: 0.5rem;
   padding: 0.9rem 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.education__item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .education__info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.education__icon {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  color: var(--first-color-alt);
+  opacity: 0.7;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.education__item:hover .education__icon {
+  transform: rotate(-8deg) scale(1.15);
+}
+
+.education__info-text {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
