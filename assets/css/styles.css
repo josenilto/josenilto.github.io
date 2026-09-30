@@ -1081,11 +1081,31 @@ img {
 }
 
 .engagement__card--featured {
-    box-shadow: 0 4px 20px rgba(0, 100, 0, 0.12);
+    border: 1px solid rgba(52, 168, 83, 0.35);
+    box-shadow: 0 4px 20px rgba(52, 168, 83, 0.16);
 }
 
 .engagement__card--featured::before {
     transform: scaleX(1);
+}
+
+.engagement__card--featured:hover {
+    box-shadow: 0 14px 34px rgba(52, 168, 83, 0.22), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.engagement__badge {
+    position: absolute;
+    top: 0.9rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #34a853;
+    color: #fff;
+    font-size: var(--smaller-font-size);
+    font-weight: var(--font-semi-bold);
+    padding: 0.3rem 0.9rem;
+    border-radius: 2rem;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(52, 168, 83, 0.4);
 }
 
 .engagement__card:hover {
@@ -1137,7 +1157,7 @@ img {
 
 .engagement__btn {
     display: inline-block;
-    background-color: var(--first-color-alt);
+    background-color: #34a853;
     color: #fff;
     font-size: var(--small-font-size);
     font-weight: var(--font-semi-bold);
@@ -1148,20 +1168,21 @@ img {
 }
 
 .engagement__btn:hover {
-    background-color: #004d00;
+    background-color: #2c9247;
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 100, 0, 0.4);
+    box-shadow: 0 6px 18px rgba(52, 168, 83, 0.4);
 }
 
+/* Card em destaque ganha um verde mais profundo — mesma família de
+   cor do resto do site, não mais um cinza-escuro dissonante */
 .engagement__btn--dark {
-    background-color: var(--title-color);
-    color: var(--body-color);
+    background-color: var(--first-color-alt);
+    color: #fff;
 }
 
 .engagement__btn--dark:hover {
-    background-color: var(--first-color-alt);
-    color: #fff;
-    box-shadow: 0 6px 18px rgba(0, 100, 0, 0.35);
+    background-color: #34a853;
+    box-shadow: 0 6px 18px rgba(52, 168, 83, 0.35);
 }
 
 /*========== JOBS SECTION ==========*/
