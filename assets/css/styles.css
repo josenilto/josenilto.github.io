@@ -1490,13 +1490,44 @@ img {
   animation-play-state: paused;
 }
 
-.contact__card-icon {
-  font-size: 2.25rem;
-  transition: transform 0.3s;
+.contact__card-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  transition: background-color 0.3s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.contact__card:hover .contact__card-icon {
-  transform: scale(1.1);
+.contact__card:hover .contact__card-icon-wrapper {
+  transform: scale(1.1) rotate(-6deg);
+}
+
+.contact__card-icon {
+  font-size: 1.9rem;
+  transition: color 0.3s;
+}
+
+.contact__card--whatsapp .contact__card-icon-wrapper {
+  background-color: rgba(37, 211, 102, 0.12);
+}
+.contact__card--whatsapp .contact__card-icon {
+  color: #25D366;
+}
+
+.contact__card--linkedin .contact__card-icon-wrapper {
+  background-color: rgba(10, 102, 194, 0.12);
+}
+.contact__card--linkedin .contact__card-icon {
+  color: #0A66C2;
+}
+
+.contact__card--github .contact__card-icon-wrapper {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+.contact__card--github .contact__card-icon {
+  color: var(--title-color);
 }
 
 .contact__card--whatsapp:hover {
@@ -1515,6 +1546,14 @@ img {
   background-color: var(--title-color);
   color: var(--body-color);
   border-bottom-color: var(--first-color-alt);
+}
+
+.contact__card:hover .contact__card-icon-wrapper {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.contact__card:hover .contact__card-icon {
+  color: inherit;
 }
 
 /*========== FOOTER ==========*/
