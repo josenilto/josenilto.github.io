@@ -297,7 +297,7 @@ img {
 /* Contact se destaca como call-to-action, não como mais um item igual aos outros */
 .nav__link--cta {
   color: #fff;
-  background-color: var(--first-color-alt);
+  background-color: #34a853;
   padding: 0.4rem 1rem;
   border-radius: 2rem;
 }
@@ -309,8 +309,8 @@ img {
 .nav__link--cta:hover {
   color: #fff;
   letter-spacing: normal;
-  background-color: var(--first-color);
-  box-shadow: 0 4px 14px rgba(0, 100, 0, 0.35);
+  background-color: #2c9247;
+  box-shadow: 0 4px 14px rgba(52, 168, 83, 0.4);
 }
 
 .nav__link:hover::after {
