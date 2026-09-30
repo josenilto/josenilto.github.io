@@ -32,7 +32,8 @@
 Este repositório hospeda o **portfólio e currículo online** de Josenilto L da Silva, publicado via **GitHub Pages** com pipeline de deploy automatizado usando **Jekyll + GitHub Actions**.
 
 ```text
-🌍 URL de Produção → https://josenilto.github.io
+🌍 URL de Produção (EN) → https://josenilto.github.io
+🇧🇷 Versão em Português    → https://josenilto.github.io/pt/
 ```
 
 ---
