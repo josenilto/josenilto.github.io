@@ -42,6 +42,7 @@ Este repositório hospeda o **portfólio e currículo online** de Josenilto L da
 | Instituição | Grau | Curso | Status |
 |---|---|---|---|
 | **Instituto Militar de Engenharia — IME** | Mestrado | Sistema da Informação | 🔄 Cursando |
+| **Universidade Estácio de Sá — UNESA** | Pós-Graduação | Arquitetura e Projetos de Cloud Computing | ✅ Concluído · Dez/2025 |
 | **Universidade Estácio de Sá — UNESA** | Bacharelado | Sistema da Informação | ✅ Concluído · Mar/2024 |
 | **Universidade Veiga de Almeida — UVA** | Bacharelado | Ciência da Computação | ✅ Concluído · Ago/2019 |
 
