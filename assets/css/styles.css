@@ -619,9 +619,17 @@ img {
 }
 
 /*========== SERVICES ==========*/
+.services__intro {
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--text-color);
+}
+
 .services__container {
   row-gap: 2.5rem;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: var(--mb-4);
 }
 
 .services__content {
@@ -677,6 +685,7 @@ img {
 
 /* Container do ícone */
 .services__icon-wrapper {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -689,9 +698,26 @@ img {
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s;
 }
 
+/* Anel que se expande só no hover — não é um loop ambiente */
+.services__icon-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 1.25rem;
+  border: 1.5px solid var(--first-color-alt);
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.35s, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .services__content:hover .services__icon-wrapper {
   transform: rotate(-6deg) scale(1.08);
   box-shadow: 0 8px 24px rgba(0, 100, 0, 0.5);
+}
+
+.services__content:hover .services__icon-wrapper::after {
+  opacity: 0.35;
+  transform: scale(1);
 }
 
 .services__icon {
