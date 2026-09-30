@@ -1003,6 +1003,15 @@ img {
   transform: scaleX(1);
 }
 
+.menu__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
 .menu__category {
   display: flex;
   align-items: center;
@@ -1012,7 +1021,7 @@ img {
   color: var(--first-color-alt);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin: 0 0 0.75rem 0;
+  margin: 0;
   padding: 0.15rem 0.55rem 0.15rem 0.45rem;
   background-color: rgba(0, 100, 0, 0.07);
   border-left: 2px solid var(--first-color-alt);
@@ -1022,6 +1031,18 @@ img {
 
 .menu__category i {
   font-size: 0.78rem;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu__content:hover .menu__category i {
+  transform: rotate(-8deg) scale(1.15);
+}
+
+.menu__count {
+  flex-shrink: 0;
+  font-size: var(--smaller-font-size);
+  color: var(--text-color-light);
+  white-space: nowrap;
 }
 
 .menu__tags {
@@ -1029,6 +1050,34 @@ img {
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-top: 0.25rem;
+}
+
+/* Revelação em cascata: as tags aparecem em sequência quando o card entra na
+   viewport (mesmo gatilho do AOS no card pai) — funciona em toque, não só hover */
+.menu__content[data-aos] .menu__tags .menu__name {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease, background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.menu__content[data-aos].aos-animate .menu__tags .menu__name {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu__tags .menu__name:nth-child(1) { transition-delay: 0.05s; }
+.menu__tags .menu__name:nth-child(2) { transition-delay: 0.10s; }
+.menu__tags .menu__name:nth-child(3) { transition-delay: 0.15s; }
+.menu__tags .menu__name:nth-child(4) { transition-delay: 0.20s; }
+.menu__tags .menu__name:nth-child(5) { transition-delay: 0.25s; }
+.menu__tags .menu__name:nth-child(6) { transition-delay: 0.30s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .menu__content[data-aos] .menu__tags .menu__name {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 .menu__name {
@@ -1634,6 +1683,9 @@ img {
   .home__img {
     width: 220px;
     height: 220px;
+  }
+  .menu__count {
+    display: none;
   }
 }
 
