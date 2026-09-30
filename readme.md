@@ -52,16 +52,20 @@ Este repositório hospeda o **portfólio e currículo online** de Josenilto L da
 
 | Cargo | Empresa / Cliente | Setor |
 |---|---|---|
-| **SRE** | TIVIT · *Cliente: Petrobras* | Energia / O&G |
-| **DevOps** | TelTec Solutions · *Clientes: Grupo Madero, BRMALLS, Azul* | Varejo / Aviação |
-| **DevSecOps** | Monitora · *Cliente: Serasa Experian* | Fintech / Segurança |
-| **Arquiteto Cloud / DevOps** | Grupo Madero | Food Service |
-| **Analista Cloud** | Linx · *Projetos chaordic* | E-commerce |
-| **Analista de Infraestrutura** | Stefanini LATAM · CTCTech · *Cliente: ANP* | Governo / Oil |
-| **Analista Multiplataforma** | G&P · GlobalHitss · *Cliente: Caixa Econômica Federal* | Financeiro |
+| **Especialista / Arquiteto DevOps** | Grupo Profarma | Farmacêutico / Logística |
+| **SRE / DevOps Engineer** | TIVIT · *Cliente: Petrobras* | Energia / O&G |
+| **DevOps Engineer** | TelTec Solutions · *Clientes: Grupo Madero, BRMALLS, Azul e Gol Linhas Aéreas* | Varejo / Aviação |
+| **DevSecOps Engineer** | Monitora · *Cliente: Serasa Experian* | Fintech / Segurança |
+| **Arquiteto Cloud / DevOps Engineer** | Grupo Madero | Food Service |
+| **Analista Cloud** | Linx · *Projetos Chaordic* | E-commerce |
+| **Analista de Infraestrutura** | Stefanini LATAM | Consultoria de TI |
+| **Analista de Infraestrutura** | CTCTech · *Cliente: ANP (Projeto APPs)* | Governo / Oil |
+| **SysAdmin — On-Premises e Cloud** | G&P e GlobalHitss · *Cliente: Caixa Econômica Federal* | Financeiro |
+| **Analista de Implantação** | Ferragens Ramada | Varejo |
 | **Analista de Implantação** | Cam Tecnologia · *Clientes: RNP, Ferragens Ramada* | Educação / Varejo |
 | **Supervisor Operacional de TI** | Universidade Veiga de Almeida — UVA | Educação |
-| **Técnico de Informática** | Universidade Veiga de Almeida — UVA | Educação |
+| **Analista de Redes** | Universidade Veiga de Almeida — UVA | Educação |
+| **Estagiário de TI** | Universidade Veiga de Almeida — UVA | Educação |
 
 ---
 
