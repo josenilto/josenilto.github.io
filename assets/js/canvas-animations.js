@@ -67,15 +67,24 @@ function resizeCanvasToSection(canvas, sectionId) {
     const clockEl    = document.getElementById('greeting-clock');
     if (!greetingEl) return;
 
-    const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const isPt = document.documentElement.lang.toLowerCase().startsWith('pt');
+
+    const DAYS   = isPt
+        ? ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado']
+        : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const MONTHS = isPt
+        ? ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']
+        : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const GREETINGS = isPt
+        ? ['Bom dia','Boa tarde','Boa noite']
+        : ['Good morning','Good afternoon','Good evening'];
 
     function pad(n) { return String(n).padStart(2, '0'); }
 
     function tick() {
         const now  = new Date();
         const h    = now.getHours();
-        const greeting = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+        const greeting = h < 12 ? GREETINGS[0] : h < 18 ? GREETINGS[1] : GREETINGS[2];
         greetingEl.textContent = greeting;
         dateEl.textContent     = `${DAYS[now.getDay()]}, ${MONTHS[now.getMonth()]} ${now.getDate()} ${now.getFullYear()}`;
         clockEl.textContent    = `${pad(h)}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
