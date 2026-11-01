@@ -1,6 +1,6 @@
 /*!
  * Bootstrap Icons v1.13.2 (https://icons.getbootstrap.com/) — subconjunto
- * com os ícones usados no menu e nas seções Career e Story de josenilto.github.io. Licensed under MIT.
+ * com os ícones usados em index.html e pt/index.html.
  * Para adicionar ícones: regenerar a partir do pacote npm bootstrap-icons@1.13.2.
  */
 @font-face {
@@ -22,36 +22,47 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.bi-rocket-takeoff::before { content: "\f845"; }
-.bi-journal-richtext::before { content: "\f443"; }
+.bi-airplane::before { content: "\f7cd"; }
+.bi-award::before { content: "\f154"; }
+.bi-bank::before { content: "\f62e"; }
+.bi-boxes::before { content: "\f685"; }
 .bi-briefcase::before { content: "\f1cc"; }
-.bi-mortarboard::before { content: "\f6fe"; }
-.bi-stars::before { content: "\f589"; }
-.bi-people::before { content: "\f4d0"; }
-.bi-terminal::before { content: "\f5c3"; }
-.bi-send::before { content: "\f6c0"; }
-.bi-translate::before { content: "\f658"; }
-.bi-moon-stars::before { content: "\f496"; }
-.bi-sun::before { content: "\f5a2"; }
-.bi-list::before { content: "\f479"; }
-.bi-x-lg::before { content: "\f659"; }
-.bi-chat-dots::before { content: "\f24a"; }
-.bi-file-earmark-arrow-down::before { content: "\f356"; }
-.bi-github::before { content: "\f3ed"; }
-.bi-linkedin::before { content: "\f472"; }
-.bi-calendar-check::before { content: "\f1e2"; }
 .bi-building::before { content: "\f1dd"; }
-.bi-cloud-check::before { content: "\f299"; }
+.bi-calendar-check::before { content: "\f1e2"; }
+.bi-capsule::before { content: "\f7df"; }
+.bi-cart3::before { content: "\f244"; }
+.bi-cash-coin::before { content: "\f632"; }
+.bi-chat-dots::before { content: "\f24a"; }
+.bi-chevron-down::before { content: "\f282"; }
 .bi-cloud::before { content: "\f2c1"; }
-.bi-shield-check::before { content: "\f52f"; }
-.bi-git::before { content: "\f69d"; }
+.bi-cloud-check::before { content: "\f299"; }
+.bi-clouds::before { content: "\f2c3"; }
 .bi-cpu::before { content: "\f2d6"; }
+.bi-cup-hot::before { content: "\f7eb"; }
 .bi-diagram-3::before { content: "\f2ee"; }
 .bi-display::before { content: "\f302"; }
-.bi-clouds::before { content: "\f2c3"; }
-.bi-patch-check::before { content: "\f4b6"; }
+.bi-file-earmark-arrow-down::before { content: "\f356"; }
+.bi-git::before { content: "\f69d"; }
+.bi-github::before { content: "\f3ed"; }
 .bi-hdd-rack::before { content: "\f40f"; }
+.bi-journal-richtext::before { content: "\f443"; }
+.bi-lightning-charge::before { content: "\f46d"; }
+.bi-linkedin::before { content: "\f472"; }
+.bi-list::before { content: "\f479"; }
+.bi-moon-stars::before { content: "\f496"; }
+.bi-mortarboard::before { content: "\f6fe"; }
+.bi-patch-check::before { content: "\f4b6"; }
 .bi-pc-display::before { content: "\f6a6"; }
-.bi-boxes::before { content: "\f685"; }
+.bi-people::before { content: "\f4d0"; }
+.bi-rocket-takeoff::before { content: "\f845"; }
+.bi-send::before { content: "\f6c0"; }
+.bi-shield-check::before { content: "\f52f"; }
+.bi-shield-lock::before { content: "\f538"; }
+.bi-shop::before { content: "\f543"; }
 .bi-speedometer2::before { content: "\f580"; }
-.bi-award::before { content: "\f154"; }
+.bi-star-fill::before { content: "\f586"; }
+.bi-stars::before { content: "\f589"; }
+.bi-sun::before { content: "\f5a2"; }
+.bi-terminal::before { content: "\f5c3"; }
+.bi-translate::before { content: "\f658"; }
+.bi-x-lg::before { content: "\f659"; }
