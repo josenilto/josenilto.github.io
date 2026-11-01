@@ -24,12 +24,13 @@
 - [Competências Técnicas](#-competências-técnicas)
 - [Tecnologias & Ferramentas](#-tecnologias--ferramentas)
 - [Stack do Site](#-stack-do-site)
+- [CI/CD — Pipelines](#️-cicd--pipelines)
 
 ---
 
 ## 🌐 Sobre o Projeto
 
-Este repositório hospeda o **portfólio e currículo online** de Josenilto L da Silva, publicado via **GitHub Pages** com pipeline de deploy automatizado usando **Jekyll + GitHub Actions**.
+Este repositório hospeda o **portfólio e currículo online** de Josenilto L da Silva, publicado via **GitHub Pages** com pipeline de deploy automatizado em **GitHub Actions** (HTML estático, sem Jekyll).
 
 ```text
 🌍 URL de Produção (EN) → https://josenilto.github.io
@@ -159,7 +160,7 @@ Este repositório hospeda o **portfólio e currículo online** de Josenilto L da
 
 ```yaml
 Plataforma:   GitHub Pages
-Framework:    Jekyll
+Framework:    HTML estático (sem Jekyll)
 CI/CD:        GitHub Actions
 Frontend:     HTML5 · CSS3 · JavaScript
 Build:        React + Vite (ambiente DEV)
@@ -220,6 +221,79 @@ ghcr.io/josenilto/josenilto.github.io:prd
 ```
 
 > Sem segredos extras — usa o `GITHUB_TOKEN` automático do GitHub Actions.
+
+---
+
+## ⚙️ CI/CD — Pipelines
+
+Todos os workflows ficam em [`.github/workflows/`](.github/workflows/) e
+publicam no branch `gh-pages` (GitHub Pages).
+
+### Fluxo entre ambientes
+
+```text
+ dev ──(Promover DEV → HMG)──▶ hmg ──(Promover HMG → PRD)──▶ prd
+  │         cria PR              │          cria PR             │
+  ▼                              ▼                              ▼
+ /dev/  (ambiente dev)        /hmg/  (ambiente hml)      /  (ambiente prd*)
+                                                               │
+                                                               ▼
+                                                     🐳 Docker Build & Push
+                                                        (ghcr.io + Trivy)
+```
+
+\* O ambiente **prd** exige aprovação manual: em *Actions → execução →
+Review deployments → Approve and deploy*.
+
+| Workflow | Dispara em | O que faz |
+| --- | --- | --- |
+| [`pipeline-prd.yml`](.github/workflows/pipeline-prd.yml) | push/PR em `prd` · manual | links → deploy `/` → health check → rollback automático → e-mail |
+| [`pipeline-hmg.yml`](.github/workflows/pipeline-hmg.yml) | push/PR em `hmg` · manual | links → deploy `/hmg/` → health check → e-mail |
+| [`pipeline-josenilto-dev.yml`](.github/workflows/pipeline-josenilto-dev.yml) | push/PR em `dev` · manual | auditoria npm → lint/build Vite → deploy `/dev/` → health check → e-mail |
+| [`promote-dev-to-hmg.yml`](.github/workflows/promote-dev-to-hmg.yml) | manual | abre/atualiza o PR `dev → hmg` com checklist |
+| [`promote-hmg-to-prd.yml`](.github/workflows/promote-hmg-to-prd.yml) | manual (digitar `CONFIRMAR`) | abre/atualiza o PR `hmg → prd` e cria a tag de versão (opcional) |
+| [`docker-build.yml`](.github/workflows/docker-build.yml) | após o PRD com sucesso · tags `v*` · manual | imagem multi-arch no GHCR, Trivy (SARIF), smoke test, limpeza |
+
+Em pull requests os pipelines só **testam** (verificação de links / build); o
+deploy acontece apenas no push para o branch do ambiente.
+
+### Pipeline PRD (site estático) passo a passo
+
+1. **🔍 Detectar tipo** — com `package.json` + Vite faz build React; senão publica o site estático.
+2. **🔗 Links locais** — [`check-links.mjs`](.github/scripts/check-links.mjs) confere todos os
+   `href`/`src`/`srcset` internos (inclusive `https://josenilto.github.io/...`), âncoras `#id` e
+   `url()` dos CSS, nas versões EN e PT. Link quebrado **bloqueia** o deploy.
+   Exceções temporárias ficam em [`linkcheck-ignore.txt`](.github/linkcheck-ignore.txt) e viram aviso.
+3. **🌐 Links externos** — linkinator (versão fixa); só gera aviso.
+4. **📦 Montar publicação** — [`build-static.sh`](.github/scripts/build-static.sh) copia só o que vai
+   para o ar, **minifica CSS/JS** com esbuild (≈ −28% no CSS) e grava `version.json` com o commit.
+5. **🚀 Deploy** — `peaceiris/actions-gh-pages` na raiz do `gh-pages` (mantém `/hmg` e `/dev`).
+6. **🏥 Health check** — espera o `version.json` no ar mostrar o commit novo (em vez de um
+   `sleep` fixo) e confere HTTP 200 em `/`, `/pt/`, `/health` e `/version.json`.
+7. **🔄 Auto-rollback** — se o health check falhar, reverte o último commit do `gh-pages`.
+8. **📧 E-mail** — resumo de cada etapa (veja a seção abaixo).
+
+Para saber qual versão está no ar: <https://josenilto.github.io/version.json>.
+
+### Rodar as verificações localmente
+
+```bash
+node .github/scripts/check-links.mjs .          # links locais (EN + PT)
+bash .github/scripts/build-static.sh _site      # pacote igual ao publicado
+pip install actionlint-py && actionlint         # lint dos workflows
+```
+
+### Segurança dos workflows
+
+- `permissions: contents: read` por padrão; só os jobs de deploy pedem escrita.
+- Textos digitados nos workflows manuais entram por variável de ambiente
+  (evita injeção de comandos no shell).
+- Versões fixas de ferramentas (linkinator, esbuild, Trivy) e Dependabot
+  semanal para as actions.
+
+> ℹ️ PRs abertos pelos workflows de promoção usam o `GITHUB_TOKEN`; por regra do
+> GitHub, eles **não disparam** os pipelines de PR. Os testes rodam no push
+> após o merge (ou rode o pipeline manualmente pela aba *Actions*).
 
 ---
 

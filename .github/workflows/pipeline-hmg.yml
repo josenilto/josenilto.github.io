@@ -26,10 +26,15 @@ concurrency:
   group: pipeline-hmg-${{ github.ref }}
   cancel-in-progress: false
 
+# Menor privilégio: só leitura por padrão; jobs que publicam pedem escrita.
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: "22"
   SITE_URL: "https://josenilto.github.io/hmg"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  LINKINATOR_VERSION: "8.1.0"
 
 # ══════════════════════════════════════════════════════════════════
 # JOB 1 — DETECTAR TIPO DE PROJETO
@@ -126,50 +131,18 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 📦 Instalar linkinator
-        run: npm install -g linkinator
-
+      # Verifica links internos (inclusive https://josenilto.github.io/...),
+      # âncoras #id e url() dos CSS em todas as páginas (EN e PT).
       - name: 🔗 Links locais
         id: local
-        run: |
-          linkinator ./index.html \
-            --skip "^https?://" \
-            --timeout 10000 \
-            --verbosity error \
-            --format json \
-            --output link-local.json 2>/dev/null || true
-
-          node -e "
-            const fs = require('fs');
-            try {
-              const data = fs.readFileSync('./link-local.json', 'utf8');
-              const lines = data.trim().split('\n').filter(Boolean);
-              const broken = [];
-              lines.forEach(line => {
-                try {
-                  const obj = JSON.parse(line);
-                  if (obj.links) obj.links.forEach(l => { if (l.state === 'BROKEN') broken.push(l); });
-                  else if (obj.state === 'BROKEN') broken.push(obj);
-                } catch(e) {}
-              });
-              if (broken.length > 0) {
-                console.error('❌ Links locais quebrados:');
-                broken.forEach(l => console.error('  •', l.url || l.href, '-', l.status || l.statusCode));
-                process.exit(1);
-              }
-              console.log('✅ Todos os links locais estão OK!');
-            } catch(e) {
-              console.log('⚠️  Relatório não gerado, pulando verificação.');
-            }
-          "
+        run: node .github/scripts/check-links.mjs .
 
       - name: 🌐 Links externos (aviso)
         run: |
-          linkinator ./index.html \
+          npx --yes linkinator@${{ env.LINKINATOR_VERSION }} . \
             --recurse \
-            --skip "api\.whatsapp\.com|josenilto\.slack\.com|web\.telegram\.org|unpkg\.com|cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com" \
-            --timeout 15000 --retry-errors --verbosity error \
-            || echo "⚠️ Alguns links externos podem estar temporariamente indisponíveis"
+            --skip "josenilto\.github\.io|linkedin\.com|api\.whatsapp\.com|josenilto\.slack\.com|web\.telegram\.org|unpkg\.com|cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com" \
+            --timeout 15000 --retry-errors --verbosity error
         continue-on-error: true
 
       - name: 📄 Resumo de links
@@ -226,18 +199,9 @@ jobs:
       # ── Caminho Estático ───────────────────────────────────────
       - name: 📁 Preparar publicação Estática
         if: needs.detect.outputs.type == 'static'
-        run: |
-          mkdir -p _site-hmg
-          for f in index.html 404.html server-info.html robots.txt sitemap.xml health; do
-            git show origin/prd:"$f" > "_site-hmg/$f" 2>/dev/null \
-              || { [ -f "$f" ] && cp "$f" "_site-hmg/$f"; } \
-              || echo "⚠️ $f não encontrado"
-          done
-          git checkout origin/prd -- assets 2>/dev/null || true
-          git checkout origin/prd -- pt 2>/dev/null || true
-          [ -d assets ] && cp -r assets/ _site-hmg/assets/
-          [ -d pt ] && cp -r pt/ _site-hmg/pt/          # versão pt-BR em /hmg/pt/
-          echo "📂 Estrutura HMG estática:"; find _site-hmg -maxdepth 2 -type f | sort
+        # publica os arquivos da própria branch hmg (o que está sendo
+        # homologado), minifica CSS/JS e grava version.json
+        run: bash .github/scripts/build-static.sh _site-hmg
 
       # ── Deploy unificado ───────────────────────────────────────
       - name: 🚀 Deploy → /hmg (gh-pages)
@@ -272,38 +236,53 @@ jobs:
     name: 🏥 Health Check Pós-Deploy
     runs-on: ubuntu-latest
     needs: [detect, deploy-hmg]
-    if: needs.deploy-hmg.result == 'success'
-    timeout-minutes: 6
+    # always(): sem ele o job é pulado quando build-react fica "skipped"
+    if: always() && needs.deploy-hmg.result == 'success'
+    timeout-minutes: 12
 
     steps:
-      - name: ⏳ Aguardar propagação do GitHub Pages
-        run: sleep 60
-
-      - name: 🔍 Verificar endpoint /hmg
+      - name: 🔍 Aguardar a nova versão e verificar páginas
+        env:
+          TYPE: ${{ needs.detect.outputs.type }}
         run: |
-          # React SPA: verifica a raiz /hmg/
-          # Estático: verifica /hmg/health se existir, senão /hmg/
-          TYPE="${{ needs.detect.outputs.type }}"
           if [ "$TYPE" = "static" ]; then
-            URL="${{ env.SITE_URL }}/health"
+            for i in $(seq 1 30); do
+              LIVE=$(curl -fsS --max-time 10 "${SITE_URL}/version.json?t=$(date +%s)" 2>/dev/null \
+                     | sed -n 's/.*"sha":"\([0-9a-f]*\)".*/\1/p' || true)
+              echo "🔄 ${i}/30 → versão no ar: ${LIVE:-—}"
+              [ "$LIVE" = "$GITHUB_SHA" ] && break
+              sleep 15
+            done
+            [ "$LIVE" = "$GITHUB_SHA" ] || echo "::warning title=Propagação lenta::version.json ainda não mostra ${GITHUB_SHA::7}"
+            PATHS="/ /pt/ /health"
           else
-            URL="${{ env.SITE_URL }}/"
+            sleep 45
+            PATHS="/"
           fi
-
-          for i in 1 2 3 4 5; do
-            echo "🔄 Tentativa ${i}/5 → ${URL}"
-            STATUS=$(curl -sf --max-time 10 -o /dev/null -w "%{http_code}" "$URL" 2>/dev/null || echo "000")
-            echo "   HTTP ${STATUS}"
-            if [ "$STATUS" = "200" ]; then echo "✅ OK!"; exit 0; fi
-            [ "$i" -lt 5 ] && sleep 20
+          FAIL=0
+          for P in $PATHS; do
+            OK=false
+            for i in 1 2 3 4 5; do
+              STATUS=$(curl -s --max-time 10 -o /dev/null -w "%{http_code}" "${SITE_URL}${P}" || true)
+              echo "   ${P} → HTTP ${STATUS} (tentativa ${i})"
+              [ "$STATUS" = "200" ] && OK=true && break
+              sleep 10
+            done
+            echo "| \`${P}\` | $([ "$OK" = true ] && echo '✅ 200' || echo "❌ ${STATUS}") |" >> /tmp/health.md
+            [ "$OK" = true ] || FAIL=1
           done
-          echo "❌ Health check falhou"; exit 1
+          [ "$FAIL" = 0 ] || { echo "❌ Health check falhou"; exit 1; }
+          echo "✅ HMG saudável"
 
       - name: 📋 Resumo
         if: always()
         run: |
-          echo "## 🏥 Health Check — HMG" >> $GITHUB_STEP_SUMMARY
-          echo "| URL | \`${{ env.SITE_URL }}/\` |" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## 🏥 Health Check — HMG"
+            echo "| Página (${SITE_URL}) | Status |"
+            echo "| --- | --- |"
+            cat /tmp/health.md 2>/dev/null || true
+          } >> "$GITHUB_STEP_SUMMARY"
 
   # ══════════════════════════════════════════════════════════════
   # JOB 5 — NOTIFICAÇÃO POR E-MAIL

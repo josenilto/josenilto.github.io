@@ -1,0 +1,6 @@
+# Links locais que podem faltar temporariamente (viram aviso, não erro).
+# Um caminho por linha, a partir da raiz do site. Remova a linha quando
+# o arquivo for adicionado ao repositório.
+
+# Currículo em PDF — falta enviar o arquivo para /docs/
+/docs/CV_Josenilto_L_da_Silva_2024_V.1.2.pdf

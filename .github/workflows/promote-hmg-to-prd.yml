@@ -33,6 +33,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write        # criar as labels usadas no PR, se ainda não existirem
 
 jobs:
   promote:
@@ -42,8 +43,10 @@ jobs:
 
     steps:
       - name: 🛡️ Validar confirmação
+        env:
+          CONFIRMAR: ${{ github.event.inputs.confirmar }}
         run: |
-          if [ "${{ github.event.inputs.confirmar }}" != "CONFIRMAR" ]; then
+          if [ "$CONFIRMAR" != "CONFIRMAR" ]; then
             echo "::error::Você precisa digitar CONFIRMAR para promover ao PRD."
             exit 1
           fi
@@ -77,9 +80,11 @@ jobs:
         if: steps.diff.outputs.has_diff == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # textos digitados no dispatch entram por env, nunca direto no script
+          NOTAS: ${{ github.event.inputs.notas }}
+          PR_TITLE: ${{ github.event.inputs.title }}
+          VERSION: ${{ github.event.inputs.version }}
         run: |
-          NOTAS="${{ github.event.inputs.notas }}"
-          VERSION="${{ github.event.inputs.version }}"
           SHORT_HMG=$(git rev-parse --short origin/hmg)
           SHORT_PRD=$(git rev-parse --short origin/prd)
           ACTOR="${{ github.actor }}"
@@ -110,7 +115,7 @@ jobs:
 
           ### Pré-requisitos
           - [ ] Pipeline HMG passou com sucesso (build + deploy + health check)
-          - [ ] Validação funcional completa em HMG (`https://josenilto.github.io/hmg/`)
+          - [ ] Validação funcional completa em HMG (\`https://josenilto.github.io/hmg/\`)
           - [ ] Aprovado pelo responsável técnico
 
           ### Funcional
@@ -136,10 +141,14 @@ jobs:
 
           ---
 
-          > Após merge, o pipeline PRD fará o deploy automático em `https://josenilto.github.io/`
+          > Após merge, o pipeline PRD fará o deploy automático em \`https://josenilto.github.io/\`
           > com health check e auto-rollback em caso de falha.
           PREOF
           )
+
+          # Labels precisam existir antes do "gh pr create --label"
+          gh label create "promotion" --color d93f0b --description "Promoção entre ambientes" 2>/dev/null || true
+          gh label create "prd-release" --color d93f0b --description "Promoção entre ambientes" 2>/dev/null || true
 
           # Verifica se já existe um PR aberto
           EXISTING=$(gh pr list --base prd --head hmg --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
@@ -147,20 +156,26 @@ jobs:
           if [ -n "$EXISTING" ]; then
             echo "::notice::PR #${EXISTING} já existe. Atualizando..."
             gh pr edit "$EXISTING" \
-              --title "${{ github.event.inputs.title }}" \
+              --title "$PR_TITLE" \
               --body "$BODY"
-            echo "✅ PR #${EXISTING} atualizado: $(gh pr view $EXISTING --json url --jq .url)"
+            echo "✅ PR #${EXISTING} atualizado: $(gh pr view "$EXISTING" --json url --jq .url)"
           else
             URL=$(gh pr create \
               --base prd \
               --head hmg \
-              --title "${{ github.event.inputs.title }}" \
+              --title "$PR_TITLE" \
               --body "$BODY" \
               --label "promotion,prd-release")
             echo "✅ PR criado: ${URL}"
           fi
 
-          ${VERSION:+git tag "$VERSION" origin/hmg && git push origin "$VERSION" 2>/dev/null || echo "Tag já existe ou sem permissão de tag"}
+          # Tag da versão (opcional) no commit de hmg que está sendo promovido
+          if [ -n "$VERSION" ]; then
+            git tag "$VERSION" origin/hmg \
+              && git push origin "$VERSION" \
+              && echo "🏷️ Tag ${VERSION} criada" \
+              || echo "::warning::Tag ${VERSION} já existe ou sem permissão para criar tags"
+          fi
 
       - name: 📋 Resumo
         if: always()

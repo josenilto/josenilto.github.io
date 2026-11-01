@@ -26,9 +26,15 @@ concurrency:
   group: pipeline-prd-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+# Menor privilégio: só leitura por padrão; jobs que publicam pedem escrita.
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: "22"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+  LINKINATOR_VERSION: "8.1.0"
+  SITE_URL: "https://josenilto.github.io"
 
 # ══════════════════════════════════════════════════════════════════
 # JOB 1 — DETECTAR TIPO DE PROJETO
@@ -123,53 +129,21 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: 📦 Instalar linkinator
-        run: npm install -g linkinator
-
+      # Verifica links internos (inclusive https://josenilto.github.io/...),
+      # âncoras #id e url() dos CSS em todas as páginas (EN e PT).
       - name: 🔗 Links locais
         id: local
-        run: |
-          linkinator ./index.html \
-            --skip "^https?://" \
-            --timeout 10000 \
-            --verbosity error \
-            --format json \
-            --output link-local.json 2>/dev/null || true
-
-          node -e "
-            const fs = require('fs');
-            try {
-              const data = fs.readFileSync('./link-local.json', 'utf8');
-              const lines = data.trim().split('\n').filter(Boolean);
-              const broken = [];
-              lines.forEach(line => {
-                try {
-                  const obj = JSON.parse(line);
-                  if (obj.links) obj.links.forEach(l => { if (l.state === 'BROKEN') broken.push(l); });
-                  else if (obj.state === 'BROKEN') broken.push(obj);
-                } catch(e) {}
-              });
-              if (broken.length > 0) {
-                console.error('❌ Links locais quebrados:');
-                broken.forEach(l => console.error('  •', l.url || l.href, '-', l.status || l.statusCode));
-                process.exit(1);
-              }
-              console.log('✅ Todos os links locais estão OK!');
-            } catch(e) {
-              console.log('⚠️  Relatório não gerado, pulando verificação.');
-            }
-          "
+        run: node .github/scripts/check-links.mjs .
 
       - name: 🌐 Links externos (aviso)
         id: external
         run: |
-          linkinator ./index.html \
+          npx --yes linkinator@${{ env.LINKINATOR_VERSION }} . \
             --recurse \
-            --skip "api\.whatsapp\.com|josenilto\.slack\.com|web\.telegram\.org|unpkg\.com|cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com" \
+            --skip "josenilto\.github\.io|linkedin\.com|api\.whatsapp\.com|josenilto\.slack\.com|web\.telegram\.org|unpkg\.com|cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com" \
             --timeout 15000 \
             --retry-errors \
-            --verbosity error \
-            || echo "⚠️ Alguns links externos podem estar temporariamente indisponíveis"
+            --verbosity error
         continue-on-error: true
 
       - name: 📄 Resumo de links
@@ -230,16 +204,8 @@ jobs:
       # ── Caminho Estático ───────────────────────────────────────
       - name: 📁 Preparar publicação Estática
         if: needs.detect.outputs.type == 'static'
-        run: |
-          mkdir -p _site
-          cp *.html      _site/
-          cp -r assets/  _site/assets/
-          cp -r pt/      _site/pt/        # versão pt-BR em /pt/
-          cp robots.txt  _site/
-          cp sitemap.xml _site/
-          cp health      _site/
-          echo "📂 Estrutura de publicação:"
-          find _site -maxdepth 2 -type f | sort
+        # copia os arquivos, minifica CSS/JS e grava version.json
+        run: bash .github/scripts/build-static.sh _site
 
       # ── Deploy unificado ───────────────────────────────────────
       - name: 🚀 Deploy → / (raiz · gh-pages)
@@ -274,52 +240,76 @@ jobs:
     name: 🏥 Health Check Pós-Deploy
     runs-on: ubuntu-latest
     needs: [detect, deploy-prd]
-    if: needs.deploy-prd.result == 'success'
-    timeout-minutes: 6
+    # always(): sem ele o job era pulado sempre que build-react era "skipped"
+    # (site estático) — e o rollback automático nunca rodava.
+    if: always() && needs.deploy-prd.result == 'success'
+    timeout-minutes: 12
     outputs:
       healthy: ${{ steps.check.outputs.healthy }}
 
     steps:
-      - name: ⏳ Aguardar propagação do GitHub Pages
-        run: sleep 60
-
-      - name: 🔍 Verificar endpoint
+      - name: 🔍 Aguardar a nova versão e verificar páginas
         id: check
+        env:
+          TYPE: ${{ needs.detect.outputs.type }}
         run: |
-          TYPE="${{ needs.detect.outputs.type }}"
+          HEALTHY=false
+          # 1) Estático: espera o GitHub Pages servir o version.json deste commit
+          #    (em vez de um sleep fixo) — confirma que o deploy chegou ao ar.
           if [ "$TYPE" = "static" ]; then
-            URL="https://josenilto.github.io/health"
+            for i in $(seq 1 30); do
+              LIVE=$(curl -fsS --max-time 10 "${SITE_URL}/version.json?t=$(date +%s)" 2>/dev/null \
+                     | sed -n 's/.*"sha":"\([0-9a-f]*\)".*/\1/p' || true)
+              echo "🔄 ${i}/30 → versão no ar: ${LIVE:-—}"
+              [ "$LIVE" = "$GITHUB_SHA" ] && break
+              sleep 15
+            done
+            if [ "$LIVE" != "$GITHUB_SHA" ]; then
+              echo "::warning title=Propagação lenta::version.json ainda não mostra ${GITHUB_SHA::7} — verificando as páginas mesmo assim"
+            fi
+            PATHS="/ /pt/ /health /version.json"
           else
-            URL="https://josenilto.github.io/"
+            sleep 45
+            PATHS="/"
           fi
 
-          HEALTHY=false
-          for i in 1 2 3 4 5; do
-            echo "🔄 Tentativa ${i}/5 → ${URL}"
-            STATUS=$(curl -sf --max-time 10 -o /dev/null -w "%{http_code}" "$URL" 2>/dev/null || echo "000")
-            echo "   HTTP ${STATUS}"
-            if [ "$STATUS" = "200" ]; then
-              HEALTHY=true
-              echo "✅ Health check OK na tentativa ${i}!"
-              break
-            fi
-            [ "$i" -lt 5 ] && echo "   ⏳ Aguardando 20s..." && sleep 20
+          # 2) Cada página precisa responder HTTP 200 (até 5 tentativas)
+          FAIL=0
+          for P in $PATHS; do
+            OK=false
+            for i in 1 2 3 4 5; do
+              STATUS=$(curl -s --max-time 10 -o /dev/null -w "%{http_code}" "${SITE_URL}${P}" || echo "000")
+              echo "   ${P} → HTTP ${STATUS} (tentativa ${i})"
+              [ "$STATUS" = "200" ] && OK=true && break
+              sleep 10
+            done
+            echo "| \`${P}\` | $([ "$OK" = true ] && echo '✅ 200' || echo "❌ ${STATUS}") |" >> /tmp/health.md
+            [ "$OK" = true ] || FAIL=1
           done
+
+          [ "$FAIL" = 0 ] && HEALTHY=true
           echo "healthy=${HEALTHY}" >> "$GITHUB_OUTPUT"
           if [ "$HEALTHY" = "false" ]; then
-            echo "❌ Health check falhou após 5 tentativas — acionando rollback"
+            echo "❌ Health check falhou — acionando rollback"
             exit 1
           fi
+          echo "✅ Site saudável"
 
       - name: 📋 Resumo
         if: always()
         run: |
-          echo "## 🏥 Health Check Pós-Deploy" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.check.outputs.healthy }}" = "true" ]; then
-            echo "✅ **Endpoint respondeu HTTP 200**" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "❌ **Endpoint não respondeu — rollback acionado**" >> $GITHUB_STEP_SUMMARY
-          fi
+          {
+            echo "## 🏥 Health Check Pós-Deploy"
+            echo "| Página | Status |"
+            echo "| --- | --- |"
+            cat /tmp/health.md 2>/dev/null || true
+            echo ""
+            if [ "${{ steps.check.outputs.healthy }}" = "true" ]; then
+              echo "✅ **Site no ar com o commit \`${GITHUB_SHA::7}\`**"
+            else
+              echo "❌ **Site não respondeu — rollback acionado**"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
 
   # ══════════════════════════════════════════════════════════════
   # JOB 5 — AUTO-ROLLBACK
