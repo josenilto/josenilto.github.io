@@ -112,3 +112,27 @@ window.onload = typeWriter;
         });
     });
 })();
+
+// Benefits: inclinação 3D leve que acompanha o mouse (só com mouse/caneta e
+// sem prefers-reduced-motion). Usa a variável --tilt do CSS (propriedade rotate).
+(function () {
+    const cards = document.querySelectorAll('.benefit__card');
+    if (!cards.length || !window.matchMedia) return;
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const MAX = 6; // graus
+    cards.forEach((card) => {
+        card.addEventListener('pointermove', (e) => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5;
+            const y = (e.clientY - r.top) / r.height - 0.5;
+            // eixo perpendicular ao deslocamento do mouse; ângulo proporcional à distância do centro
+            const angle = Math.min(Math.hypot(x, y) * 2, 1) * MAX;
+            card.style.setProperty('--tilt', `${(-y).toFixed(3)} ${x.toFixed(3)} 0 ${angle.toFixed(2)}deg`);
+        });
+        card.addEventListener('pointerleave', () => {
+            card.style.setProperty('--tilt', '0 0 1 0deg');
+        });
+    });
+})();
