@@ -172,3 +172,48 @@ themeButton.addEventListener("click", () => {
   localStorage.setItem("selected-theme", getCurrentTheme());
   localStorage.setItem("selected-icon", getCurrentIcon());
 });
+
+// Navegação interna sem "#" na URL: os links href="#secao" rolam até o topo
+// exato da seção (o espaço do header fica dentro da seção, ver --section-top
+// no CSS) e a barra de endereço continua limpa (josenilto.github.io/).
+// Links antigos com #secao ainda funcionam: ao abrir, rola até a seção e
+// remove o "#" da URL.
+(function () {
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const cleanUrl = () => {
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+  };
+
+  const goTo = (id, smooth) => {
+    const target = document.getElementById(id);
+    if (!target) return false;
+    const top = id === "career" ? 0 : target.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top, behavior: smooth && !reduceMotion ? "smooth" : "auto" });
+    // foco na seção (teclado/leitor de tela) sem provocar outro salto
+    if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+    target.focus({ preventScroll: true });
+    return true;
+  };
+
+  document.addEventListener("click", (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+    const id = link.getAttribute("href").slice(1);
+    if (!id || !document.getElementById(id)) return;
+    e.preventDefault();
+    goTo(id, true);
+    cleanUrl();
+  });
+
+  // URL antiga com #secao: alinha a seção (de novo após o load, quando
+  // fontes/imagens já mudaram o layout) e limpa a URL
+  const initial = decodeURIComponent(location.hash.slice(1));
+  if (initial && document.getElementById(initial)) {
+    cleanUrl();
+    goTo(initial, false);
+    window.addEventListener("load", () => goTo(initial, false), { once: true });
+  } else {
+    cleanUrl();
+  }
+})();
