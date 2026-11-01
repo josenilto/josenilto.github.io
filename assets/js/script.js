@@ -76,3 +76,33 @@ window.onload = typeWriter;
 
     nums.forEach((el) => io.observe(el));
 })();
+
+// Experience: mostra as 6 mais recentes e um botão "Ver todas"; sem JS tudo
+// aparece. Também posiciona o brilho dos cards (--mx/--my) sob o mouse.
+(function () {
+    const section = document.getElementById('experience');
+    const btn = section && section.querySelector('.experience__toggle');
+    if (!section || !btn) return;
+
+    const label = btn.querySelector('.experience__toggle-label');
+    section.classList.add('is-collapsible');
+
+    btn.addEventListener('click', () => {
+        const expanded = section.classList.toggle('is-expanded');
+        btn.setAttribute('aria-expanded', expanded);
+        label.textContent = expanded ? btn.dataset.labelLess : btn.dataset.labelMore;
+        if (!expanded && section.getBoundingClientRect().top < 0) {
+            // ao recolher estando mais abaixo, volta para o início da seção
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        if (window.AOS) window.AOS.refresh();
+    });
+
+    section.querySelectorAll('.experience__card').forEach((card) => {
+        card.addEventListener('pointermove', (e) => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+            card.style.setProperty('--my', `${e.clientY - r.top}px`);
+        });
+    });
+})();
