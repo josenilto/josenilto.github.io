@@ -45,6 +45,7 @@
 .bi-cloud-check::before { content: "\f299"; }
 .bi-clouds::before { content: "\f2c3"; }
 .bi-code-slash::before { content: "\f2c6"; }
+.bi-compass::before { content: "\f2d1"; }
 .bi-cpu::before { content: "\f2d6"; }
 .bi-cup-hot::before { content: "\f7eb"; }
 .bi-database::before { content: "\f8c4"; }
@@ -55,12 +56,15 @@
 .bi-geo-alt::before { content: "\f3e8"; }
 .bi-git::before { content: "\f69d"; }
 .bi-github::before { content: "\f3ed"; }
+.bi-globe2::before { content: "\f3ef"; }
 .bi-graph-up-arrow::before { content: "\f673"; }
 .bi-grid-3x3-gap::before { content: "\f3f9"; }
 .bi-hdd-rack::before { content: "\f40f"; }
 .bi-hdd-stack::before { content: "\f411"; }
+.bi-heart-fill::before { content: "\f415"; }
 .bi-hourglass-split::before { content: "\f41f"; }
 .bi-infinity::before { content: "\f69e"; }
+.bi-instagram::before { content: "\f437"; }
 .bi-journal-richtext::before { content: "\f443"; }
 .bi-laptop::before { content: "\f456"; }
 .bi-lightning-charge::before { content: "\f46d"; }
@@ -75,6 +79,7 @@
 .bi-people::before { content: "\f4d0"; }
 .bi-people-fill::before { content: "\f4cf"; }
 .bi-rocket-takeoff::before { content: "\f845"; }
+.bi-rocket-takeoff-fill::before { content: "\f844"; }
 .bi-send::before { content: "\f6c0"; }
 .bi-shield-check::before { content: "\f52f"; }
 .bi-shield-lock::before { content: "\f538"; }
@@ -83,7 +88,9 @@
 .bi-star-fill::before { content: "\f586"; }
 .bi-stars::before { content: "\f589"; }
 .bi-sun::before { content: "\f5a2"; }
+.bi-telegram::before { content: "\f5b3"; }
 .bi-terminal::before { content: "\f5c3"; }
 .bi-translate::before { content: "\f658"; }
 .bi-whatsapp::before { content: "\f618"; }
 .bi-x-lg::before { content: "\f659"; }
+.bi-youtube::before { content: "\f62b"; }
