@@ -28,6 +28,10 @@ concurrency:
   group: pipeline-josenilto-dev-${{ github.ref }}
   cancel-in-progress: true
 
+# Menor privilégio: só leitura por padrão; jobs que publicam pedem escrita.
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '22'
   SITE_URL: 'https://josenilto.github.io/dev'
@@ -259,7 +263,8 @@ jobs:
     name: 🏥 Health Check Pós-Deploy
     runs-on: ubuntu-latest
     needs: deploy-josenilto-dev
-    if: needs.deploy-josenilto-dev.result == 'success'
+    # always(): sem ele o job é pulado quando link-check fica "skipped"
+    if: always() && needs.deploy-josenilto-dev.result == 'success'
     timeout-minutes: 6
 
     steps:

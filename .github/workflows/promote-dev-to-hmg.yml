@@ -24,6 +24,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write        # criar as labels usadas no PR, se ainda não existirem
 
 jobs:
   promote:
@@ -60,8 +61,10 @@ jobs:
         if: steps.diff.outputs.has_diff == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # textos digitados no dispatch entram por env, nunca direto no script
+          NOTAS: ${{ github.event.inputs.notas }}
+          PR_TITLE: ${{ github.event.inputs.title }}
         run: |
-          NOTAS="${{ github.event.inputs.notas }}"
           SHORT_DEV=$(git rev-parse --short origin/dev)
           SHORT_HMG=$(git rev-parse --short origin/hmg)
           ACTOR="${{ github.actor }}"
@@ -88,7 +91,7 @@ jobs:
 
           ### Funcional
           - [ ] Build passou sem erros no pipeline DEV
-          - [ ] UI/UX validada no ambiente DEV (`https://josenilto.github.io/dev/`)
+          - [ ] UI/UX validada no ambiente DEV (\`https://josenilto.github.io/dev/\`)
           - [ ] Responsividade verificada (mobile, tablet, desktop)
           - [ ] Sem erros no console do browser
 
@@ -99,14 +102,18 @@ jobs:
 
           ### Segurança
           - [ ] Sem dados sensíveis expostos no código
-          - [ ] Dependências sem vulnerabilidades críticas (`npm audit`)
+          - [ ] Dependências sem vulnerabilidades críticas (\`npm audit\`)
 
           ---
 
-          > Após aprovação e merge, o pipeline HMG realizará o deploy automático em `https://josenilto.github.io/hmg/`.
+          > Após aprovação e merge, o pipeline HMG realizará o deploy automático em \`https://josenilto.github.io/hmg/\`.
           > Para promover ao PRD após validação no HMG, execute o workflow **Promover HMG → PRD**.
           PREOF
           )
+
+          # Labels precisam existir antes do "gh pr create --label"
+          gh label create "promotion" --color 5319e7 --description "Promoção entre ambientes" 2>/dev/null || true
+          gh label create "hmg-validation" --color 5319e7 --description "Promoção entre ambientes" 2>/dev/null || true
 
           # Verifica se já existe um PR aberto
           EXISTING=$(gh pr list --base hmg --head dev --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
@@ -114,14 +121,14 @@ jobs:
           if [ -n "$EXISTING" ]; then
             echo "::notice::PR #${EXISTING} já existe. Atualizando título..."
             gh pr edit "$EXISTING" \
-              --title "${{ github.event.inputs.title }}" \
+              --title "$PR_TITLE" \
               --body "$BODY"
-            echo "✅ PR #${EXISTING} atualizado: $(gh pr view $EXISTING --json url --jq .url)"
+            echo "✅ PR #${EXISTING} atualizado: $(gh pr view "$EXISTING" --json url --jq .url)"
           else
             URL=$(gh pr create \
               --base hmg \
               --head dev \
-              --title "${{ github.event.inputs.title }}" \
+              --title "$PR_TITLE" \
               --body "$BODY" \
               --label "promotion,hmg-validation")
             echo "✅ PR criado: ${URL}"
