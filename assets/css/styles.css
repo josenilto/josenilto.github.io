@@ -23,7 +23,7 @@
 
 /*===== VARIABLES CSS =====*/
 :root {
-  --header-height: 2rem;
+  --header-height: 4rem;
 
   /*========== Colors ==========*/
   --first-color: #ffcb00;
@@ -95,31 +95,6 @@ body.dark-theme {
   --container-color: #27302c;
 }
 
-/*========== Button Dark/Light ==========*/
-.change-theme {
-  position: absolute;
-  right: 1rem;
-  top: 1.8rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  color: #b45309;
-  transition: color 0.3s;
-}
-
-.change-theme:hover {
-  color: #fbbf24;
-}
-
-.change-theme svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  fill: currentColor;
-}
-
-.theme-icon--sun { display: none; }
-.bx-sun .theme-icon--moon { display: none; }
-.bx-sun .theme-icon--sun { display: block; }
 
 body {
   margin: var(--header-height) 0 0 0;
@@ -188,51 +163,91 @@ img {
   gap: 1.5rem;
 }
 
+
+/*========== NAVBAR FUTURISTA (padrão navbar Bootstrap 5 + Bootstrap Icons) ==========*/
+/* Cápsula de vidro flutuante com borda em gradiente neon, ícone + rótulo em
+   cada item, indicador luminoso no item ativo e painel em grade no mobile.
+   Mantém os ids/classes usados pelo main.js: #nav-menu, #nav-toggle,
+   #theme-button, .nav__link, .active-link, .show-menu, .scroll-header. */
+:root {
+  --nav-glass: rgba(255, 255, 255, 0.72);
+  --nav-glass-strong: rgba(255, 255, 255, 0.94);
+  --nav-border: rgba(0, 100, 0, 0.16);
+  --nav-neon: #00c853;
+  --nav-neon-2: #00bfa5;
+  --nav-glow: rgba(0, 200, 83, 0.35);
+  --nav-text: #3f4a44;
+  --nav-active-bg: linear-gradient(135deg, rgba(0, 200, 83, 0.16), rgba(0, 191, 165, 0.12));
+}
+
+body.dark-theme {
+  --nav-glass: rgba(18, 26, 22, 0.66);
+  --nav-glass-strong: rgba(18, 26, 22, 0.96);
+  --nav-border: rgba(0, 230, 118, 0.22);
+  --nav-glow: rgba(0, 230, 118, 0.45);
+  --nav-text: #c7d1cc;
+  --nav-active-bg: linear-gradient(135deg, rgba(0, 230, 118, 0.2), rgba(0, 191, 165, 0.14));
+}
+
+html {
+  scroll-padding-top: 5.5rem;
+}
+
 .l-header {
-  width: 100%;
   position: fixed;
-  top: 0%;
-  left: 0%;
+  top: 0;
+  left: 0;
+  width: 100%;
   z-index: var(--z-fixed);
-  background-color: var(--body-color);
+  padding: 0.6rem 0;
+  pointer-events: none; /* só a cápsula recebe cliques */
 }
 
-/*========== NAV ==========*/
 .nav {
+  pointer-events: auto;
   position: relative;
-  max-width: 1024px;
-  height: var(--header-height);
+  max-width: 1240px;
+  height: 3.25rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.5rem 0 1rem;
+  border-radius: 999px;
+  background: var(--nav-glass);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid var(--nav-border);
+  box-shadow: 0 8px 28px rgba(0, 40, 20, 0.08);
+  transition: box-shadow 0.35s, background-color 0.35s;
 }
 
-@media screen and (max-width: 768px) {
-  .nav__menu {
-    position: fixed;
-    top: -100%;
-    left: 0%;
-    width: 100%;
-    padding: 1.5rem 0 1rem;
-    text-align: center;
-    background-color: var(--body-color);
-    transition: 0.4s;
-    box-shadow: 0 4px 4px rgba(77, 76, 76, 0.1);
-    border-radius: 0 0 1rem 1rem;
-    z-index: var(--z-fixed);
-  }
+/* Linha de luz que percorre a borda inferior da cápsula */
+.nav::after {
+  content: '';
+  position: absolute;
+  left: 1.5rem;
+  right: 1.5rem;
+  bottom: -1px;
+  height: 1px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, transparent, var(--nav-neon), var(--nav-neon-2), transparent);
+  background-size: 200% 100%;
+  opacity: 0.7;
+  animation: nav-scan 6s linear infinite;
+  pointer-events: none;
 }
 
-.nav__item {
-  margin-bottom: var(--mb-2);
+@keyframes nav-scan {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
 }
 
-.nav__link,
-.nav__toggle {
-  color: var(--text-color);
-  font-weight: var(--font-medium);
+.scroll-header .nav {
+  background: var(--nav-glass-strong);
+  box-shadow: 0 10px 34px rgba(0, 40, 20, 0.14), 0 0 0 1px var(--nav-border), 0 0 24px -8px var(--nav-glow);
 }
 
+/* ── Logo ── */
 .nav__logo {
   display: inline-flex;
   align-items: center;
@@ -254,6 +269,11 @@ img {
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+body.dark-theme .nav__logo-icon,
+body.dark-theme .nav__logo-bracket {
+  color: var(--nav-neon);
+}
+
 .nav__logo:hover .nav__logo-icon {
   transform: rotate(360deg);
 }
@@ -266,108 +286,331 @@ img {
 
 .nav__logo:hover {
   color: var(--first-color-alt);
-  text-shadow: 0 0 10px rgba(0, 100, 0, 0.55);
+  text-shadow: 0 0 10px var(--nav-glow);
+}
+
+/* ── Itens ── */
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .nav__link {
   position: relative;
-  padding-bottom: 4px;
-  transition: color 0.3s, letter-spacing 0.3s, text-shadow 0.3s;
-}
-
-.nav__link::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  width: 5px;
-  height: 5px;
-  background: var(--first-color-alt);
-  border-radius: 50%;
-  transform: translateX(-50%) scale(0);
-  opacity: 0;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s;
-}
-
-.nav__link:hover {
-  color: var(--first-color-alt);
-  letter-spacing: 0.05em;
-}
-
-/* Contact se destaca como call-to-action, não como mais um item igual aos outros */
-.nav__link--cta {
-  color: #fff;
-  background-color: #34a853;
-  padding: 0.4rem 1rem;
-  border-radius: 2rem;
-}
-
-.nav__link--cta::after {
-  display: none;
-}
-
-.nav__link--cta:hover {
-  color: #fff;
-  letter-spacing: normal;
-  background-color: #2c9247;
-  box-shadow: 0 4px 14px rgba(52, 168, 83, 0.4);
-}
-
-/* Seletor de idioma — mesma pílula discreta em EN e PT, cada um
-   apontando pra versão do site no outro idioma */
-.nav__lang {
-  display: inline-block;
-  font-size: var(--smaller-font-size);
-  font-weight: var(--font-semi-bold);
-  color: var(--text-color);
-  border: 1px solid rgba(0, 100, 0, 0.25);
-  border-radius: 2rem;
-  padding: 0.2rem 0.6rem;
-  transition: color 0.25s, border-color 0.25s, background-color 0.25s;
-}
-
-.nav__lang:hover {
-  color: #fff;
-  background-color: var(--first-color-alt);
-  border-color: var(--first-color-alt);
-}
-
-.nav__link:hover::after {
-  transform: translateX(-50%) scale(1);
-  opacity: 0.5;
-}
-
-.nav__toggle {
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  color: var(--nav-text);
+  font-size: var(--small-font-size);
+  font-weight: var(--font-medium);
+  white-space: nowrap;
+  transition: color 0.25s, background-color 0.25s, box-shadow 0.25s, transform 0.25s;
 }
 
-.nav__toggle svg {
-  width: 2rem;
-  height: 2rem;
-  fill: currentColor;
+.nav__icon {
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s;
 }
 
-/* Show menu */
-.show-menu {
-  top: var(--header-height);
-}
-
-/* Active menu */
-.active-link {
+.nav__link:hover,
+.nav__link:focus-visible {
   color: var(--first-color-alt);
+  background-color: rgba(0, 160, 70, 0.08);
 }
 
-.active-link::after {
-  transform: translateX(-50%) scale(1);
-  opacity: 1;
-  background: var(--first-color-alt);
+body.dark-theme .nav__link:hover,
+body.dark-theme .nav__link:focus-visible {
+  color: var(--nav-neon);
 }
 
-/* Change background header */
-.scroll-header {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.nav__link:hover .nav__icon {
+  transform: translateY(-2px) scale(1.12);
+  filter: drop-shadow(0 0 6px var(--nav-glow));
+}
+
+/* Item ativo: fundo em gradiente + ponto de luz pulsante */
+.nav__link.active-link {
+  color: var(--first-color-alt);
+  background: var(--nav-active-bg);
+  box-shadow: inset 0 0 0 1px var(--nav-border), 0 0 18px -6px var(--nav-glow);
+}
+
+body.dark-theme .nav__link.active-link {
+  color: var(--nav-neon);
+}
+
+.nav__link.active-link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -0.2rem;
+  width: 1.4rem;
+  height: 2px;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, var(--nav-neon), var(--nav-neon-2));
+  box-shadow: 0 0 8px var(--nav-glow);
+}
+
+/* ── Ações (CTA, idioma, tema, toggle) ── */
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.nav__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1.05rem;
+  border-radius: 999px;
+  color: #fff;
+  font-size: var(--small-font-size);
+  font-weight: var(--font-semi-bold);
+  white-space: nowrap;
+  background: linear-gradient(135deg, #00a845, #00897b);
+  box-shadow: 0 6px 18px -6px rgba(0, 168, 69, 0.7);
+  transition: transform 0.25s, box-shadow 0.25s, filter 0.25s;
+}
+
+.nav__cta:hover,
+.nav__cta:focus-visible {
+  color: #fff;
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow: 0 8px 24px -6px rgba(0, 200, 83, 0.85);
+}
+
+.nav__cta .bi {
+  transition: transform 0.3s;
+}
+
+.nav__cta:hover .bi {
+  transform: translate(2px, -2px) rotate(-8deg);
+}
+
+.nav__lang,
+.change-theme,
+.nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  height: 2.3rem;
+  min-width: 2.3rem;
+  padding: 0 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--nav-border);
+  background: transparent;
+  color: var(--nav-text);
+  font: inherit;
+  font-size: var(--smaller-font-size);
+  font-weight: var(--font-semi-bold);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s, background-color 0.25s, box-shadow 0.25s;
+}
+
+.change-theme,
+.nav__toggle {
+  padding: 0;
+  width: 2.3rem;
+  font-size: 1.05rem;
+}
+
+.nav__lang:hover,
+.nav__lang:focus-visible,
+.nav__toggle:hover,
+.nav__toggle:focus-visible {
+  color: var(--first-color-alt);
+  border-color: var(--nav-neon);
+  box-shadow: 0 0 14px -4px var(--nav-glow);
+}
+
+body.dark-theme .nav__lang:hover,
+body.dark-theme .nav__toggle:hover {
+  color: var(--nav-neon);
+}
+
+.change-theme {
+  color: #b45309;
+}
+
+.change-theme:hover,
+.change-theme:focus-visible {
+  color: #f59e0b;
+  border-color: #f59e0b;
+  box-shadow: 0 0 14px -4px rgba(245, 158, 11, 0.7);
+}
+
+.theme-icon--sun { display: none; }
+.bx-sun .theme-icon--moon { display: none; }
+.bx-sun .theme-icon--sun { display: inline-block; }
+
+.nav__toggle-close { display: none; }
+.nav__toggle[aria-expanded="true"] .nav__toggle-open { display: none; }
+.nav__toggle[aria-expanded="true"] .nav__toggle-close { display: inline-block; }
+
+/* ── Mobile / tablet: painel em grade de ícones ── */
+@media screen and (max-width: 1023px) {
+  .nav__menu {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    left: 0;
+    right: 0;
+    padding: 0.75rem;
+    border-radius: 1.25rem;
+    background: var(--nav-glass-strong);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid var(--nav-border);
+    box-shadow: 0 18px 40px rgba(0, 40, 20, 0.18), 0 0 30px -12px var(--nav-glow);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.98);
+    transform-origin: top center;
+    transition: opacity 0.25s, transform 0.25s, visibility 0s linear 0.25s;
+  }
+
+  .nav__menu.show-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.25s, transform 0.25s, visibility 0s;
+  }
+
+  .nav__list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+  }
+
+  .nav__item {
+    display: flex;
+  }
+
+  .nav__link {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.85rem 0.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--nav-border);
+    font-size: var(--smaller-font-size);
+  }
+
+  .nav__icon {
+    font-size: 1.35rem;
+  }
+
+  .nav__link.active-link::after {
+    bottom: 0.35rem;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .nav {
+    width: calc(100% - 1.25rem);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0.85rem;
+  }
+
+  /* CTA vira só ícone para caber ao lado do idioma, tema e menu */
+  .nav__cta {
+    width: 2.3rem;
+    height: 2.3rem;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .nav__list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Item que sobra sozinho na última linha ocupa a linha toda */
+  .nav__item:last-child:nth-child(3n + 1) {
+    grid-column: 1 / -1;
+  }
+
+  .nav__item:last-child:nth-child(3n + 1) .nav__link {
+    flex-direction: row;
+  }
+
+  .nav__cta-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+/* ── Desktop: menu inline ── */
+@media screen and (min-width: 1024px) {
+  .l-header {
+    padding: 0.85rem 0;
+  }
+
+  .nav {
+    height: 3.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 2rem);
+  }
+
+  .nav__menu {
+    margin: 0 auto;
+  }
+
+  .nav__toggle {
+    display: none;
+  }
+}
+
+/* Entre 1024 e 1279px só os ícones aparecem (rótulo vira tooltip/leitor de tela) */
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+  .nav__link {
+    padding: 0.55rem;
+  }
+
+  .nav__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .nav__icon {
+    font-size: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav::after {
+    animation: none;
+  }
+  .nav__menu,
+  .nav__link,
+  .nav__icon,
+  .nav__cta,
+  .nav__cta .bi {
+    transition: none;
+  }
 }
 
 /* Scroll top */
@@ -1881,60 +2124,6 @@ img {
     padding-top: 8rem;
   }
 
-  .nav {
-    height: calc(var(--header-height) + 1.5rem);
-  }
-  .nav__list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    row-gap: 0.5rem;
-  }
-  .nav__item {
-    margin-left: 0.6rem;
-    margin-bottom: 0;
-  }
-  .nav__link {
-    font-size: var(--small-font-size);
-  }
-  .nav__toggle {
-    display: none;
-  }
-
-  /* Fica fora do fluxo do nav__list — nunca quebra linha junto com os
-     itens do menu, não importa quantos existam. Ancorado à .nav
-     (position: relative), que aqui já não tem o nav__menu fixed no
-     caminho (isso só vale para mobile). */
-  .change-theme {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  /* Seletor de idioma: mesmo cluster fixo, entre o CTA e o tema. */
-  .nav__item:has(.nav__lang) {
-    position: absolute;
-    right: 2.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: 0;
-  }
-
-  /* Contact (CTA) segue o mesmo tratamento: fica ancorado, não é só
-     "mais um item" que pode ser vítima de quebra de linha quando o
-     menu ganhar itens novos no futuro. */
-  .nav__item:has(.nav__link--cta) {
-    position: absolute;
-    right: 5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: 0;
-  }
-
-  .nav__menu {
-    padding-right: 11.5rem;
-  }
 
   .home__container {
     justify-items: center;
@@ -1961,12 +2150,6 @@ img {
     margin-right: auto;
   }
 
-  .nav__item {
-    margin-left: 0.9rem;
-  }
-  .nav__link {
-    font-size: var(--normal-font-size);
-  }
 
   .container {
     width: 360px;
@@ -2064,6 +2247,8 @@ img {
   .nav__toggle,
   .change-theme,
   .nav__lang,
+  .nav__actions,
+  .nav__icon,
   .nav__close,
   .career__scroll-cue,
   .theme-icon,

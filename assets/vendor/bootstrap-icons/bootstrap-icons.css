@@ -1,0 +1,37 @@
+/*!
+ * Bootstrap Icons v1.13.2 (https://icons.getbootstrap.com/) — subconjunto
+ * com os ícones usados no menu de josenilto.github.io. Licensed under MIT.
+ * Para adicionar ícones: regenerar a partir do pacote npm bootstrap-icons@1.13.2.
+ */
+@font-face {
+  font-display: swap;
+  font-family: "bootstrap-icons";
+  src: url("bootstrap-icons.woff2") format("woff2");
+}
+.bi::before,
+[class^="bi-"]::before,
+[class*=" bi-"]::before {
+  display: inline-block;
+  font-family: bootstrap-icons !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -.125em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.bi-rocket-takeoff::before { content: "\f845"; }
+.bi-journal-richtext::before { content: "\f443"; }
+.bi-briefcase::before { content: "\f1cc"; }
+.bi-mortarboard::before { content: "\f6fe"; }
+.bi-stars::before { content: "\f589"; }
+.bi-people::before { content: "\f4d0"; }
+.bi-terminal::before { content: "\f5c3"; }
+.bi-send::before { content: "\f6c0"; }
+.bi-translate::before { content: "\f658"; }
+.bi-moon-stars::before { content: "\f496"; }
+.bi-sun::before { content: "\f5a2"; }
+.bi-list::before { content: "\f479"; }
+.bi-x-lg::before { content: "\f659"; }

@@ -52,6 +52,7 @@
 
     <link href="./assets/vendor/fontawesome/fontawesome.css" rel="stylesheet">
     <link href="./assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="./assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="./assets/css/styles.css" rel="stylesheet" />
 
     <!-- JSON-LD Structured Data -->
@@ -105,32 +106,36 @@
 
 <body>
     <header class="l-header" id="header">
-        <nav class="nav bd-container">
+        <nav class="nav bd-container" aria-label="Main navigation">
 
             <a href="#career" class="nav__logo">
-                <i class="fab fa-github-alt nav__logo-icon"></i>
+                <i class="fab fa-github-alt nav__logo-icon" aria-hidden="true"></i>
                 <span class="nav__logo-text"><span class="nav__logo-bracket">&lt;</span>JLS<span class="nav__logo-bracket">/&gt;</span></span>
             </a>
 
-            <div class="nav__menu" id="nav-menu" aria-label="Menu principal">
+            <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
-                    <li class="nav__item"><a href="#career" class="nav__link active-link">Career</a></li>
-                    <li class="nav__item"><a href="#story" class="nav__link">Story</a></li>
-                    <li class="nav__item"><a href="#experience" class="nav__link">Experience</a></li>
-                    <li class="nav__item"><a href="#education" class="nav__link">Education</a></li>
-                    <li class="nav__item"><a href="#skills" class="nav__link">Benefits</a></li>
-                    <li class="nav__item"><a href="#engagement" class="nav__link">Consulting</a></li>
-                    <li class="nav__item"><a href="#labs" class="nav__link">Labs</a></li>
-                    <li class="nav__item"><a href="#contact" class="nav__link nav__link--cta">Contact</a></li>
-                    <li><a href="/pt/" class="nav__lang" hreflang="pt-BR" lang="pt-BR" aria-label="Ver este site em português">PT</a></li>
-                    <li><span class="change-theme" id="theme-button" role="button" tabindex="0" aria-label="Alternar tema claro/escuro">
-                        <svg class="theme-icon theme-icon--moon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z"/></svg>
-                        <svg class="theme-icon theme-icon--sun" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l1.414-1.414 2.122 2.122-1.414 1.414zM16.24 6.344l1.414-1.414 2.122 2.122-1.414 1.414zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z"/></svg>
-                    </span></li>
+                    <li class="nav__item"><a href="#career" class="nav__link active-link" title="Career"><i class="bi bi-rocket-takeoff nav__icon" aria-hidden="true"></i><span class="nav__label">Career</span></a></li>
+                    <li class="nav__item"><a href="#story" class="nav__link" title="Story"><i class="bi bi-journal-richtext nav__icon" aria-hidden="true"></i><span class="nav__label">Story</span></a></li>
+                    <li class="nav__item"><a href="#experience" class="nav__link" title="Experience"><i class="bi bi-briefcase nav__icon" aria-hidden="true"></i><span class="nav__label">Experience</span></a></li>
+                    <li class="nav__item"><a href="#education" class="nav__link" title="Education"><i class="bi bi-mortarboard nav__icon" aria-hidden="true"></i><span class="nav__label">Education</span></a></li>
+                    <li class="nav__item"><a href="#skills" class="nav__link" title="Benefits"><i class="bi bi-stars nav__icon" aria-hidden="true"></i><span class="nav__label">Benefits</span></a></li>
+                    <li class="nav__item"><a href="#engagement" class="nav__link" title="Consulting"><i class="bi bi-people nav__icon" aria-hidden="true"></i><span class="nav__label">Consulting</span></a></li>
+                    <li class="nav__item"><a href="#labs" class="nav__link" title="Labs"><i class="bi bi-terminal nav__icon" aria-hidden="true"></i><span class="nav__label">Labs</span></a></li>
                 </ul>
             </div>
-            <div class="nav__toggle" id="nav-toggle" role="button" tabindex="0" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="nav-menu">
-                <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+
+            <div class="nav__actions">
+                <a href="#contact" class="nav__cta" title="Contact"><i class="bi bi-send" aria-hidden="true"></i><span class="nav__cta-label">Contact</span></a>
+                <a href="/pt/" class="nav__lang" hreflang="pt-BR" lang="pt-BR" aria-label="Ver este site em português" title="Ver este site em português"><i class="bi bi-translate" aria-hidden="true"></i><span>PT</span></a>
+                <button type="button" class="change-theme" id="theme-button" aria-label="Toggle light/dark theme" title="Toggle light/dark theme">
+                    <i class="bi bi-moon-stars theme-icon theme-icon--moon" aria-hidden="true"></i>
+                    <i class="bi bi-sun theme-icon theme-icon--sun" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="nav__toggle" id="nav-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-menu" data-label-open="Open navigation menu" data-label-close="Close navigation menu">
+                    <i class="bi bi-list nav__toggle-open" aria-hidden="true"></i>
+                    <i class="bi bi-x-lg nav__toggle-close" aria-hidden="true"></i>
+                </button>
             </div>
         </nav>
     </header>
