@@ -1,22 +1,12 @@
 # CVEs aceitos como risco gerenciado — base: nginx:stable-alpine3.23
 # Revisitar mensalmente ou quando Alpine liberar pacotes corrigidos.
-# Ultima revisao: 2026-05-30 | VEX: .docker/scout/vex/vex.json (Docker Scout)
-
-# busybox 1.37.0-r30 — utilitario base do Alpine, nao removivel (6.5 M)
-CVE-2025-60876
-
-# freetype 2.14.1-r0 — fix em 2.14.2, Alpine 3.23 ainda em 2.14.1 (5.3 M)
-CVE-2026-23865
-
-# libxml2 2.13.9-r0 — sem patch disponivel no Alpine 3.23 (6.5 M)
-CVE-2026-6732
-
-# libgcrypt — dependencia indireta do nginx, aguardando pacote Alpine (6.7 M)
-CVE-2026-41989
-
-# util-linux — utilitario base do Alpine, nao removivel (4.7 M)
-CVE-2026-27456
-
-# libavif — dependencia do nginx (4.5 M)
-CVE-2025-48174
-CVE-2025-48175
+# Ultima revisao: 2026-11-01 | VEX: .docker/scout/vex/vex.json (Docker Scout)
+#
+# Revisao 2026-11-01: as entradas anteriores (busybox CVE-2025-60876,
+# freetype CVE-2026-23865, libxml2 CVE-2026-6732, libgcrypt CVE-2026-41989,
+# util-linux CVE-2026-27456, libavif CVE-2025-48174/48175) nao aparecem mais
+# na imagem base (Trivy 0.70, alpine 3.23.5) e foram removidas para nao
+# mascarar regressoes. O scan ja usa ignore-unfixed: CVEs sem correcao no
+# Alpine nao quebram o pipeline e nao precisam ser listados aqui.
+#
+# Formato: um CVE por linha, com comentario de justificativa acima.

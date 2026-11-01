@@ -20,7 +20,15 @@ LABEL org.opencontainers.image.title="portfolio-api" \
       org.opencontainers.image.description="API REST + SQLite para o portfólio josenilto.github.io"
 
 # su-exec: troca de usuário sem shell extra (like gosu, mas Alpine-nativo)
-RUN apk upgrade --no-cache && apk add --no-cache su-exec
+# Remove npm/npx, corepack e yarn: não são usados em runtime (a API roda com
+# `node server.js` e as dependências vêm do stage builder) e o npm embutido
+# na imagem oficial traz CVEs próprios (brace-expansion, picomatch, pacote,
+# sigstore, ip-address, glob, minimatch…). Reduz superfície de ataque.
+RUN apk upgrade --no-cache && apk add --no-cache su-exec && \
+    rm -rf /usr/local/lib/node_modules/npm \
+           /usr/local/lib/node_modules/corepack \
+           /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
+           /usr/local/bin/yarn /usr/local/bin/yarnpkg /opt/yarn-*
 
 WORKDIR /app
 
