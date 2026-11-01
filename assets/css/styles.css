@@ -2851,8 +2851,20 @@ body.dark-theme .career__chip .bi { color: var(--hero-neon); }
   #jobs    { page-break-before: always; }
   #contact { page-break-before: avoid; }
 
-  /* Botões de ação (GitHub, LinkedIn, PDF): exibir como texto */
-  .button {
+  /* Efeitos decorativos do topo não vão para o papel */
+  .career__aurora,
+  .career__grid,
+  .career__ring,
+  .career__orbit,
+  .career__chip,
+  .career__wave,
+  .career__status {
+    display: none !important;
+  }
+
+  /* Botões de ação (contato, CV, GitHub, LinkedIn): exibir como texto */
+  .career__btn,
+  .career__social {
     display: inline-block;
     border: 1pt solid #000;
     padding: 2pt 6pt;
