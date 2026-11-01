@@ -25,6 +25,7 @@
 .bi-airplane::before { content: "\f7cd"; }
 .bi-award::before { content: "\f154"; }
 .bi-bank::before { content: "\f62e"; }
+.bi-bank2::before { content: "\f62f"; }
 .bi-boxes::before { content: "\f685"; }
 .bi-briefcase::before { content: "\f1cc"; }
 .bi-building::before { content: "\f1dd"; }
@@ -46,12 +47,15 @@
 .bi-github::before { content: "\f3ed"; }
 .bi-hdd-rack::before { content: "\f40f"; }
 .bi-journal-richtext::before { content: "\f443"; }
+.bi-laptop::before { content: "\f456"; }
 .bi-lightning-charge::before { content: "\f46d"; }
 .bi-linkedin::before { content: "\f472"; }
 .bi-list::before { content: "\f479"; }
 .bi-moon-stars::before { content: "\f496"; }
 .bi-mortarboard::before { content: "\f6fe"; }
+.bi-mortarboard-fill::before { content: "\f6fd"; }
 .bi-patch-check::before { content: "\f4b6"; }
+.bi-patch-check-fill::before { content: "\f4b5"; }
 .bi-pc-display::before { content: "\f6a6"; }
 .bi-people::before { content: "\f4d0"; }
 .bi-rocket-takeoff::before { content: "\f845"; }
