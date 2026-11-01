@@ -164,3 +164,39 @@ window.onload = typeWriter;
         });
     });
 })();
+
+// Voltar ao topo: anel de progresso da rolagem e decolagem do foguete 🚀.
+// O main.js mostra/esconde o botão (.show-scroll); aqui só o efeito.
+(function () {
+    const btn = document.getElementById('scroll-top');
+    if (!btn) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let ticking = false;
+    const update = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0;
+        btn.style.setProperty('--progress', pct.toFixed(1));
+        ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+
+    let busy = false;
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (reduce) { window.scrollTo(0, 0); return; }
+        if (busy) return;
+        busy = true;
+        btn.classList.add('is-launching');
+        // a página sobe logo depois da ignição
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 150);
+        setTimeout(() => {
+            btn.classList.remove('is-launching');
+            btn.classList.add('is-landing');
+            setTimeout(() => { btn.classList.remove('is-landing'); busy = false; }, 500);
+        }, 950);
+    });
+})();
