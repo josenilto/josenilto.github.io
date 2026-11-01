@@ -788,67 +788,65 @@
     </main>
 
     <!--========== SCROLL TOP ==========-->
-    <a href="#career" class="scrolltop" id="scroll-top" aria-label="Voltar ao topo">
-        <svg class="scrolltop__icon" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m6.293 13.293 1.414 1.414L12 10.414l4.293 4.293 1.414-1.414L12 7.586z"/></svg>
+    <a href="#career" class="scrolltop" id="scroll-top" aria-label="Back to top" title="Back to top">
+        <svg class="scrolltop__ring" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle class="scrolltop__track" cx="24" cy="24" r="22"/><circle class="scrolltop__progress" cx="24" cy="24" r="22" pathLength="100"/></svg>
+        <span class="scrolltop__rocket" aria-hidden="true"><i class="bi bi-rocket-takeoff-fill"></i><span class="scrolltop__flame"></span></span>
+        <span class="scrolltop__smoke" aria-hidden="true"><span></span><span></span><span></span></span>
     </a>
 
     <!--========== FOOTER ==========-->
     <footer class="footer">
+        <div class="footer__glow" aria-hidden="true"></div>
         <div class="footer__inner bd-container">
 
-            <div class="footer__container bd-grid">
+            <div class="footer__container">
 
-                <!-- Brand -->
-                <div class="footer__content footer__content--brand">
+                <!-- Marca -->
+                <div class="footer__content footer__content--brand" data-aos="fade-up" data-aos-duration="600">
+                    <a href="#career" class="footer__brand-logo"><span class="footer__bracket">&lt;</span>JLS<span class="footer__bracket">/&gt;</span><span class="footer__cursor" aria-hidden="true">_</span></a>
                     <span class="footer__logo">Josenilto L da Silva</span>
                     <span class="footer__description">Cloud Solutions Architect &amp; DevOps Engineer</span>
                     <p class="footer__brand-text">13+ years designing and automating resilient infrastructure across Azure, AWS and GCP — from bare-metal to Kubernetes.</p>
                     <div class="footer__available">
-                        <span class="footer__available-dot"></span>
+                        <span class="footer__available-dot" aria-hidden="true"></span>
                         Available for consulting &amp; freelance
                     </div>
-                    <div class="footer__stack">
-                        <span>Azure</span><span>AWS</span><span>GCP</span><span>Kubernetes</span><span>Terraform</span>
-                    </div>
+                    <ul class="footer__stack" aria-label="Main stack"><li>Azure</li><li>AWS</li><li>GCP</li><li>Kubernetes</li><li>Terraform</li></ul>
                 </div>
 
-                <!-- Navigation -->
-                <div class="footer__content">
-                    <span class="footer__logo">Navigation</span>
+                <!-- Navegação -->
+                <nav class="footer__content" aria-label="Navigation" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+                    <span class="footer__title"><i class="bi bi-compass" aria-hidden="true"></i> Navigation</span>
                     <ul class="footer__nav">
-                        <li><a href="#career" class="footer__link"><i class="fas fa-chevron-right"></i> Career</a></li>
-                        <li><a href="#story" class="footer__link"><i class="fas fa-chevron-right"></i> Story</a></li>
-                        <li><a href="#experience" class="footer__link"><i class="fas fa-chevron-right"></i> Experience</a></li>
-                        <li><a href="#education" class="footer__link"><i class="fas fa-chevron-right"></i> Education</a></li>
-                        <li><a href="#skills" class="footer__link"><i class="fas fa-chevron-right"></i> Benefits</a></li>
-                        <li><a href="#engagement" class="footer__link"><i class="fas fa-chevron-right"></i> Consulting</a></li>
-                        <li><a href="#labs" class="footer__link"><i class="fas fa-chevron-right"></i> Labs</a></li>
-                        <li><a href="#contact" class="footer__link"><i class="fas fa-chevron-right"></i> Contact</a></li>
-                        <li><a href="/pt/" class="footer__link" hreflang="pt-BR" lang="pt-BR"><i class="fas fa-globe"></i> Português</a></li>
+                        <li><a href="#career" class="footer__link"><i class="bi bi-rocket-takeoff" aria-hidden="true"></i> Career</a></li>
+                        <li><a href="#story" class="footer__link"><i class="bi bi-journal-richtext" aria-hidden="true"></i> Story</a></li>
+                        <li><a href="#experience" class="footer__link"><i class="bi bi-briefcase" aria-hidden="true"></i> Experience</a></li>
+                        <li><a href="#education" class="footer__link"><i class="bi bi-mortarboard" aria-hidden="true"></i> Education</a></li>
+                        <li><a href="#skills" class="footer__link"><i class="bi bi-stars" aria-hidden="true"></i> Benefits</a></li>
+                        <li><a href="#engagement" class="footer__link"><i class="bi bi-people" aria-hidden="true"></i> Consulting</a></li>
+                        <li><a href="#labs" class="footer__link"><i class="bi bi-terminal" aria-hidden="true"></i> Labs</a></li>
+                        <li><a href="#contact" class="footer__link"><i class="bi bi-send" aria-hidden="true"></i> Contact</a></li>
+                        <li><a href="/pt/" class="footer__link footer__link--lang" hreflang="pt-BR" lang="pt-BR"><i class="bi bi-translate" aria-hidden="true"></i> Português</a></li>
                     </ul>
-                </div>
+                </nav>
 
-                <!-- Contact -->
-                <div class="footer__content">
-                    <span class="footer__logo">Get in Touch</span>
+                <!-- Contato -->
+                <div class="footer__content" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
+                    <span class="footer__title"><i class="bi bi-send" aria-hidden="true"></i> Get in Touch</span>
                     <ul class="footer__info">
-                        <li><i class="fas fa-map-marker-alt"></i> Rio de Janeiro, Brazil</li>
-                        <li><i class="fas fa-globe"></i> Open to remote worldwide</li>
+                        <li><i class="bi bi-geo-alt" aria-hidden="true"></i> Rio de Janeiro, Brazil</li>
+                        <li><i class="bi bi-globe2" aria-hidden="true"></i> Open to remote worldwide</li>
                     </ul>
                     <div class="footer__socials">
-                        <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade."
-                            target="_blank" rel="noopener noreferrer" class="footer__social footer__social--whatsapp" title="WhatsApp" aria-label="Contato pelo WhatsApp (abre em nova aba)">
-                            <i class="fab fa-whatsapp" aria-hidden="true"></i></a>
-                        <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--linkedin" title="LinkedIn" aria-label="Perfil no LinkedIn (abre em nova aba)">
-                            <i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
-                        <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--github" title="GitHub" aria-label="Perfil no GitHub (abre em nova aba)">
-                            <i class="fab fa-github-alt" aria-hidden="true"></i></a>
-                        <a href="https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--youtube" title="YouTube" aria-label="Canal no YouTube (abre em nova aba)">
-                            <i class="fab fa-youtube" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--instagram" title="Instagram" aria-label="Perfil no Instagram (abre em nova aba)">
-                            <i class="fab fa-instagram" aria-hidden="true"></i></a>
-                        <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--telegram" title="Telegram" aria-label="Contato pelo Telegram (abre em nova aba)">
-                            <i class="fab fa-telegram-plane" aria-hidden="true"></i></a>
+                        <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade." target="_blank" rel="noopener noreferrer" class="footer__social footer__social--whatsapp" title="WhatsApp" aria-label="Contato pelo WhatsApp (abre em nova aba)"><i class="bi bi-whatsapp" aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--linkedin" title="LinkedIn" aria-label="Perfil no LinkedIn (abre em nova aba)"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                        <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--github" title="GitHub" aria-label="Perfil no GitHub (abre em nova aba)"><i class="bi bi-github" aria-hidden="true"></i></a>
+                        <a href="https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--youtube" title="YouTube" aria-label="Canal no YouTube (abre em nova aba)"><i class="bi bi-youtube" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--instagram" title="Instagram" aria-label="Perfil no Instagram (abre em nova aba)"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+                        <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--telegram" title="Telegram" aria-label="Contato pelo Telegram (abre em nova aba)"><i class="bi bi-telegram" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="footer__terminal" aria-hidden="true">
+                        <span class="footer__prompt">$</span> uptime <span class="footer__term-ok">13+ years</span> · status: <span class="footer__term-ok">online</span><span class="footer__cursor">_</span>
                     </div>
                 </div>
 
@@ -856,7 +854,7 @@
 
             <div class="footer__bottom">
                 <p class="footer__copy">&#169; 2026 Josenilto L da Silva. All rights reserved.</p>
-                <p class="footer__copy footer__copy--right">Built &amp; maintained by Josenilto L da Silva</p>
+                <p class="footer__copy footer__copy--right">Made with <i class="bi bi-heart-fill footer__heart" aria-hidden="true"></i> · Built &amp; maintained by Josenilto L da Silva</p>
             </div>
 
         </div>
