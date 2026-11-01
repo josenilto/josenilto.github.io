@@ -234,7 +234,9 @@ jobs:
               || echo "⚠️ $f não encontrado"
           done
           git checkout origin/prd -- assets 2>/dev/null || true
+          git checkout origin/prd -- pt 2>/dev/null || true
           [ -d assets ] && cp -r assets/ _site-hmg/assets/
+          [ -d pt ] && cp -r pt/ _site-hmg/pt/          # versão pt-BR em /hmg/pt/
           echo "📂 Estrutura HMG estática:"; find _site-hmg -maxdepth 2 -type f | sort
 
       # ── Deploy unificado ───────────────────────────────────────

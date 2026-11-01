@@ -16,6 +16,11 @@
 })();
 
 // Função para mostrar/ocultar o menu de navegação
+// Rótulos vêm do HTML (data-label-open/close) para seguir o idioma da página
+const menuLabel = (toggle, isOpen) =>
+  toggle.dataset[isOpen ? "labelClose" : "labelOpen"] ||
+  (isOpen ? "Fechar menu de navegação" : "Abrir menu de navegação");
+
 const showMenu = (toggleId, navId) => {
   const toggle = document.getElementById(toggleId);
   const nav = document.getElementById(navId);
@@ -24,7 +29,7 @@ const showMenu = (toggleId, navId) => {
     toggle.addEventListener("click", () => {
       const isOpen = nav.classList.toggle("show-menu");
       toggle.setAttribute("aria-expanded", isOpen);
-      toggle.setAttribute("aria-label", isOpen ? "Fechar menu de navegação" : "Abrir menu de navegação");
+      toggle.setAttribute("aria-label", menuLabel(toggle, isOpen));
     });
   }
 };
@@ -40,12 +45,23 @@ const linkAction = () => {
     navMenu.classList.remove("show-menu");
     if (navToggle) {
       navToggle.setAttribute("aria-expanded", "false");
-      navToggle.setAttribute("aria-label", "Abrir menu de navegação");
+      navToggle.setAttribute("aria-label", menuLabel(navToggle, false));
     }
   }
 };
 
 navLinks.forEach((link) => link.addEventListener("click", linkAction));
+document.querySelectorAll(".nav__cta").forEach((link) => link.addEventListener("click", linkAction));
+
+// Esc fecha o menu mobile e devolve o foco ao botão
+document.addEventListener("keydown", (e) => {
+  const navMenu = document.getElementById("nav-menu");
+  if (e.key === "Escape" && navMenu && navMenu.classList.contains("show-menu")) {
+    linkAction();
+    const navToggle = document.getElementById("nav-toggle");
+    if (navToggle) navToggle.focus();
+  }
+});
 
 // Função para destacar o link ativo baseado na rolagem
 const sections = document.querySelectorAll("section[id]");
@@ -58,7 +74,8 @@ const scrollActive = () => {
     const sectionTop = current.offsetTop - 50;
     const sectionId = current.getAttribute("id");
 
-    const link = document.querySelector(`.nav__menu a[href*='${sectionId}']`);
+    const link = document.querySelector(`.nav__menu a[href="#${sectionId}"]`);
+    if (!link) return; // seção sem item no menu (ex.: contato, que é o CTA)
     if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
       link.classList.add("active-link");
     } else {

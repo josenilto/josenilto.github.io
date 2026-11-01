@@ -234,6 +234,7 @@ jobs:
           mkdir -p _site
           cp *.html      _site/
           cp -r assets/  _site/assets/
+          cp -r pt/      _site/pt/        # versão pt-BR em /pt/
           cp robots.txt  _site/
           cp sitemap.xml _site/
           cp health      _site/
