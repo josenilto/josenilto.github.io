@@ -633,132 +633,154 @@
         </section>
 
         <!--========== LABS ==========-->
-        <section class="jobs section bd-container" id="labs">
-            <div class="bd-container">
-                <span class="section-subtitle">Labs</span>
-                <h2 class="section-title">Lab Repositories by Category</h2>
-                <p class="jobs__intro" data-aos="fade-up" data-aos-duration="600">Hands-on setup guides and configs I maintain on GitHub — click a technology to open its repository.</p>
+        <section class="labs section" id="labs">
+            <div class="labs__bg" aria-hidden="true"></div>
+            <div class="bd-container labs__inner">
+                <span class="section-subtitle section-eyebrow" data-aos="fade-up" data-aos-duration="500"><i class="bi bi-terminal" aria-hidden="true"></i> Labs</span>
+                <h2 class="section-title section-heading" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">Lab Repositories by Category</h2>
+                <p class="labs__intro" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">Hands-on setup guides and configs I maintain on GitHub — click a technology to open its repository.</p>
 
-                <div class="menu__container bd-grid">
+                <div class="labs__stats" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
+                    <span class="labs__stat"><i class="bi bi-github" aria-hidden="true"></i> <strong>23</strong> repositories on GitHub</span>
+                    <span class="labs__stat labs__stat--soon"><i class="bi bi-hourglass-split" aria-hidden="true"></i> <strong>4</strong> in preparation</span>
+                </div>
 
-                    <div class="menu__content" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
-                        <div class="menu__header">
-                            <h3 class="menu__category"><i class="fas fa-chart-line"></i> Monitoring</h3>
-                            <span class="menu__count">4 repos</span>
-                        </div>
-                        <div class="menu__tags">
-                            <a href="https://github.com/josenilto/dev.grafana" target="_blank" rel="noopener noreferrer" class="menu__name">Grafana</a>
-                            <a href="https://github.com/josenilto/dev.prometheus" target="_blank" rel="noopener noreferrer" class="menu__name">Prometheus</a>
-                            <a href="https://github.com/josenilto/dev.telegraf" target="_blank" rel="noopener noreferrer" class="menu__name">Telegraf</a>
-                            <a href="https://github.com/josenilto/dev.zabbix" target="_blank" rel="noopener noreferrer" class="menu__name">Zabbix</a>
-                        </div>
-                    </div>
+                <div class="labs__filters" role="group" aria-label="Filter labs by category" data-aos="fade-up" data-aos-duration="600" data-aos-delay="500">
+                    <button type="button" class="labs__pill is-active" data-filter="all" aria-pressed="true"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i> All <span class="labs__pill-count">23</span></button>
+                    <button type="button" class="labs__pill" data-filter="monitoring" aria-pressed="false"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i> Monitoring</button>
+                    <button type="button" class="labs__pill" data-filter="web" aria-pressed="false"><i class="bi bi-hdd-stack" aria-hidden="true"></i> Web &amp; App</button>
+                    <button type="button" class="labs__pill" data-filter="databases" aria-pressed="false"><i class="bi bi-database" aria-hidden="true"></i> Databases</button>
+                    <button type="button" class="labs__pill" data-filter="network" aria-pressed="false"><i class="bi bi-shield-lock" aria-hidden="true"></i> Network</button>
+                    <button type="button" class="labs__pill" data-filter="loadbalance" aria-pressed="false"><i class="bi bi-diagram-2" aria-hidden="true"></i> Load Balance</button>
+                    <button type="button" class="labs__pill" data-filter="devops" aria-pressed="false"><i class="bi bi-infinity" aria-hidden="true"></i> DevOps &amp; IaC</button>
+                </div>
 
-                    <div class="menu__content" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
-                        <div class="menu__header">
-                            <h3 class="menu__category"><i class="fas fa-server"></i> Web &amp; App Servers</h3>
-                            <span class="menu__count">5 repos</span>
-                        </div>
-                        <div class="menu__tags">
-                            <a href="https://github.com/josenilto/dev.apache" target="_blank" rel="noopener noreferrer" class="menu__name">Apache</a>
-                            <a href="https://github.com/josenilto/dev.httpd" target="_blank" rel="noopener noreferrer" class="menu__name">Httpd</a>
-                            <a href="https://github.com/josenilto/dev.jboss" target="_blank" rel="noopener noreferrer" class="menu__name">JBoss</a>
-                            <a href="https://github.com/josenilto/dev.nginx" target="_blank" rel="noopener noreferrer" class="menu__name">Nginx</a>
-                            <a href="https://github.com/josenilto/dev.webmin" target="_blank" rel="noopener noreferrer" class="menu__name">Webmin</a>
-                        </div>
-                    </div>
-
-                    <div class="menu__content" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
-                        <div class="menu__header">
-                            <h3 class="menu__category"><i class="fas fa-database"></i> Databases</h3>
-                            <span class="menu__count">4 repos</span>
-                        </div>
-                        <div class="menu__tags">
-                            <a href="https://github.com/josenilto/dev.influxdb" target="_blank" rel="noopener noreferrer" class="menu__name">InfluxDB</a>
-                            <a href="https://github.com/josenilto/dev.mongodb" target="_blank" rel="noopener noreferrer" class="menu__name">MongoDB</a>
-                            <a href="https://github.com/josenilto/dev.mysql" target="_blank" rel="noopener noreferrer" class="menu__name">MySQL</a>
-                            <a href="https://github.com/josenilto/dev.postgres" target="_blank" rel="noopener noreferrer" class="menu__name">PostgreSQL</a>
-                            <span class="menu__name menu__name--soon" title="Repositório em preparação">SQL Server</span>
-                        </div>
-                    </div>
-
-                    <div class="menu__content" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
-                        <div class="menu__header">
-                            <h3 class="menu__category"><i class="fas fa-shield-alt"></i> Network &amp; Security</h3>
-                            <span class="menu__count">2 repos</span>
-                        </div>
-                        <div class="menu__tags">
-                            <a href="https://github.com/josenilto/dev.firewall" target="_blank" rel="noopener noreferrer" class="menu__name">Firewall</a>
-                            <a href="https://github.com/josenilto/dev.proxysquid" target="_blank" rel="noopener noreferrer" class="menu__name">Squid</a>
-                            <span class="menu__name menu__name--soon" title="Repositório em preparação">DNS</span>
-                            <span class="menu__name menu__name--soon" title="Repositório em preparação">LDAP</span>
-                            <span class="menu__name menu__name--soon" title="Repositório em preparação">SSH</span>
-                        </div>
-                    </div>
-
-                    <div class="menu__content" data-aos="fade-up" data-aos-duration="600" data-aos-delay="500">
-                        <div class="menu__header">
-                            <h3 class="menu__category"><i class="fas fa-scale-balanced"></i> Load Balance &amp; Proxy</h3>
-                            <span class="menu__count">2 repos</span>
-                        </div>
-                        <div class="menu__tags">
-                            <a href="https://github.com/josenilto/dev.haproxy" target="_blank" rel="noopener noreferrer" class="menu__name">HAProxy</a>
-                            <a href="https://github.com/josenilto/dev.pfsense" target="_blank" rel="noopener noreferrer" class="menu__name">pfSense</a>
-                        </div>
-                    </div>
-
-                    <div class="menu__content" data-aos="fade-up" data-aos-duration="600" data-aos-delay="600">
-                        <div class="menu__header">
-                            <h3 class="menu__category"><i class="fas fa-code-branch"></i> DevOps &amp; IaC</h3>
-                            <span class="menu__count">6 repos</span>
-                        </div>
-                        <div class="menu__tags">
-                            <a href="https://github.com/josenilto/dev.ansible" target="_blank" rel="noopener noreferrer" class="menu__name">Ansible</a>
-                            <a href="https://github.com/josenilto/dev.docker" target="_blank" rel="noopener noreferrer" class="menu__name">Docker</a>
-                            <a href="https://github.com/josenilto/dev.jenkins" target="_blank" rel="noopener noreferrer" class="menu__name">Jenkins</a>
-                            <a href="https://github.com/josenilto/dev.kubernetes" target="_blank" rel="noopener noreferrer" class="menu__name">Kubernetes</a>
-                            <a href="https://github.com/josenilto/dev.terraform" target="_blank" rel="noopener noreferrer" class="menu__name">Terraform</a>
-                            <a href="https://github.com/josenilto/dev.vagrant" target="_blank" rel="noopener noreferrer" class="menu__name">Vagrant</a>
-                        </div>
-                    </div>
-
+                <div class="labs__grid">
+                    <article class="labs__card" data-category="monitoring" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+                        <header class="labs__card-head">
+                            <span class="labs__icon" aria-hidden="true"><i class="bi bi-graph-up-arrow"></i></span>
+                            <h3 class="labs__card-title">Monitoring</h3>
+                            <span class="labs__count"><i class="bi bi-github" aria-hidden="true"></i> 4 repos</span>
+                        </header>
+                        <ul class="labs__tags">
+                            <li><a href="https://github.com/josenilto/dev.grafana" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Grafana repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Grafana <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.prometheus" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Prometheus repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Prometheus <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.telegraf" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Telegraf repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Telegraf <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.zabbix" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Zabbix repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Zabbix <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </article>
+                    <article class="labs__card" data-category="web" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
+                        <header class="labs__card-head">
+                            <span class="labs__icon" aria-hidden="true"><i class="bi bi-hdd-stack"></i></span>
+                            <h3 class="labs__card-title">Web &amp; App Servers</h3>
+                            <span class="labs__count"><i class="bi bi-github" aria-hidden="true"></i> 5 repos</span>
+                        </header>
+                        <ul class="labs__tags">
+                            <li><a href="https://github.com/josenilto/dev.apache" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Apache repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Apache <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.httpd" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Httpd repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Httpd <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.jboss" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the JBoss repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> JBoss <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.nginx" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Nginx repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Nginx <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.webmin" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Webmin repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Webmin <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </article>
+                    <article class="labs__card" data-category="databases" data-aos="fade-up" data-aos-duration="600" data-aos-delay="500">
+                        <header class="labs__card-head">
+                            <span class="labs__icon" aria-hidden="true"><i class="bi bi-database"></i></span>
+                            <h3 class="labs__card-title">Databases</h3>
+                            <span class="labs__count"><i class="bi bi-github" aria-hidden="true"></i> 4 repos</span>
+                        </header>
+                        <ul class="labs__tags">
+                            <li><a href="https://github.com/josenilto/dev.influxdb" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the InfluxDB repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> InfluxDB <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.mongodb" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the MongoDB repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> MongoDB <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.mysql" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the MySQL repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> MySQL <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.postgres" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the PostgreSQL repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> PostgreSQL <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><span class="labs__tag labs__tag--soon" title="Repository coming soon"><i class="bi bi-hourglass-split" aria-hidden="true"></i> SQL Server <span class="labs__soon">Coming soon</span></span></li>
+                        </ul>
+                    </article>
+                    <article class="labs__card" data-category="network" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+                        <header class="labs__card-head">
+                            <span class="labs__icon" aria-hidden="true"><i class="bi bi-shield-lock"></i></span>
+                            <h3 class="labs__card-title">Network &amp; Security</h3>
+                            <span class="labs__count"><i class="bi bi-github" aria-hidden="true"></i> 2 repos</span>
+                        </header>
+                        <ul class="labs__tags">
+                            <li><a href="https://github.com/josenilto/dev.firewall" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Firewall repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Firewall <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.proxysquid" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Squid repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Squid <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><span class="labs__tag labs__tag--soon" title="Repository coming soon"><i class="bi bi-hourglass-split" aria-hidden="true"></i> DNS <span class="labs__soon">Coming soon</span></span></li>
+                            <li><span class="labs__tag labs__tag--soon" title="Repository coming soon"><i class="bi bi-hourglass-split" aria-hidden="true"></i> LDAP <span class="labs__soon">Coming soon</span></span></li>
+                            <li><span class="labs__tag labs__tag--soon" title="Repository coming soon"><i class="bi bi-hourglass-split" aria-hidden="true"></i> SSH <span class="labs__soon">Coming soon</span></span></li>
+                        </ul>
+                    </article>
+                    <article class="labs__card" data-category="loadbalance" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
+                        <header class="labs__card-head">
+                            <span class="labs__icon" aria-hidden="true"><i class="bi bi-diagram-2"></i></span>
+                            <h3 class="labs__card-title">Load Balance &amp; Proxy</h3>
+                            <span class="labs__count"><i class="bi bi-github" aria-hidden="true"></i> 2 repos</span>
+                        </header>
+                        <ul class="labs__tags">
+                            <li><a href="https://github.com/josenilto/dev.haproxy" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the HAProxy repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> HAProxy <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.pfsense" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the pfSense repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> pfSense <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </article>
+                    <article class="labs__card" data-category="devops" data-aos="fade-up" data-aos-duration="600" data-aos-delay="500">
+                        <header class="labs__card-head">
+                            <span class="labs__icon" aria-hidden="true"><i class="bi bi-infinity"></i></span>
+                            <h3 class="labs__card-title">DevOps &amp; IaC</h3>
+                            <span class="labs__count"><i class="bi bi-github" aria-hidden="true"></i> 6 repos</span>
+                        </header>
+                        <ul class="labs__tags">
+                            <li><a href="https://github.com/josenilto/dev.ansible" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Ansible repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Ansible <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.docker" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Docker repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Docker <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.jenkins" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Jenkins repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Jenkins <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.kubernetes" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Kubernetes repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Kubernetes <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.terraform" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Terraform repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Terraform <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                            <li><a href="https://github.com/josenilto/dev.vagrant" target="_blank" rel="noopener noreferrer" class="labs__tag" aria-label="Open the Vagrant repository on GitHub (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i> Vagrant <i class="bi bi-arrow-up-right labs__tag-go" aria-hidden="true"></i></a></li>
+                        </ul>
+                    </article>
                 </div>
             </div>
         </section>
 
         <!--========== CONTACT ==========-->
-        <section class="contact section bd-container" id="contact">
-            <div class="bd-container contact__wrapper">
-                <div class="contact__data">
-                    <span class="section-subtitle">Let's Connect</span>
-                    <h2 class="section-title">Get in Touch</h2>
+        <section class="contact section" id="contact">
+            <div class="contact__bg" aria-hidden="true"></div>
+            <div class="bd-container contact__inner">
+                <div class="contact__data" data-aos="fade-right" data-aos-duration="600">
+                    <span class="section-subtitle section-eyebrow contact__eyebrow"><i class="bi bi-send" aria-hidden="true"></i> Let's Connect</span>
+                    <h2 class="section-title contact__title">Get in Touch</h2>
                     <p class="contact__description">Have a cloud or infrastructure challenge? I'm open to SRE/DevOps consulting, freelance projects, and full-time opportunities. Pick a channel and let's talk.</p>
+                    <span class="career__status contact__status"><span class="career__status-dot" aria-hidden="true"></span>Available for consulting</span>
+                    <ul class="contact__offers">
+                        <li><i class="bi bi-chat-dots" aria-hidden="true"></i> SRE/DevOps consulting</li>
+                        <li><i class="bi bi-code-slash" aria-hidden="true"></i> Freelance projects</li>
+                        <li><i class="bi bi-briefcase" aria-hidden="true"></i> Full-time opportunities</li>
+                    </ul>
                 </div>
 
-                <div class="contact__cards">
-                    <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade."
-                        target="_blank" rel="noopener noreferrer" class="contact__card contact__card--whatsapp"
-                        data-aos="zoom-in" data-aos-duration="500" data-aos-delay="0">
-                        <span class="contact__card-icon-wrapper">
-                            <i class="fab fa-whatsapp contact__card-icon"></i>
+                <div class="contact__channels">
+                    <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade." target="_blank" rel="noopener noreferrer" class="channel channel--whatsapp" aria-label="Contact via WhatsApp (opens in a new tab)" data-aos="fade-left" data-aos-duration="600" data-aos-delay="200">
+                        <span class="channel__icon" aria-hidden="true"><i class="bi bi-whatsapp"></i></span>
+                        <span class="channel__text">
+                            <span class="channel__name">WhatsApp</span>
+                            <span class="channel__hint">Direct chat on mobile</span>
                         </span>
-                        <span>WhatsApp</span>
+                        <i class="bi bi-arrow-up-right channel__go" aria-hidden="true"></i>
                     </a>
-                    <a href="https://www.linkedin.com/in/josenilto"
-                        target="_blank" rel="noopener noreferrer" class="contact__card contact__card--linkedin"
-                        data-aos="zoom-in" data-aos-duration="500" data-aos-delay="120">
-                        <span class="contact__card-icon-wrapper">
-                            <i class="fab fa-linkedin-in contact__card-icon"></i>
+                    <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="channel channel--linkedin" aria-label="LinkedIn profile (opens in a new tab)" data-aos="fade-left" data-aos-duration="600" data-aos-delay="400">
+                        <span class="channel__icon" aria-hidden="true"><i class="bi bi-linkedin"></i></span>
+                        <span class="channel__text">
+                            <span class="channel__name">LinkedIn</span>
+                            <span class="channel__hint">Professional profile & messages</span>
                         </span>
-                        <span>LinkedIn</span>
+                        <i class="bi bi-arrow-up-right channel__go" aria-hidden="true"></i>
                     </a>
-                    <a href="https://github.com/josenilto"
-                        target="_blank" rel="noopener noreferrer" class="contact__card contact__card--github"
-                        data-aos="zoom-in" data-aos-duration="500" data-aos-delay="240">
-                        <span class="contact__card-icon-wrapper">
-                            <i class="fab fa-github contact__card-icon"></i>
+                    <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="channel channel--github" aria-label="GitHub profile (opens in a new tab)" data-aos="fade-left" data-aos-duration="600" data-aos-delay="500">
+                        <span class="channel__icon" aria-hidden="true"><i class="bi bi-github"></i></span>
+                        <span class="channel__text">
+                            <span class="channel__name">GitHub</span>
+                            <span class="channel__hint">Code, labs and projects</span>
                         </span>
-                        <span>GitHub</span>
+                        <i class="bi bi-arrow-up-right channel__go" aria-hidden="true"></i>
                     </a>
                 </div>
             </div>

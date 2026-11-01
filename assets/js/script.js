@@ -136,3 +136,31 @@ window.onload = typeWriter;
         });
     });
 })();
+
+// Labs: filtro por categoria (pílulas). Sem JS, todas as categorias aparecem.
+(function () {
+    const pills = document.querySelectorAll('.labs__pill');
+    const cards = document.querySelectorAll('.labs__card');
+    if (!pills.length || !cards.length) return;
+
+    pills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+            const filter = pill.dataset.filter;
+            pills.forEach((p) => {
+                const on = p === pill;
+                p.classList.toggle('is-active', on);
+                p.setAttribute('aria-pressed', on);
+            });
+            cards.forEach((card) => {
+                const show = filter === 'all' || card.dataset.category === filter;
+                card.classList.toggle('is-filtered', !show);
+                card.classList.remove('is-revealed');
+                if (show) {
+                    void card.offsetWidth; // reinicia a animação de entrada
+                    card.classList.add('is-revealed');
+                }
+            });
+            if (window.AOS) window.AOS.refresh();
+        });
+    });
+})();
