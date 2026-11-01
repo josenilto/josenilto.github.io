@@ -1,4 +1,10 @@
-if (window.AOS) AOS.init({ offset: 0 });
+if (window.AOS) {
+    AOS.init({ offset: 0 });
+    // O AOS mede as posições no DOMContentLoaded, antes de fontes/imagens e do
+    // salto para o #hash; sem recalcular, seções mais abaixo (ex.: /#education
+    // no celular) ficavam sem animar. Recalcula quando tudo carregou.
+    window.addEventListener('load', () => AOS.refresh());
+}
 
 // Typewriter Effect
 
