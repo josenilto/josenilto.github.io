@@ -26,6 +26,7 @@
 .bi-arrow-left-right::before { content: "\f12b"; }
 .bi-arrow-repeat::before { content: "\f130"; }
 .bi-arrow-right::before { content: "\f138"; }
+.bi-arrow-up-right::before { content: "\f144"; }
 .bi-award::before { content: "\f154"; }
 .bi-bank::before { content: "\f62e"; }
 .bi-bank2::before { content: "\f62f"; }
@@ -43,15 +44,23 @@
 .bi-cloud::before { content: "\f2c1"; }
 .bi-cloud-check::before { content: "\f299"; }
 .bi-clouds::before { content: "\f2c3"; }
+.bi-code-slash::before { content: "\f2c6"; }
 .bi-cpu::before { content: "\f2d6"; }
 .bi-cup-hot::before { content: "\f7eb"; }
+.bi-database::before { content: "\f8c4"; }
+.bi-diagram-2::before { content: "\f2ec"; }
 .bi-diagram-3::before { content: "\f2ee"; }
 .bi-display::before { content: "\f302"; }
 .bi-file-earmark-arrow-down::before { content: "\f356"; }
 .bi-geo-alt::before { content: "\f3e8"; }
 .bi-git::before { content: "\f69d"; }
 .bi-github::before { content: "\f3ed"; }
+.bi-graph-up-arrow::before { content: "\f673"; }
+.bi-grid-3x3-gap::before { content: "\f3f9"; }
 .bi-hdd-rack::before { content: "\f40f"; }
+.bi-hdd-stack::before { content: "\f411"; }
+.bi-hourglass-split::before { content: "\f41f"; }
+.bi-infinity::before { content: "\f69e"; }
 .bi-journal-richtext::before { content: "\f443"; }
 .bi-laptop::before { content: "\f456"; }
 .bi-lightning-charge::before { content: "\f46d"; }
@@ -76,4 +85,5 @@
 .bi-sun::before { content: "\f5a2"; }
 .bi-terminal::before { content: "\f5c3"; }
 .bi-translate::before { content: "\f658"; }
+.bi-whatsapp::before { content: "\f618"; }
 .bi-x-lg::before { content: "\f659"; }
