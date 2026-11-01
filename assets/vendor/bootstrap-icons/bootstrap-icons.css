@@ -23,7 +23,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 .bi-airplane::before { content: "\f7cd"; }
+.bi-arrow-left-right::before { content: "\f12b"; }
 .bi-arrow-repeat::before { content: "\f130"; }
+.bi-arrow-right::before { content: "\f138"; }
 .bi-award::before { content: "\f154"; }
 .bi-bank::before { content: "\f62e"; }
 .bi-bank2::before { content: "\f62f"; }
@@ -36,6 +38,7 @@
 .bi-cash-coin::before { content: "\f632"; }
 .bi-chat-dots::before { content: "\f24a"; }
 .bi-check2::before { content: "\f272"; }
+.bi-check2-circle::before { content: "\f270"; }
 .bi-chevron-down::before { content: "\f282"; }
 .bi-cloud::before { content: "\f2c1"; }
 .bi-cloud-check::before { content: "\f299"; }
@@ -45,6 +48,7 @@
 .bi-diagram-3::before { content: "\f2ee"; }
 .bi-display::before { content: "\f302"; }
 .bi-file-earmark-arrow-down::before { content: "\f356"; }
+.bi-geo-alt::before { content: "\f3e8"; }
 .bi-git::before { content: "\f69d"; }
 .bi-github::before { content: "\f3ed"; }
 .bi-hdd-rack::before { content: "\f40f"; }
