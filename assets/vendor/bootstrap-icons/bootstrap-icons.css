@@ -23,6 +23,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 .bi-airplane::before { content: "\f7cd"; }
+.bi-arrow-repeat::before { content: "\f130"; }
 .bi-award::before { content: "\f154"; }
 .bi-bank::before { content: "\f62e"; }
 .bi-bank2::before { content: "\f62f"; }
@@ -34,6 +35,7 @@
 .bi-cart3::before { content: "\f244"; }
 .bi-cash-coin::before { content: "\f632"; }
 .bi-chat-dots::before { content: "\f24a"; }
+.bi-check2::before { content: "\f272"; }
 .bi-chevron-down::before { content: "\f282"; }
 .bi-cloud::before { content: "\f2c1"; }
 .bi-cloud-check::before { content: "\f299"; }
@@ -58,6 +60,7 @@
 .bi-patch-check-fill::before { content: "\f4b5"; }
 .bi-pc-display::before { content: "\f6a6"; }
 .bi-people::before { content: "\f4d0"; }
+.bi-people-fill::before { content: "\f4cf"; }
 .bi-rocket-takeoff::before { content: "\f845"; }
 .bi-send::before { content: "\f6c0"; }
 .bi-shield-check::before { content: "\f52f"; }
