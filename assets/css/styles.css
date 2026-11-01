@@ -1312,11 +1312,14 @@ body.dark-theme .career__chip .bi { color: var(--hero-neon); }
 }
 
 /*========== STORY — CARDS ANIMADOS (estilo Bootstrap 5 + Bootstrap Icons) ==========*/
-.story {
+/* .section.story: precisa vencer o ".section { padding-top: 8rem }" do
+   @media ≥768px, que vem depois no arquivo */
+.section.story {
   position: relative;
   overflow: hidden;
-  padding: 5rem 0 4rem;
+  padding: 1.5rem 0 3.5rem;
 }
+
 
 /* Fundo: brilho radial suave + pontos de grade, esmaecidos nas bordas */
 .story__bg {
@@ -1363,8 +1366,8 @@ body.dark-theme .story__eyebrow { color: var(--hero-neon); }
 
 .story__title {
   position: relative;
-  margin: 0 auto 1rem;
-  max-width: 44rem;
+  margin: 0 auto 0.75rem;
+  max-width: 60rem;
   line-height: 1.25;
 }
 
@@ -1373,7 +1376,7 @@ body.dark-theme .story__eyebrow { color: var(--hero-neon); }
   display: block;
   width: 0;
   height: 3px;
-  margin: 0.85rem auto 0;
+  margin: 0.6rem auto 0;
   border-radius: 3px;
   background: linear-gradient(90deg, var(--hero-neon), var(--hero-teal));
   box-shadow: 0 0 12px var(--hero-glow);
@@ -1387,7 +1390,7 @@ body.dark-theme .story__eyebrow { color: var(--hero-neon); }
 
 .story__lead {
   max-width: 40rem;
-  margin: 0 auto 2.5rem;
+  margin: 0 auto 1.75rem;
   text-align: center;
   line-height: 1.75;
 }
@@ -1402,8 +1405,8 @@ body.dark-theme .story__eyebrow { color: var(--hero-neon); }
 
 @media screen and (min-width: 900px) {
   .story__layout {
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-    gap: 2.25rem;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 2rem;
   }
 }
 
@@ -1640,8 +1643,8 @@ body.dark-theme .story__card-count { color: var(--hero-neon); }
 
 /* Trajetória: linha que se preenche + etapas com ícone */
 .story__path {
-  margin-top: 2.75rem;
-  padding: 1.25rem 1.25rem 1.4rem;
+  margin-top: 1.75rem;
+  padding: 1rem 1.25rem 1.1rem;
   border-radius: 1.25rem;
   background: var(--hero-glass);
   border: 1px solid var(--hero-border);
@@ -1651,7 +1654,7 @@ body.dark-theme .story__card-count { color: var(--hero-neon); }
 
 .story__path-title {
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   text-align: center;
   font-size: var(--smaller-font-size);
   font-weight: var(--font-semi-bold);
@@ -1752,8 +1755,8 @@ body.dark-theme .story__path-title { color: var(--hero-neon); }
 
 /* Celular: cards em 1 coluna, trajetória vertical */
 @media screen and (max-width: 575px) {
-  .story {
-    padding: 3.5rem 0 3rem;
+  .section.story {
+    padding: 1.5rem 0 3rem;
   }
 
   .story__cards {

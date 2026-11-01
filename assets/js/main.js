@@ -66,25 +66,29 @@ document.addEventListener("keydown", (e) => {
 // Função para destacar o link ativo baseado na rolagem
 const sections = document.querySelectorAll("section[id]");
 
+// Item ativo do menu = última seção cujo topo já passou de uma "linha de
+// leitura" a ~35% da altura da tela. Leva em conta o header fixo e o
+// scroll-padding (ao abrir /#story o navegador para um pouco acima do topo
+// da seção) e roda também no carregamento, em hashchange e resize — antes
+// só rodava após um scroll, então /#story abria com "Career" ativo.
 const scrollActive = () => {
-  const scrollY = window.pageYOffset;
+  const probe = window.scrollY + window.innerHeight * 0.35;
+  const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  let current = null;
 
-  sections.forEach((current) => {
-    const sectionHeight = current.offsetHeight;
-    const sectionTop = current.offsetTop - 50;
-    const sectionId = current.getAttribute("id");
+  sections.forEach((section) => {
+    if (section.offsetTop <= probe) current = section;
+  });
+  if (atBottom && sections.length) current = sections[sections.length - 1];
 
-    const link = document.querySelector(`.nav__menu a[href="#${sectionId}"]`);
-    if (!link) return; // seção sem item no menu (ex.: contato, que é o CTA)
-    if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-      link.classList.add("active-link");
-    } else {
-      link.classList.remove("active-link");
-    }
+  document.querySelectorAll(".nav__menu .nav__link").forEach((link) => {
+    const isActive = !!current && link.getAttribute("href") === `#${current.id}`;
+    link.classList.toggle("active-link", isActive);
+    if (isActive) link.setAttribute("aria-current", "true");
+    else link.removeAttribute("aria-current");
   });
 };
 
-// Debounce para otimizar a função de rolagem
 const debounce = (func, wait) => {
   let timeout;
   return function (...args) {
@@ -94,7 +98,20 @@ const debounce = (func, wait) => {
   };
 };
 
-window.addEventListener("scroll", debounce(scrollActive, 100));
+// Atualiza no máximo uma vez por quadro (sem o atraso de 100 ms do debounce)
+let activeTicking = false;
+window.addEventListener("scroll", () => {
+  if (activeTicking) return;
+  activeTicking = true;
+  requestAnimationFrame(() => {
+    scrollActive();
+    activeTicking = false;
+  });
+}, { passive: true });
+window.addEventListener("hashchange", scrollActive);
+window.addEventListener("resize", debounce(scrollActive, 150));
+window.addEventListener("load", scrollActive);
+scrollActive();
 
 // Função para adicionar/remover classe ao cabeçalho ao rolar
 const scrollHeader = () => {
