@@ -143,48 +143,81 @@
     <main class="l-main">
 
         <!--========== CAREER ==========-->
-        <section class="about career section bd-container" id="career">
+        <section class="about career section" id="career">
             <canvas id="career-particles" aria-hidden="true"></canvas>
+            <div class="career__aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="career__grid" aria-hidden="true"></div>
             <div class="home__container bd-container bd-grid">
                 <div class="home__data">
 
-                    <div class="home__greeting" data-aos="fade-right" data-aos-duration="600" data-aos-delay="200">
-                        <span class="home__greeting-text" id="greeting-text"></span>
-                        <span class="home__greeting-sep">·</span>
-                        <span class="home__greeting-date" id="greeting-date"></span>
-                        <span class="home__greeting-sep">·</span>
-                        <span class="home__greeting-clock" id="greeting-clock"></span>
+                    <div class="career__badges" data-aos="fade-right" data-aos-duration="600" data-aos-delay="200">
+                        <span class="career__status"><span class="career__status-dot" aria-hidden="true"></span>Available for consulting</span>
+                        <div class="home__greeting">
+                            <span class="home__greeting-text" id="greeting-text"></span>
+                            <span class="home__greeting-sep">·</span>
+                            <span class="home__greeting-date" id="greeting-date"></span>
+                            <span class="home__greeting-sep">·</span>
+                            <span class="home__greeting-clock" id="greeting-clock"></span>
+                        </div>
                     </div>
 
-                    <h1 class="home__title" data-aos="fade-right" data-aos-duration="500" data-aos-delay="500">Hi, I'm<span class="sr-only"> Josenilto Luis da Silva, SRE/DevOps Engineer</span>
+                    <h1 class="home__title" data-aos="fade-right" data-aos-duration="500" data-aos-delay="400">Hi, I'm <span class="career__wave" aria-hidden="true">👋</span><span class="sr-only"> Josenilto Luis da Silva, SRE/DevOps Engineer</span>
                     </h1>
 
-                    <div class="text" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="700">
+                    <div class="text career__name" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
                         <span>Josenilto</span> Luis da Silva
                     </div>
 
-                    <div class="home__subtitle" data-aos="fade-right" data-aos-duration="1500" data-aos-delay="900">I'm
-                        a
+                    <div class="home__subtitle" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="600">I'm a
                         <strong><span class="typewriter-text"></span><label for=""> );</label></strong>
                     </div>
 
-                    <p data-aos="flip-down" data-aos-duration="1500" data-aos-delay="1500">
+                    <p class="career__lead" data-aos="fade-up" data-aos-duration="800" data-aos-delay="700">
                         Designing and automating infrastructure for over <strong>13 years</strong> — delivering reliability and scalability across Azure, AWS, and GCP, from bare-metal to Kubernetes.
                     </p>
 
-                    <div>
-                        <a href="https://github.com/josenilto" class="button" target="_blank" rel="noopener noreferrer" aria-label="Perfil no GitHub (abre em nova aba)" data-aos="fade-right"
-                            data-aos-duration="1500" data-aos-delay="1300"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
-                        <a href="https://www.linkedin.com/in/josenilto" class="button" target="_blank" rel="noopener noreferrer" aria-label="Perfil no LinkedIn (abre em nova aba)" data-aos="fade-right"
-                            data-aos-duration="1000" data-aos-delay="1000"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
-                        <a href="https://josenilto.github.io/docs/CV_Josenilto_L_da_Silva_2024_V.1.2.pdf" class="button"
-                            target="_blank" rel="noopener noreferrer" aria-label="Baixar currículo em PDF (abre em nova aba)" data-aos="fade-right" data-aos-duration="500" data-aos-delay="700"><i
-                                class="fa-solid fa-file-pdf" aria-hidden="true"></i></a>
+                    <div class="career__actions" data-aos="fade-up" data-aos-duration="800" data-aos-delay="900">
+                        <a href="#contact" class="career__btn career__btn--primary"><i class="bi bi-chat-dots" aria-hidden="true"></i><span>Let's talk</span></a>
+                        <a href="https://josenilto.github.io/docs/CV_Josenilto_L_da_Silva_2024_V.1.2.pdf" class="career__btn career__btn--ghost" target="_blank" rel="noopener noreferrer" aria-label="Baixar currículo em PDF (abre em nova aba)"><i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i><span>Download CV</span></a>
+                        <span class="career__socials">
+                            <a href="https://github.com/josenilto" class="career__social" target="_blank" rel="noopener noreferrer" aria-label="Perfil no GitHub (abre em nova aba)" title="GitHub"><i class="bi bi-github" aria-hidden="true"></i></a>
+                            <a href="https://www.linkedin.com/in/josenilto" class="career__social" target="_blank" rel="noopener noreferrer" aria-label="Perfil no LinkedIn (abre em nova aba)" title="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                        </span>
                     </div>
+
+                    <ul class="career__stats" aria-label="Career highlights">
+                        <li class="career__stat" data-aos="fade-up" data-aos-duration="600" data-aos-delay="900">
+                            <i class="bi bi-calendar-check career__stat-icon" aria-hidden="true"></i>
+                            <span class="career__stat-num" data-count="13" data-suffix="+">13+</span>
+                            <span class="career__stat-label">Years in IT</span>
+                        </li>
+                        <li class="career__stat" data-aos="fade-up" data-aos-duration="600" data-aos-delay="1000">
+                            <i class="bi bi-building career__stat-icon" aria-hidden="true"></i>
+                            <span class="career__stat-num" data-count="12" data-suffix="">12</span>
+                            <span class="career__stat-label">Companies</span>
+                        </li>
+                        <li class="career__stat" data-aos="fade-up" data-aos-duration="600" data-aos-delay="1300">
+                            <i class="bi bi-cloud-check career__stat-icon" aria-hidden="true"></i>
+                            <span class="career__stat-num" data-count="5" data-suffix="">5</span>
+                            <span class="career__stat-label">Cloud providers</span>
+                        </li>
+                        <li class="career__stat" data-aos="fade-up" data-aos-duration="600" data-aos-delay="1500">
+                            <i class="bi bi-terminal career__stat-icon" aria-hidden="true"></i>
+                            <span class="career__stat-num" data-count="23" data-suffix="">23</span>
+                            <span class="career__stat-label">Lab repos</span>
+                        </li>
+                    </ul>
                 </div>
-                <div class="container" data-aos="fade-left" data-aos-duration="800" data-aos-delay="400">
+
+                <div class="container career__photo" data-aos="fade-left" data-aos-duration="800" data-aos-delay="400">
+                    <span class="career__ring" aria-hidden="true"></span>
+                    <span class="career__orbit" aria-hidden="true"><span class="career__orbit-dot"></span></span>
                     <img class="home__img" src="./assets/img/profile-josenilto.webp" alt="Josenilto Luis da Silva, SRE/DevOps Engineer"
                         width="297" height="300" fetchpriority="high" decoding="async">
+                    <span class="career__chip career__chip--1" aria-hidden="true"><i class="bi bi-cloud"></i>Cloud</span>
+                    <span class="career__chip career__chip--2" aria-hidden="true"><i class="bi bi-shield-check"></i>SecOps</span>
+                    <span class="career__chip career__chip--3" aria-hidden="true"><i class="bi bi-git"></i>GitOps</span>
+                    <span class="career__chip career__chip--4" aria-hidden="true"><i class="bi bi-cpu"></i>SRE</span>
                 </div>
             </div>
 
