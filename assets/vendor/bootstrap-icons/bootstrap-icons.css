@@ -1,6 +1,6 @@
 /*!
  * Bootstrap Icons v1.13.2 (https://icons.getbootstrap.com/) — subconjunto
- * com os ícones usados no menu e no topo (career) de josenilto.github.io. Licensed under MIT.
+ * com os ícones usados no menu e nas seções Career e Story de josenilto.github.io. Licensed under MIT.
  * Para adicionar ícones: regenerar a partir do pacote npm bootstrap-icons@1.13.2.
  */
 @font-face {
@@ -47,3 +47,11 @@
 .bi-git::before { content: "\f69d"; }
 .bi-cpu::before { content: "\f2d6"; }
 .bi-diagram-3::before { content: "\f2ee"; }
+.bi-display::before { content: "\f302"; }
+.bi-clouds::before { content: "\f2c3"; }
+.bi-patch-check::before { content: "\f4b6"; }
+.bi-hdd-rack::before { content: "\f40f"; }
+.bi-pc-display::before { content: "\f6a6"; }
+.bi-boxes::before { content: "\f685"; }
+.bi-speedometer2::before { content: "\f580"; }
+.bi-award::before { content: "\f154"; }
