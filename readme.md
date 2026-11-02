@@ -266,7 +266,9 @@ deploy acontece apenas no push para o branch do ambiente.
    Exceções temporárias ficam em [`linkcheck-ignore.txt`](.github/linkcheck-ignore.txt) e viram aviso.
 3. **🌐 Links externos** — linkinator (versão fixa); só gera aviso.
 4. **📦 Montar publicação** — [`build-static.sh`](.github/scripts/build-static.sh) copia só o que vai
-   para o ar, **minifica CSS/JS** com esbuild (≈ −28% no CSS) e grava `version.json` com o commit.
+   para o ar, junta os 4 CSS da página em um só `bundle.css`
+   ([`bundle-css.mjs`](.github/scripts/bundle-css.mjs) — 1 requisição bloqueante em vez de 4),
+   **minifica CSS/JS** com esbuild, confere os links do pacote final e grava `version.json` com o commit.
 5. **🚀 Deploy** — `peaceiris/actions-gh-pages` na raiz do `gh-pages` (mantém `/hmg` e `/dev`).
 6. **🏥 Health check** — espera o `version.json` no ar mostrar o commit novo (em vez de um
    `sleep` fixo) e confere HTTP 200 em `/`, `/pt/`, `/health` e `/version.json`.
