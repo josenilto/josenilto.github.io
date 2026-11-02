@@ -48,14 +48,12 @@
     <link rel="preload" as="image" href="./assets/img/profile-josenilto.webp" type="image/webp" fetchpriority="high">
     <link rel="preload" as="font" href="./assets/fonts/poppins-latin-400-normal.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="./assets/fonts/poppins-latin-600-normal.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="./assets/fonts/poppins-latin-500-normal.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="./assets/vendor/bootstrap-icons/bootstrap-icons.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="./assets/vendor/fontawesome/webfonts/fa-brands-400.woff2" type="font/woff2" crossorigin>
 
-    <link href="./assets/vendor/fontawesome/fontawesome.css" rel="stylesheet">
-    <link href="./assets/vendor/aos/aos.css" rel="stylesheet">
-    <link href="./assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="./assets/css/styles.css" rel="stylesheet" />
-
-    <!-- JSON-LD Structured Data -->
+    <link href="./assets/css/bundle.css" rel="stylesheet">
+<!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -108,7 +106,7 @@
     <header class="l-header" id="header">
         <nav class="nav bd-container" aria-label="Main navigation">
 
-            <a href="#career" class="nav__logo" aria-label="Josenilto Luis da Silva — back to top">
+            <a href="#career" class="nav__logo" aria-label="JLS — Josenilto Luis da Silva, back to top">
                 <span class="nav__logo-badge" aria-hidden="true"><i class="bi bi-terminal-fill"></i></span>
                 <span class="nav__logo-text" aria-hidden="true"><span class="nav__logo-bracket">&lt;</span><span class="nav__logo-name">JLS</span><span class="nav__logo-bracket">/&gt;</span><span class="nav__logo-caret">_</span></span>
             </a>
@@ -127,7 +125,7 @@
 
             <div class="nav__actions">
                 <a href="#contact" class="nav__cta" title="Contact"><i class="bi bi-send" aria-hidden="true"></i><span class="nav__cta-label">Contact</span></a>
-                <a href="/pt/" class="nav__lang" hreflang="pt-BR" lang="pt-BR" aria-label="Ver este site em português" title="Ver este site em português"><i class="bi bi-translate" aria-hidden="true"></i><span>PT</span></a>
+                <a href="/pt/" class="nav__lang" hreflang="pt-BR" lang="pt-BR" aria-label="PT — Ver este site em português" title="Ver este site em português"><i class="bi bi-translate" aria-hidden="true"></i><span>PT</span></a>
                 <button type="button" class="change-theme" id="theme-button" aria-label="Toggle light/dark theme" title="Toggle light/dark theme">
                     <i class="bi bi-moon-stars theme-icon theme-icon--moon" aria-hidden="true"></i>
                     <i class="bi bi-sun theme-icon theme-icon--sun" aria-hidden="true"></i>
@@ -178,10 +176,10 @@
 
                     <div class="career__actions" data-aos="fade-up" data-aos-duration="800" data-aos-delay="900">
                         <a href="#contact" class="career__btn career__btn--primary"><i class="bi bi-chat-dots" aria-hidden="true"></i><span>Let's talk</span></a>
-                        <a href="https://josenilto.github.io/docs/CV_Josenilto_L_da_Silva_2024_V.1.2.pdf" class="career__btn career__btn--ghost" target="_blank" rel="noopener noreferrer" aria-label="Baixar currículo em PDF (abre em nova aba)"><i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i><span>Download CV</span></a>
+                        <a href="https://josenilto.github.io/docs/CV_Josenilto_L_da_Silva_2024_V.1.2.pdf" class="career__btn career__btn--ghost" target="_blank" rel="noopener noreferrer" aria-label="Download CV — résumé in PDF (opens in a new tab)"><i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i><span>Download CV</span></a>
                         <span class="career__socials">
-                            <a href="https://github.com/josenilto" class="career__social" target="_blank" rel="noopener noreferrer" aria-label="Perfil no GitHub (abre em nova aba)" title="GitHub"><i class="bi bi-github" aria-hidden="true"></i></a>
-                            <a href="https://www.linkedin.com/in/josenilto" class="career__social" target="_blank" rel="noopener noreferrer" aria-label="Perfil no LinkedIn (abre em nova aba)" title="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                            <a href="https://github.com/josenilto" class="career__social" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile (opens in a new tab)" title="GitHub"><i class="bi bi-github" aria-hidden="true"></i></a>
+                            <a href="https://www.linkedin.com/in/josenilto" class="career__social" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile (opens in a new tab)" title="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
                         </span>
                     </div>
 
@@ -221,7 +219,7 @@
                 </div>
             </div>
 
-            <a href="#story" class="career__scroll-cue" aria-label="Rolar para a próxima seção">
+            <a href="#story" class="career__scroll-cue" aria-label="Scroll to the next section">
                 <span class="career__scroll-cue-label">Scroll</span>
                 <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m6.293 8.293 1.414-1.414L12 11.172l4.293-4.293 1.414 1.414L12 14z"/></svg>
             </a>
@@ -838,12 +836,12 @@
                         <li><i class="bi bi-globe2" aria-hidden="true"></i> Open to remote worldwide</li>
                     </ul>
                     <div class="footer__socials">
-                        <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade." target="_blank" rel="noopener noreferrer" class="footer__social footer__social--whatsapp" title="WhatsApp" aria-label="Contato pelo WhatsApp (abre em nova aba)"><i class="bi bi-whatsapp" aria-hidden="true"></i></a>
-                        <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--linkedin" title="LinkedIn" aria-label="Perfil no LinkedIn (abre em nova aba)"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
-                        <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--github" title="GitHub" aria-label="Perfil no GitHub (abre em nova aba)"><i class="bi bi-github" aria-hidden="true"></i></a>
-                        <a href="https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--youtube" title="YouTube" aria-label="Canal no YouTube (abre em nova aba)"><i class="bi bi-youtube" aria-hidden="true"></i></a>
-                        <a href="https://www.instagram.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--instagram" title="Instagram" aria-label="Perfil no Instagram (abre em nova aba)"><i class="bi bi-instagram" aria-hidden="true"></i></a>
-                        <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--telegram" title="Telegram" aria-label="Contato pelo Telegram (abre em nova aba)"><i class="bi bi-telegram" aria-hidden="true"></i></a>
+                        <a href="https://api.whatsapp.com/send?phone=5521981918601&text=Ol%C3%A1%2C%20Josenilto!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20uma%20oportunidade." target="_blank" rel="noopener noreferrer" class="footer__social footer__social--whatsapp" title="WhatsApp" aria-label="Contact via WhatsApp (opens in a new tab)"><i class="bi bi-whatsapp" aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/in/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--linkedin" title="LinkedIn" aria-label="LinkedIn profile (opens in a new tab)"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
+                        <a href="https://github.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--github" title="GitHub" aria-label="GitHub profile (opens in a new tab)"><i class="bi bi-github" aria-hidden="true"></i></a>
+                        <a href="https://www.youtube.com/channel/UCk8gmswVN_4zDvo5eIfzQ4Q" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--youtube" title="YouTube" aria-label="YouTube channel (opens in a new tab)"><i class="bi bi-youtube" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/josenilto" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--instagram" title="Instagram" aria-label="Instagram profile (opens in a new tab)"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+                        <a href="https://web.telegram.org" target="_blank" rel="noopener noreferrer" class="footer__social footer__social--telegram" title="Telegram" aria-label="Contact via Telegram (opens in a new tab)"><i class="bi bi-telegram" aria-hidden="true"></i></a>
                     </div>
                     <div class="footer__terminal" aria-hidden="true">
                         <span class="footer__prompt">$</span> uptime <span class="footer__term-ok">13+ years</span> · status: <span class="footer__term-ok">online</span><span class="footer__cursor">_</span>
