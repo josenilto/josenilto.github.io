@@ -25,18 +25,37 @@ const canvasObserver = 'IntersectionObserver' in window
     })
     : null;
 
+// Começa ~1,5 s depois do load e com o navegador ocioso: no celular a
+// animação não disputa a thread principal com a renderização inicial.
+const START_DELAY_MS = 1500;
 function whenIdle(fn) {
-    const run = () => ('requestIdleCallback' in window)
+    const idle = () => ('requestIdleCallback' in window)
         ? requestIdleCallback(fn, { timeout: 2000 })
         : setTimeout(fn, 200);
+    const run = () => setTimeout(idle, START_DELAY_MS);
     if (document.readyState === 'complete') run();
     else window.addEventListener('load', run, { once: true });
+}
+
+// ~30 quadros/s bastam para partículas lentas e cortam pela metade o
+// trabalho de pintura (PageSpeed: "minimizar trabalho da thread principal").
+const FRAME_MS = 1000 / 30;
+const lastFrame = new WeakMap();
+function throttledFrame(canvas, draw) {
+    requestAnimationFrame(function step(ts) {
+        if (ts - (lastFrame.get(canvas) || 0) < FRAME_MS - 1) {
+            requestAnimationFrame(step);
+            return;
+        }
+        lastFrame.set(canvas, ts);
+        draw(ts);
+    });
 }
 
 function nextFrame(canvas, draw) {
     if (reduceMotion) return;
     if (!canvasObserver) {
-        requestAnimationFrame(draw);
+        throttledFrame(canvas, draw);
         return;
     }
     if (!canvasVisible.has(canvas)) {
@@ -50,7 +69,7 @@ function nextFrame(canvas, draw) {
         pendingDraw.set(canvas, draw);
         return;
     }
-    requestAnimationFrame(draw);
+    throttledFrame(canvas, draw);
 }
 
 function resizeCanvasToSection(canvas, sectionId) {
